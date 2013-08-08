@@ -1,10 +1,10 @@
 <?php 
 /*
 Plugin Name: QQWorld Auto Save Images
-Plugin URI: http://wordpress.org/plugins/qqworld-auto-save-images/
+Plugin URI: http://project.qqworld.org
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.0
-Author: Michael Wang
+Version: 1.1
+Author: QQWorld
 Author URI: http://project.qqworld.org
 */
 
@@ -47,7 +47,7 @@ class QQWorld_auto_save_images {
 		$file=file_get_contents($image_url);
 		$filename=basename($image_url);
 		preg_match( '/(.*?)(\.\w+)$/', $filename, $match );
-		$im_name = md5($match[1]).$match[2];		
+		$im_name = $match[1].$match[2];		
 		$res=wp_upload_bits($im_name,'',$file);
 		$attach_id = $this->insert_attachment($res['file'],$post_id);
 		if( $i==1 ) set_post_thumbnail( $post_id, $attach_id );

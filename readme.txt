@@ -3,7 +3,7 @@ Contributors: qqworld
 Tags: auto, save, local, collection, images
 Requires at least: 2.7
 Tested up to: 3.6
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,3 +17,19 @@ Automatically keep the all remote picture to the local, and automatically set fe
 
 1. 上传 `qqworld-auto-save-images` 目录到 `/wp-content/plugins/` 文件夹
 1. 在wordpress的 '插件' 菜单中激活该插件
+
+== Changelog ==
+
+= 1.1 =
+* Remove auto rename. 移除自动更名功能。
+
+= 1.0 =
+* 为采集而生
+
+== Upgrade Notice ==
+
+= 1.1 =
+如果需要上传中文名图片，服务器又不支持中文文件名，请使用1.0
+
+= 1.0 =
+特色是可以自动更改图片的文件名
