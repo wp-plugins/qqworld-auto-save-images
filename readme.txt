@@ -1,7 +1,7 @@
 === Plugin Name ===
 Contributors: qqworld
 Tags: auto, save, local, collection, images
-Requires at least: 2.7
+Requires at least: 3.0
 Tested up to: 3.6
 Stable tag: 1.1
 License: GPLv2 or later
