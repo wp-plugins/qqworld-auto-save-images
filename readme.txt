@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== QQWorld Auto Save Images ===
 Contributors: Michael Wang
 Tags: auto, save, local, collection, images
 Requires at least: 3.0
