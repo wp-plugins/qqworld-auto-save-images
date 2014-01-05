@@ -2,8 +2,8 @@
 Contributors: Michael Wang
 Tags: auto, save, local, collection, images
 Requires at least: 3.0
-Tested up to: 3.6
-Stable tag: 1.1
+Tested up to: 3.8
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,9 @@ Automatically keep the all remote picture to the local, and automatically set fe
 1. 在wordpress的 '插件' 菜单中激活该插件
 
 == Changelog ==
+
+= 1.2 =
+* add admin form. 添加后台表单来管理选择使用下载远程图片的动作。
 
 = 1.1 =
 * Remove auto rename. 移除自动更名功能。

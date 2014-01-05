@@ -3,15 +3,82 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: http://project.qqworld.org
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.1
+Version: 1.2
 Author: QQWorld
 Author URI: http://project.qqworld.org
 */
 
 class QQWorld_auto_save_images {
+	var $using_action;
 	function __construct() {
-		add_action('publish_post', array($this, 'fetch_images') );
+		$this->using_action = get_option('using_action', 'publish');
+		$this->add_actions();
+		add_action( 'plugins_loaded', array($this, 'load_language') );
+		add_action( 'admin_menu', array($this, 'admin_menu') );
+		add_action( 'admin_init', array($this, 'register_settings') );
+		add_filter( 'plugin_row_meta', array($this, 'registerPluginLinks'),10,2 );
 	}
+
+	public function load_language() {
+		load_plugin_textdomain( 'qqworld_auto_save_images', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
+	}
+
+	function registerPluginLinks($links, $file) {
+		$base = plugin_basename(__FILE__);
+		if ($file == $base) {
+			$links[] = '<a href="' . menu_page_url( 'qqworld-auto-save-images', 0 ) . '">' . __('Settings') . '</a>';
+		}
+		return $links;
+	}
+
+	function admin_menu() {
+		add_submenu_page('options-general.php', 'QQWorld Auto Save Images', 'QQWorld Auto Save Images', 'manage_options', 'qqworld-auto-save-images', array($this, 'fn'));
+	}
+
+	function fn() {
+?>
+<div class="wrap">
+	<h2><?php _e('QQWorld Auto Save Images'); ?></h2>
+	<?php if ($_GET['updated']=='true') { ?><div class="updated settings-error" id="setting-error-settings_updated"><p><strong><?php _e('Settings saved.'); ?></strong></p></div><?php }; ?>
+	<form action="options.php" method="post">
+		<?php settings_fields('qqworld_auto_save_images_settings'); ?>
+		<table class="form-table">
+			<tbody>
+				<tr valign="top">
+					<th scope="row"><label for="blogname"><?php _e('The action of using', 'qqworld_auto_save_images'); ?></label></th>
+					<td><fieldset>
+						<legend class="screen-reader-text"><span><?php _e('The action of using', 'qqworld_auto_save_images'); ?></span></legend>
+							<label for="save">
+								<input name="using_action" type="radio" id="save" value="save" <?php checked('save', $this->using_action); ?> />
+								<?php _e('Save post (Publish, save draft or pedding review).', 'qqworld_auto_save_images'); ?>
+							</label><br />
+							<label for="publish">
+								<input name="using_action" type="radio" id="publish" value="publish" <?php checked('publish', $this->using_action); ?> />
+								<?php _e('Publish post only.', 'qqworld_auto_save_images'); ?>
+							</label>
+					</fieldset></td>
+				</tr>
+			</tbody>
+		</table>
+		<p class="submit"><input type="submit" value="<?php _e('Save Changes') ?>" class="button-primary" name="Submit" /></p>
+	</form>
+<?php
+	}
+
+	function register_settings() {
+		register_setting('qqworld_auto_save_images_settings', 'using_action');
+	}
+
+	function add_actions() {
+		if ($this->using_action == 'publish') add_action('publish_post', array($this, 'fetch_images') );
+		elseif ($this->using_action == 'save') add_action('save_post', array($this, 'fetch_images') );
+	}
+
+	function remove_actions() {
+		if ($this->using_action == 'publish') remove_action('publish_post', array($this, 'fetch_images') );
+		elseif ($this->using_action == 'save') remove_action('save_post', array($this, 'fetch_images') );
+	}
+
 	function fetch_images($post_ID) {
 		//Check to make sure function is not executed more than once on save
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
@@ -20,7 +87,7 @@ class QQWorld_auto_save_images {
 		if ( !current_user_can('edit_post', $post_ID) ) 
 		return;
 
-		remove_action('publish_post', array($this, 'fetch_images') );
+		$this->remove_actions();
 
 		$post=get_post($post_ID);
 		$content=$post->post_content;
@@ -40,8 +107,9 @@ class QQWorld_auto_save_images {
 		}
 	    //Replace the image in the post
 	    wp_update_post(array('ID' => $post_ID, 'post_content' => $content));
-		add_action('publish_post', array($this, 'fetch_images') );
+		$this->add_actions();
 	}
+
 	//save exterior images
 	function save_images($image_url,$post_id,$i){
 		$file=file_get_contents($image_url);
