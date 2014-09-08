@@ -16,15 +16,15 @@ Automatically keep the all remote picture to the local, and automatically set fe
 This plugin has a big problem that is all the image url must be full url, it means must include "http(s)://", for example:
 
 <ul>
-<li><strong><em>&lt;img src="http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg" /&gt;</em></strong></li>
+<li>&lt;img src="http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg" /&gt;</li>
 </ul>
 
 The examples not working code:
 
 <ul>
-<li><strong><em>&lt;img src="/images/great.png" /&gt;</em></strong></li>
-<li><strong><em>&lt;img src="./photo-lab/2014-08-09.jpg" /&gt;</em></strong></li>
-<li><strong><em>&lt;img src="img/background/black.gif" /&gt;</em></strong></li>
+<li>&lt;img src="/images/great.png" /&gt;</li>
+<li>&lt;img src="./photo-lab/2014-08-09.jpg" /&gt;</li>
+<li>&lt;img src="img/background/black.gif" /&gt;</li>
 </ul>
 
 I was tried to fix this out, but i can't let the program get the host name to full the image src.
@@ -38,15 +38,15 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 该插件有个大问题是，所有的图片URL必须是完整的，就是说必须得包含"http(s)://"，举例：
 
 <ul>
-<li><strong><em>&lt;img src="http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg" /&gt;</em></strong></li>
+<li>&lt;img src="http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg" /&gt;</li>
 </ul>
 
 不能保存图片的例子：
 
 <ul>
-<li><strong><em>&lt;img src="/images/great.png" /&gt;</em></strong></li>
-<li><strong><em>&lt;img src="./photo-lab/2014-08-09.jpg" /&gt;</em></strong></li>
-<li><strong><em>&lt;img src="img/background/black.gif" /&gt;</em></strong></li>
+<li>&lt;img src="/images/great.png" /&gt;</li>
+<li>&lt;img src="./photo-lab/2014-08-09.jpg" /&gt;</li>
+<li>&lt;img src="img/background/black.gif" /&gt;</li>
 </ul>
 
 我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整。
