@@ -50,7 +50,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 </ul>
 
 我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整。
-所以，如果你碰到这样的代码，请手动让图片地址改成完整的，或者使用采集工具自动补完图片的URL然后从外部提交给Wordpress。
+所以，如果你碰到这样的代码，请手动将图片地址改成完整的，或者使用采集工具自动补完图片的URL然后从外部提交给Wordpress。
 
 == Installation ==
 
@@ -66,9 +66,14 @@ add admin page to control use which action to save remote image.
 = 1.1 =
 Remove auto rename.
 移除自动更名功能。
+if you want to upload images with chinese file name and server does not support chinese filename, please using 1.0.
+如果需要上传中文名图片，服务器又不支持中文文件名，请使用1.0
 
 = 1.0 =
+Born for Capture.
 为采集而生
+The feature is can automatically change image filename.
+特色是可以自动更改图片的文件名
 
 == Upgrade Notice ==
 
