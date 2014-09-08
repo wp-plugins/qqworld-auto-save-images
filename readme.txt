@@ -27,7 +27,7 @@ The examples not working code:
 <li>&lt;img src="img/background/black.gif" /&gt;</li>
 </ul>
 
-I was tried to fix this out, but i can't let the program get the host name to full the image src.
+I tried to fix this out, but i can't let the program get the host name to full the image src.
 
 So if you encounter these codes, plaese manually fix the images src to full url.
 
