@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, collection, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.2
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,18 @@ No special needs description
 没有特别需要说明的
 
 == Changelog ==
+
+= 1.3 =
+Fixed 2 bugs:
+<ol>
+<li>Failed to save remote image to local when the image url include "(\?(.*?))?", now it's works.</li>
+<li>If the remote image url is invalid, will not to save it to a blank attachment.</li>
+</ol>
+修复两个bug:
+<ol>
+<li>如果远程图片地址包含 "(\?(.*?))?" 会无法保存到本地，现在工作正常。</li>
+<li>如果远程图片地址无效，则不保存到本地。</li>
+</ol>
 
 = 1.2 =
 add admin page to control use which action to save remote image.
