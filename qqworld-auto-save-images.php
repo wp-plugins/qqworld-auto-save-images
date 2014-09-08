@@ -93,17 +93,15 @@ class QQWorld_auto_save_images {
 		$content=$post->post_content;
 		$preg=preg_match_all('/<img.*?src="(.*?)(\?.*?)?"/',stripslashes($content),$matches);
 		if($preg){
-			$i = 1;
 			foreach($matches[1] as $image_url){
 				if(empty($image_url)) continue;
 				$pos=strpos($image_url,get_bloginfo('url'));
 				if($pos===false){
-					if ($res=$this->save_images($image_url,$post_id,$i)) {
+					if ($res=$this->save_images($image_url,$post_id)) {
 						$replace=$res['url'];
 						$content=str_replace($image_url,$replace,$content);
 					}
 				}
-				$i++;
 			}
 		}
 	    //Replace the image in the post
@@ -112,7 +110,7 @@ class QQWorld_auto_save_images {
 	}
 
 	//save exterior images
-	function save_images($image_url,$post_id,$i){
+	function save_images($image_url, $post_id){
 		if ( $file=@file_get_contents($image_url) ) {
 			$filename=basename($image_url);
 			preg_match( '/(.*?)(\.\w+)$/', $filename, $match );
