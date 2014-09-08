@@ -7,7 +7,7 @@ Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Automatically keep the all remote picture to the local, and automatically set featured image.
+Automatically keep the all remote picture to the local, and automatically set featured image.自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
 
 == Description ==
 
@@ -15,7 +15,7 @@ Automatically keep the all remote picture to the local, and automatically set fe
 
 This plugin has a big problem that is all the image url must be full url, it means must include "http(s)://", for example:
 
-&lt;img src="http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg" /&gt;
+<strong><em>&lt;img src="http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg" /&gt;</em></strong>
 
 The examples not working code:
 
@@ -33,7 +33,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 该插件有个大问题是，所有的图片URL必须是完整的，就是说必须得包含"http(s)://"，举例：
 
-&lt;img src="http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg" /&gt;
+<strong><em>&lt;img src="http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg" /&gt;</em></strong>
 
 不能保存图片的例子：
 
