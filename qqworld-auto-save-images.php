@@ -119,7 +119,7 @@ class QQWorld_auto_save_images {
 			$im_name = $match[1].$match[2];
 			$res=wp_upload_bits($im_name,'',$file);
 			$attach_id = $this->insert_attachment($res['file'],$post_id);
-			if( $i==1 ) set_post_thumbnail( $post_id, $attach_id );
+			if( !has_post_thumbnail($post_id) ) set_post_thumbnail( $post_id, $attach_id );
 			return $res;
 		}
 		return false;
