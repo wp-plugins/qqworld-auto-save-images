@@ -11,7 +11,38 @@ Automatically keep the all remote picture to the local, and automatically set fe
 
 == Description ==
 
-Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
+Automatically keep the all remote picture to the local, and automatically set featured image.
+
+This plugin has a big problem that is all the image url must be full url, it means must include "http(s)://", for example:
+
+<img src="http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg" />
+
+The examples not working code:
+
+<em><img src="/images/great.png" />
+<img src="./photo-lab/2014-08-09.jpg" />
+<img src="img/background/black.gif" /></em>
+
+I was tried to fix this out, but i can't let the program get the host name to full the image src.
+
+So if you encounter these codes, plaese manually fix the images src to full url.
+
+-----------------------------------------------------------------------------------------------
+
+自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
+
+该插件有个大问题是，所有的图片URL必须是完整的，就是说必须得包含"http(s)://"，举例：
+
+<img src="http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg" />
+
+不能保存图片的例子：
+
+<img src="/images/great.png" />
+<img src="./photo-lab/2014-08-09.jpg" />
+<img src="img/background/black.gif" />
+
+我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整。
+所以，如果你碰到这样的代码，请手动让图片地址改成完整的，或者使用采集工具自动补完图片的URL然后从外部提交给Wordpress。
 
 == Installation ==
 
