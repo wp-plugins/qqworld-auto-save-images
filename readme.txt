@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, collection, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.3
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ Automatically keep the all remote picture to the local, and automatically set fe
 
 Automatically keep the all remote picture to the local, and automatically set featured image.
 
-This plugin has a big problem that is all the image url must be full url, it means must include "http(s)://", for example:
+This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://", for example:
 
 <ul>
 <li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
@@ -35,7 +35,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
 
-该插件有个大问题是，所有的图片URL必须是完整的，就是说必须得包含"http(s)://"，举例：
+该插件有个小问题是，所有的图片URL必须是完整的，就是说必须得包含"http(s)://"，举例：
 
 <ul>
 <li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
@@ -58,6 +58,13 @@ No special needs description
 没有特别需要说明的
 
 == Changelog ==
+
+= 1.4 =
+Add a new type allow user manually save remote images via click a button on the top of editor, and don't forget after you saved images, you still need to submit the post.
+You can change the Type in the plugin's setting page.
+
+添加一个新类型允许用户通过单击编辑器顶部的按钮手动保存远程图像，别忘记了在保存图片后提交文章哦。
+你可以在插件的设置页面更改类型。
 
 = 1.3 =
 Fixed 2 bugs:
