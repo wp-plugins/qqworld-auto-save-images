@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, collection, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.4
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,10 @@ No special needs description
 没有特别需要说明的
 
 == Changelog ==
+
+= 1.4.1 =
+New functional optimized
+优化了新功能
 
 = 1.4 =
 Add a new type allow user manually save remote images via click a button on the top of editor, and don't forget after you saved images, you still need to submit the post.

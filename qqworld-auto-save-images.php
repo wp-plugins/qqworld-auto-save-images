@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.4
+Version: 1.4.1
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 */
@@ -20,10 +20,6 @@ class QQWorld_auto_save_images {
 				break;
 			case 'manual':
 				add_action( 'media_buttons', array($this, 'media_buttons' ), 11 );
-				add_action( 'admin_init', array($this, 'add_buttons_in_visualmode') );
-				add_action( 'admin_print_footer_scripts', array($this, 'add_buttons_in_textmode') );
-				add_action( 'wp_ajax_get_ajax_editor_button_plugin', array($this, 'get_ajax_editor_button') );
-				add_action( 'wp_ajax_nopriv_get_ajax_editor_button_plugin', array($this, 'get_ajax_editor_button') );
 				add_action( 'wp_ajax_save_remote_images', array($this, 'save_remote_images') );
 				add_action( 'wp_ajax_nopriv_save_remote_images', array($this, 'save_remote_images') );	
 				break;
@@ -33,101 +29,6 @@ class QQWorld_auto_save_images {
 		add_action( 'admin_menu', array($this, 'admin_menu') );
 		add_action( 'admin_init', array($this, 'register_settings') );
 		add_filter( 'plugin_row_meta', array($this, 'registerPluginLinks'),10,2 );
-	}
-
-	public function add_buttons_in_textmode() {
-		if (wp_script_is('quicktags')) : ?>
-<script>
-QTags.addButton('qqworld_auto_save_images', '<?php _e('Save Remote Images', 'qqworld_auto_save_images'); ?>', function(el, canvas) {
-console.log(1)
-	var $ = jQuery;
-	var icon = '<span class="wp-media-buttons-icon"></span>';
-	jQuery('.button.save_remote_images').html(icon+QQWorld_auto_save_images.text.in_process);
-	jQuery.ajax({
-		type: "POST",
-		url: ajaxurl,
-		data: {
-			action: 'save_remote_images',
-			post_id: QQWorld_auto_save_images.post_id,
-			content: escape($('#content').val())
-		},
-		success: function(respond) {
-			jQuery('.button.save_remote_images').addClass('success').html(icon+QQWorld_auto_save_images.text.succesed_save_remote_images);
-			var init = function() {
-				jQuery('.button.save_remote_images').removeClass('success').html(icon+QQWorld_auto_save_images.text.save_remote_images);
-			}
-			//console.log(respond)
-			$('#content').val(respond)
-			setTimeout(init, 3000);
-		}
-	});
-});
-</script>
-	<?php endif;
-	}
-
-	public function get_ajax_editor_button() {
-		header("Content-type: application/x-javascript");
-?>
-(function() {
-	tinymce.create('tinymce.plugins.save_remote_images', {
-		init: function(ed, url) {
-			ed.addButton('save_remote_images', {
-				title: '<?php _e('Save Remote Images', 'qqworld_auto_save_images'); ?>',
-				onclick: function() {
-					var icon = '<span class="wp-media-buttons-icon"></span>';
-					jQuery('.button.save_remote_images').html(icon+QQWorld_auto_save_images.text.in_process);
-					jQuery.ajax({
-						type: "POST",
-						url: ajaxurl,
-						data: {
-							action: 'save_remote_images',
-							post_id: QQWorld_auto_save_images.post_id,
-							content: escape(ed.getContent())
-						},
-						success: function(respond) {
-							jQuery('.button.save_remote_images').addClass('success').html(icon+QQWorld_auto_save_images.text.succesed_save_remote_images);
-							var init = function() {
-								jQuery('.button.save_remote_images').removeClass('success').html(icon+QQWorld_auto_save_images.text.save_remote_images);
-							}
-							//console.log(respond)
-							ed.setContent(respond);
-							setTimeout(init, 3000);
-						}
-					});
-				}
-			});
-		},
-		createControl: function(n, cm) {
-			return null;
-		},
-	});
-	tinymce.PluginManager.add('save_remote_images', tinymce.plugins.save_remote_images);
-})();
-<?php
-		exit;
-	}
-
-	public function add_buttons_in_visualmode() {
-		if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) {
-			return;
-		}
-		if ( get_user_option('rich_editing') == 'true' ) {
-			add_filter( 'mce_external_plugins', array($this, 'add_tinymce_plugin') );
-			add_filter( 'mce_buttons', array($this, 'register_button') );
-		}
-	}
-	public function add_tinymce_plugin( $plugin_array ) {
-		$data = array(
-			'action' => 'get_ajax_editor_button_plugin',
-			'data' => $button['virtual']
-		);
-		$plugin_array['save_remote_images'] = admin_url( 'admin-ajax.php?'.http_build_query($data), 'relative' );
-		return $plugin_array;
-	}
-	public function register_button( $buttons ) {
-		array_push( $buttons, 'save_remote_images' );
-		return $buttons;
 	}
 
 	public function media_buttons() {
@@ -155,10 +56,6 @@ console.log(1)
 			-ms-transform: scale(1.1);
 			transform: scale(1.1);
 		}
-		#qt_content_qqworld_auto_save_images {
-			position: absolute;
-			z-index: -10;
-		}
 		</style>
 		<a href="javascript:" id="save-remote-images-button" class="button save_remote_images" title="<?php _e('Save Remote Images', 'qqworld_auto_save_images'); ?>"><span class="wp-media-buttons-icon"></span><?php _e('Save Remote Images', 'qqworld_auto_save_images'); ?></a>
 		<script>
@@ -173,11 +70,58 @@ console.log(1)
 			$(window).on('load', function() {
 				$('.mce-i-save_remote_images').closest('.mce-widget').hide();
 				$(document).on('click', '#save-remote-images-button', function() {
-					$('#qt_content_qqworld_auto_save_images').click();
-					$('.mce-i-save_remote_images').click();
+					var icon = '<span class="wp-media-buttons-icon"></span>',
+					mode = 'text';
+					if (tinyMCE.activeEditor) {
+						var id = tinyMCE.activeEditor.id;
+						mode = $('#'+id).is(':visible') ? 'text' : 'virtual';
+					}
+					switch (mode) {
+						case 'text':
+							$('.button.save_remote_images').html(icon+QQWorld_auto_save_images.text.in_process);
+							$.ajax({
+								type: "POST",
+								url: ajaxurl,
+								data: {
+									action: 'save_remote_images',
+									post_id: QQWorld_auto_save_images.post_id,
+									content: escape($('#content').val())
+								},
+								success: function(respond) {
+									$('.button.save_remote_images').addClass('success').html(icon+QQWorld_auto_save_images.text.succesed_save_remote_images);
+									var init = function() {
+										$('.button.save_remote_images').removeClass('success').html(icon+QQWorld_auto_save_images.text.save_remote_images);
+									}
+									$('#content').val(respond)
+									setTimeout(init, 3000);
+								}
+							});
+							break;
+						case 'virtual':
+							$('.button.save_remote_images').html(icon+QQWorld_auto_save_images.text.in_process);
+							$.ajax({
+								type: "POST",
+								url: ajaxurl,
+								data: {
+									action: 'save_remote_images',
+									post_id: QQWorld_auto_save_images.post_id,
+									content: escape(tinyMCE.activeEditor.getContent())
+								},
+								success: function(respond) {
+									$('.button.save_remote_images').addClass('success').html(icon+QQWorld_auto_save_images.text.succesed_save_remote_images);
+									var init = function() {
+										$('.button.save_remote_images').removeClass('success').html(icon+QQWorld_auto_save_images.text.save_remote_images);
+									}
+									tinyMCE.activeEditor.setContent(respond);
+									setTimeout(init, 3000);
+								}
+							});
+							break;						
+					}
 				});
 			})
 		});
+
 		</script>
 	<?php
 	}
@@ -211,11 +155,11 @@ console.log(1)
 					<th scope="row"><label for="blogname"><?php _e('Type'); ?></label></th>
 					<td><fieldset>
 						<legend class="screen-reader-text"><span><?php _e('Type'); ?></span></legend>
-							<label for="save">
+							<label for="auto">
 								<input name="qqworld_auto_save_imagess_type" type="radio" id="auto" value="auto" <?php checked('auto', $this->type); ?> />
 								<?php _e('Automatically save all remote images to local media libary when you save or publish post.', 'qqworld_auto_save_images'); ?>
 							</label><br />
-							<label for="publish">
+							<label for="manual">
 								<input name="qqworld_auto_save_imagess_type" type="radio" id="manual" value="manual" <?php checked('manual', $this->type); ?> />
 								<?php _e('Manually save all remote images to local media libary when you click the button on the top of editor.', 'qqworld_auto_save_images'); ?>
 							</label>
