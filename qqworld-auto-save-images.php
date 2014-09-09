@@ -39,6 +39,7 @@ class QQWorld_auto_save_images {
 		if (wp_script_is('quicktags')) : ?>
 <script>
 QTags.addButton('qqworld_auto_save_images', '<?php _e('Save Remote Images', 'qqworld_auto_save_images'); ?>', function(el, canvas) {
+console.log(1)
 	var $ = jQuery;
 	var icon = '<span class="wp-media-buttons-icon"></span>';
 	jQuery('.button.save_remote_images').html(icon+QQWorld_auto_save_images.text.in_process);
@@ -51,9 +52,9 @@ QTags.addButton('qqworld_auto_save_images', '<?php _e('Save Remote Images', 'qqw
 			content: escape($('#content').val())
 		},
 		success: function(respond) {
-			jQuery('.button.save_remote_images').html(icon+QQWorld_auto_save_images.text.succesed_save_remote_images);
+			jQuery('.button.save_remote_images').addClass('success').html(icon+QQWorld_auto_save_images.text.succesed_save_remote_images);
 			var init = function() {
-				jQuery('.button.save_remote_images').html(icon+QQWorld_auto_save_images.text.save_remote_images);
+				jQuery('.button.save_remote_images').removeClass('success').html(icon+QQWorld_auto_save_images.text.save_remote_images);
 			}
 			//console.log(respond)
 			$('#content').val(respond)
@@ -153,6 +154,10 @@ QTags.addButton('qqworld_auto_save_images', '<?php _e('Save Remote Images', 'qqw
 			-o-transform: scale(1.1);
 			-ms-transform: scale(1.1);
 			transform: scale(1.1);
+		}
+		#qt_content_qqworld_auto_save_images {
+			position: absolute;
+			z-index: -10;
 		}
 		</style>
 		<a href="javascript:" id="save-remote-images-button" class="button save_remote_images" title="<?php _e('Save Remote Images', 'qqworld_auto_save_images'); ?>"><span class="wp-media-buttons-icon"></span><?php _e('Save Remote Images', 'qqworld_auto_save_images'); ?></a>
