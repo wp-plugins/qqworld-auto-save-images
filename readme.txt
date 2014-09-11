@@ -1,14 +1,13 @@
 === QQWorld Auto Save Images ===
 Contributors: Michael Wang
-Tags: auto, save, local, collection, images
+Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
 Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Automatically keep the all remote picture to the local media libary when you publishing posts, and automatically set featured image.
-在保存或发布文章时自动保存远程图片到本地媒体库，自动设置特色图片，并且支持机器人采集软件从外部提交。
+Automatically keep the all remote picture to the local media libary when you publishing posts, and automatically set featured image.在保存或发布文章时自动保存远程图片到本地媒体库，自动设置特色图片，并且支持机器人采集软件从外部提交。
 
 == Description ==
 
