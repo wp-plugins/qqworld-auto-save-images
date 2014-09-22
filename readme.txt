@@ -62,7 +62,7 @@ No special needs description
 = 1.4.2 =
 Fix a bug: If remote images are too big or too many, program need more time to download, When default time out, whole process stoped.
 If remote images are too many, sometimes you need fetch twice.
-修复了一个bug：如果远程图片太大或太多，程序需要更多时间来下载，当默认的运行超时，整个过程停止。
+修复了一个bug：如果远程图片太大或太多，程序需要更多时间来下载，当默认的运行超时，程序会卡住。
 如果远程图片太多，有时候需要抓取两次。
 
 = 1.4.1 =
