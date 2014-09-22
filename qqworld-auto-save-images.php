@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.4.1
+Version: 1.4.2
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 */
@@ -92,7 +92,7 @@ class QQWorld_auto_save_images {
 									var init = function() {
 										$('.button.save_remote_images').removeClass('success').html(icon+QQWorld_auto_save_images.text.save_remote_images);
 									}
-									$('#content').val(respond)
+									if (respond) $('#content').val(respond)
 									setTimeout(init, 3000);
 								}
 							});
@@ -112,7 +112,7 @@ class QQWorld_auto_save_images {
 									var init = function() {
 										$('.button.save_remote_images').removeClass('success').html(icon+QQWorld_auto_save_images.text.save_remote_images);
 									}
-									tinyMCE.activeEditor.setContent(respond);
+									if (respond) tinyMCE.activeEditor.setContent(respond);
 									setTimeout(init, 3000);
 								}
 							});
@@ -241,6 +241,7 @@ class QQWorld_auto_save_images {
 	}
 
 	function save_remote_images() {
+		set_time_limit(0);
 		//Check to make sure function is not executed more than once on save
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
 		return;
@@ -251,7 +252,7 @@ class QQWorld_auto_save_images {
 		$post_id = $_POST['post_id'];
 		$content = $this->js_unescape($_POST['content']);
 
-		$preg=preg_match_all('/<img.*?src="(.*?)(\?.*?)?"/',stripslashes($content),$matches);
+		$preg=preg_match_all('/<img.*?src="((?![\"\']).*?)((?![\"\'])\?.*?)?"/',stripslashes($content),$matches);
 		if($preg){
 			foreach($matches[1] as $image_url){
 				if(empty($image_url)) continue;
@@ -269,6 +270,7 @@ class QQWorld_auto_save_images {
 	}
 
 	function fetch_images($post_id) {
+		set_time_limit(0);
 		//Check to make sure function is not executed more than once on save
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
 		return;
@@ -280,7 +282,7 @@ class QQWorld_auto_save_images {
 
 		$post=get_post($post_id);
 		$content=$post->post_content;
-		$preg=preg_match_all('/<img.*?src="(.*?)(\?.*?)?"/',stripslashes($content),$matches);
+		$preg=preg_match_all('/<img.*?src="((?![\"\']).*?)((?![\"\'])\?.*?)?"/',stripslashes($content),$matches);
 		if($preg){
 			foreach($matches[1] as $image_url){
 				if(empty($image_url)) continue;
