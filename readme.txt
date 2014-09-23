@@ -54,8 +54,8 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 == Installation ==
 
-No special needs description
-没有特别需要说明的
+Make sure the server configuration allow_url_fopen=1 in php.ini.
+请确保php.ini的设置中 allow_url_fopen=1
 
 == Changelog ==
 
