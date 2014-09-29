@@ -55,38 +55,37 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 == Installation ==
 
 <ol>
-<li>Make sure the server configuration allow_url_fopen=1 in php.ini.
+<li>Make sure the server configuration allow_url_fopen=1 in php.ini.<br />
 请确保php.ini的设置中 allow_url_fopen=1</li>
 
-<li>Warning: If your website domain had changed, you must modify all image link to new domain from database, or else all images which not modified in post content will be save again.
+<li>Warning: If your website domain had changed, you must modify all image link to new domain from database, or else all images which not modified in post content will be save again.<br />
 警告：如果你的网站域名更改了，必须在数据库中将所有的图片链接更新到新域名，否则插件会把未更改的图片再保存一次。</li>
 </ol>
 
 == Changelog ==
 
 = 1.5 =
-New feature: Scan posts and save remote images in all posts to local media library. Maybe take a long time.
+New feature: Scan posts and save remote images in all posts to local media library. Maybe take a long time.<br />
 新功能：扫描所有的文章，将所有远程图片保存到本地，可能需要很长时间。
 
 = 1.4.3 =
-Now you can choose auto set featured image or not.
+Now you can choose auto set featured image or not.<br />
 现在你可以选择是否自动设置特色图片。
 
 = 1.4.2 =
-Fixed 1 bug: If remote images are too big or too many, program need more time to download, When default time out, whole process stoped.
-If remote images are too many, sometimes you need fetch twice.
-修复bug：如果远程图片太大或太多，程序需要更多时间来下载，当默认的运行超时，程序会卡住。
+Fixed 1 bug: If remote images are too big or too many, program need more time to download, When default time out, whole process stoped.<br />
+If remote images are too many, sometimes you need fetch twice.<br />
+修复bug：如果远程图片太大或太多，程序需要更多时间来下载，当默认的运行超时，程序会卡住。<br />
 如果远程图片太多，有时候需要抓取两次。
 
 = 1.4.1 =
-New functional optimized
+New functional optimized<br />
 优化了新功能
 
 = 1.4 =
-Add a new type allow user manually save remote images via click a button on the top of editor, and don't forget after you saved images, you still need to submit the post.
-You can change the Type in the plugin's setting page.
-
-添加一个新类型允许用户通过单击编辑器顶部的按钮手动保存远程图像，别忘记了在保存图片后提交文章哦。
+Add a new type allow user manually save remote images via click a button on the top of editor, and don't forget after you saved images, you still need to submit the post.<br />
+You can change the Type in the plugin's setting page.<br />
+添加一个新类型允许用户通过单击编辑器顶部的按钮手动保存远程图像，别忘记了在保存图片后提交文章哦。<br />
 你可以在插件的设置页面更改类型。
 
 = 1.3 =
@@ -102,27 +101,27 @@ Fixed 2 bugs:
 </ol>
 
 = 1.2 =
-add admin page to control use which action to save remote image.
+add admin page to control use which action to save remote image.<br />
 添加后台页面来管理选择使用下载远程图片的动作。
 
 = 1.1 =
-Remove auto rename.
-移除自动更名功能。
-if you want to upload images with chinese file name and server does not support chinese filename, please using 1.0.
+Remove auto rename.<br />
+移除自动更名功能。<br />
+if you want to upload images with chinese file name and server does not support chinese filename, please using 1.0.<br />
 如果需要上传中文名图片，服务器又不支持中文文件名，请使用1.0
 
 = 1.0 =
-Born for Capture.
-为采集而生
-The feature is can automatically change image filename.
+Born for Capture.<br />
+为采集而生<br />
+The feature is can automatically change image filename.<br />
 特色是可以自动更改图片的文件名
 
 == Upgrade Notice ==
 
 = 1.1 =
-if you want to upload images with chinese file name and server does not support chinese filename, please using 1.0.
+if you want to upload images with chinese file name and server does not support chinese filename, please using 1.0.<br />
 如果需要上传中文名图片，服务器又不支持中文文件名，请使用1.0
 
 = 1.0 =
-The feature is can automatically change image filename.
+The feature is can automatically change image filename.<br />
 特色是可以自动更改图片的文件名
