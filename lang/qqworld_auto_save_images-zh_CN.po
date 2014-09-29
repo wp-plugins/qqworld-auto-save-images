@@ -1,0 +1,83 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: QQworld Auto Save Images\n"
+"Report-Msgid-Bugs-To: http://www.qqworld.org\n"
+"POT-Creation-Date: 2011-12-10 19:47:15+00:00\n"
+"PO-Revision-Date: 2014-09-29 20:59+0800\n"
+"Last-Translator: Michael Wang <admin@qqworld.org>\n"
+"Language-Team: QQWorld <admin@qqworld.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.6.9\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+msgid "QQWorld Auto Save Images"
+msgstr "QQWorld自动保存图片"
+
+msgid "Save Remote Images"
+msgstr "保存远程图片"
+
+msgid "When"
+msgstr "什么时候"
+
+msgid "Save post (Publish, save draft or pedding review)."
+msgstr "保存文章时（发布文章，保存草稿和提交审核）。"
+
+msgid "Publish post only."
+msgstr "仅发布文章时。"
+
+msgid "In Process..."
+msgstr "正在保存……"
+
+msgid "Successed save remote images"
+msgstr "成功保存远程图片"
+
+msgid ""
+"Automatically save all remote images to local media libary when you save or "
+"publish post."
+msgstr "在保存或发布文章时，自动将所有远程图像保存到本地媒体库。"
+
+msgid ""
+"Manually save all remote images to local media libary when you click the "
+"button on the top of editor."
+msgstr "当单击编辑器顶部的按钮时，手动将所有远程图像保存到本地媒体库。"
+
+msgid "Automatically Set Featured Image"
+msgstr "自动设置特色图片"
+
+msgid "Scan Old Posts"
+msgstr "扫描旧的文章"
+
+msgid "Scan"
+msgstr "扫描"
+
+msgid ""
+"Are you sure? Before you click the yes button, I recommend you backup the "
+"website database."
+msgstr "你确定吗？在点击确定按钮之前，我建议你备份网站的数据库。"
+
+msgid ""
+"Scan posts and keep remote images in all posts to local media library. Maybe "
+"take a long time."
+msgstr "扫描所有的文章，将所有远程图片保存到本地，可能需要很长时间。"
+
+msgid "Scanning..."
+msgstr "扫描中……"
+
+msgid "Select post types you want to scan:"
+msgstr "选择想要扫描的文章类型："
+
+msgid "All done."
+msgstr "全部完成。"
+
+msgid "Post Type"
+msgstr "文章类型"
+
+msgid "Return"
+msgstr "返回"
+
+msgid "Please select the post type you want to scan."
+msgstr "请选择要扫描的文章类型。"
