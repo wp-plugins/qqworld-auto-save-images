@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,10 @@ Make sure the server configuration allow_url_fopen=1 in php.ini.
 请确保php.ini的设置中 allow_url_fopen=1
 
 == Changelog ==
+
+= 1.4.3 =
+Now you can choose auto set featured image or not.
+现在你可以选择是否自动设置特色图片。
 
 = 1.4.2 =
 Fixed 1 bug: If remote images are too big or too many, program need more time to download, When default time out, whole process stoped.

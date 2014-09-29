@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.4.2
+Version: 1.4.3
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 */
@@ -14,6 +14,7 @@ class QQWorld_auto_save_images {
 	function __construct() {
 		$this->using_action = get_option('using_action', 'publish');
 		$this->type = get_option('qqworld_auto_save_imagess_type', 'auto');
+		$this->featured_image = get_option('qqworld_auto_save_imagess_set_featured_image', 'yes');
 		switch ($this->type) {
 			case 'auto':
 				$this->add_actions();
@@ -152,7 +153,7 @@ class QQWorld_auto_save_images {
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
-					<th scope="row"><label for="blogname"><?php _e('Type'); ?></label></th>
+					<th scope="row"><label><?php _e('Type'); ?></label></th>
 					<td><fieldset>
 						<legend class="screen-reader-text"><span><?php _e('Type'); ?></span></legend>
 							<label for="auto">
@@ -165,9 +166,24 @@ class QQWorld_auto_save_images {
 							</label>
 					</fieldset></td>
 				</tr>
+
+				<tr valign="top">
+					<th scope="row"><label><?php _e('Auto Set Featured Image', 'qqworld_auto_save_images'); ?></label></th>
+					<td><fieldset>
+						<legend class="screen-reader-text"><span><?php _e('Auto Set Featured Image', 'qqworld_auto_save_images'); ?></span></legend>
+							<label for="qqworld_auto_save_imagess_set_featured_image_yes">
+								<input name="qqworld_auto_save_imagess_set_featured_image" type="radio" id="qqworld_auto_save_imagess_set_featured_image_yes" value="yes" <?php checked('yes', $this->featured_image); ?> />
+								<?php _e('Yes'); ?>
+							</label><br />
+							<label for="qqworld_auto_save_imagess_set_featured_image_no">
+								<input name="qqworld_auto_save_imagess_set_featured_image" type="radio" id="qqworld_auto_save_imagess_set_featured_image_no" value="no" <?php checked('no', $this->featured_image); ?> />
+								<?php _e('No'); ?>
+							</label>
+					</fieldset></td>
+				</tr>
 				
 				<tr id="second_level" valign="top"<?php if ($this->type != 'auto') echo ' style="display: none;"'; ?>>
-					<th scope="row"><label for="blogname"><?php _e('When', 'qqworld_auto_save_images'); ?></label></th>
+					<th scope="row"><label><?php _e('When', 'qqworld_auto_save_images'); ?></label></th>
 					<td><fieldset>
 						<legend class="screen-reader-text"><span><?php _e('When', 'qqworld_auto_save_images'); ?></span></legend>
 							<label for="save">
@@ -198,6 +214,7 @@ class QQWorld_auto_save_images {
 	function register_settings() {
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_imagess_type');
 		register_setting('qqworld_auto_save_images_settings', 'using_action');
+		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_imagess_set_featured_image');
 	}
 
 	function add_actions() {
@@ -308,7 +325,7 @@ class QQWorld_auto_save_images {
 			$im_name = $match[1].$match[2];
 			$res=wp_upload_bits($im_name,'',$file);
 			$attach_id = $this->insert_attachment($res['file'],$post_id);
-			if( !has_post_thumbnail($post_id) ) set_post_thumbnail( $post_id, $attach_id );
+			if( !has_post_thumbnail($post_id) && $this->featured_image=='yes' ) set_post_thumbnail( $post_id, $attach_id );
 			return $res;
 		}
 		return false;
