@@ -168,9 +168,9 @@ class QQWorld_auto_save_images {
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><label><?php _e('Auto Set Featured Image', 'qqworld_auto_save_images'); ?></label></th>
+					<th scope="row"><label><?php _e('Automatically Set Featured Image', 'qqworld_auto_save_images'); ?></label></th>
 					<td><fieldset>
-						<legend class="screen-reader-text"><span><?php _e('Auto Set Featured Image', 'qqworld_auto_save_images'); ?></span></legend>
+						<legend class="screen-reader-text"><span><?php _e('Automatically Set Featured Image', 'qqworld_auto_save_images'); ?></span></legend>
 							<label for="qqworld_auto_save_imagess_set_featured_image_yes">
 								<input name="qqworld_auto_save_imagess_set_featured_image" type="radio" id="qqworld_auto_save_imagess_set_featured_image_yes" value="yes" <?php checked('yes', $this->featured_image); ?> />
 								<?php _e('Yes'); ?>
