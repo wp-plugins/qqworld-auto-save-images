@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.5
+Stable tag: 1.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,7 +58,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 <li>Make sure the server configuration <strong>allow_url_fopen=1</strong> in php.ini.<br />
 请确保php.ini的设置中 <strong>allow_url_fopen=1</strong></li>
 
-<li>Warning: If your website domain had changed, you must modify all image link to new domain from database, or else all images which not modified in post content will be save again.<br />
+<li>Warning: If your website domain has been changed, you must modify all image link to new domain from database, or else all images which not modified in post content will be save again.<br />
 警告：如果你的网站域名更改了，必须在数据库中将所有的图片链接更新到新域名，否则插件会把未更改的图片再保存一次。</li>
 </ol>
 
