@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.5.2
+Version: 1.5.3
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 */
@@ -84,7 +84,8 @@ class QQWorld_auto_save_images {
 								text: QQWorld_auto_save_images.text.in_process,	
 								type: 'notification',
 								layout: 'center',
-								modal: true
+								modal: true,
+								closeWith: ['button']
 							}) );
 							$.ajax({
 								type: "POST",
@@ -111,7 +112,8 @@ class QQWorld_auto_save_images {
 								text: QQWorld_auto_save_images.text.in_process,	
 								type: 'notification',
 								layout: 'center',
-								modal: true
+								modal: true,
+								closeWith: ['button']
 							}) );
 							$.ajax({
 								type: "POST",
@@ -220,14 +222,24 @@ class QQWorld_auto_save_images {
 					<th scope="row"><label><?php _e('Scan Old Posts', 'qqworld_auto_save_images'); ?></label></th>
 					<td>
 					<p><?php _e('Select post types you want to scan:', 'qqworld_auto_save_images'); ?></p>
-					<p id="post_types_list">
-					<?php
-					$post_types = get_post_types('', 'objects');
-					foreach ($post_types as $name => $post_type) : ?>
-						<label><input name="qqworld_auto_save_imagess_post_types[]" type="checkbox" value="<?php echo $name; ?>" /> <?php echo $post_type->labels->name; ?></label>
-					<?php endforeach;
-					?>
-					</p>
+					<div id="post_types_list">
+						<p><?php
+						$post_types = get_post_types('', 'objects');
+						foreach ($post_types as $name => $post_type) : ?>
+							<label><input name="qqworld_auto_save_imagess_post_types[]" type="checkbox" value="<?php echo $name; ?>" /> <?php echo $post_type->labels->name; ?></label>
+						<?php endforeach;
+						?></p>
+						<p><?php _e('Filter:', 'qqworld_auto_save_images'); ?> <?php printf(__('Start from %s Scan', 'qqworld_auto_save_images'), '<input type="number" name="offset" value="0" />'); ?>
+							<select name="posts_per_page">
+								<option value="-1"><?php _e('All'); ?></option>
+								<?php for ($i=1; $i<=10; $i++) : ?>
+								<option value="<?php echo $i*100; ?>"><?php echo $i*100; ?></option>
+								<?php endfor; ?>
+							</select> <?php _e('Posts'); ?>
+						</p>
+						<p class="description"><?php _e('If you want to scan 50-150 posts, please type 50 in the textfield and choose 100 in the select.', 'qqworld_auto_save_images'); ?></p>
+					</div>
+					
 					<fieldset>
 						<legend class="screen-reader-text"><span><?php _e('Scan Old Posts', 'qqworld_auto_save_images'); ?></span></legend>
 							<label for="scan_old_posts">
@@ -302,13 +314,17 @@ class QQWorld_auto_save_images {
 	<?php
 	set_time_limit(0);
 	$post_types = $_POST['qqworld_auto_save_imagess_post_types'];
+	$offset = empty($_POST['offset']) ? 0 : $_POST['offset'];
+	$posts_per_page = $_POST['posts_per_page'];
 	$args = array(
-		'posts_per_page' => -1,
+		'posts_per_page' => $posts_per_page,
+		'offset' => $offset,
 		'order' => 'ASC',
-		'post_type' => $post_types,
+		'post_type' => $post_types
 	);
 	$posts = get_posts($args);
 	if (!empty($posts)) : ?>
+		<p><?php _e('Scan posts and keep remote images in all posts to local media library. Maybe take a long time.', 'qqworld_auto_save_images'); ?></p>
 		<table id="scan_old_post_list">
 			<thead>
 				<th><?php _e('ID'); ?></th>
@@ -353,9 +369,9 @@ class QQWorld_auto_save_images {
 			timeout: 3000
 		});
 		</script>
-		<p><a href="<?php echo menu_page_url( 'qqworld-auto-save-images', 0 ); ?>" class="button button-primary"><?php _e('Return', 'qqworld_auto_save_images') ?></a></p>
-	<?php endif;
-	endif; ?>
+	<?php endif; ?>
+	<p><a href="<?php echo menu_page_url( 'qqworld-auto-save-images', 0 ); ?>" class="button button-primary"><?php _e('Return', 'qqworld_auto_save_images') ?></a></p>
+	<?php endif; ?>
 <?php
 	}
 
