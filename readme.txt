@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,14 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 </ol>
 
 == Changelog ==
+
+= 1.5.2 =
+Make the plugin more proffesional<br />
+让插件更专业
+
+= 1.5.1 =
+Make the plugin more secure<br />
+让插件更安全
 
 = 1.5 =
 New feature: Scan posts and save remote images in all posts to local media library. Maybe take a long time.<br />

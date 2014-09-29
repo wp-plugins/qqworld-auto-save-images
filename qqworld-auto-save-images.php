@@ -3,10 +3,12 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.5.1
+Version: 1.5.2
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 */
+define('QQWORLD_AUTO_SAVE_IMAGES_DIR', __DIR__ . DIRECTORY_SEPARATOR);
+define('QQWORLD_AUTO_SAVE_IMAGES_URL', plugin_dir_url(__FILE__));
 
 class QQWorld_auto_save_images {
 	var $using_action;
@@ -58,12 +60,12 @@ class QQWorld_auto_save_images {
 			transform: scale(1.1);
 		}
 		</style>
+		<script src="<?php echo QQWORLD_AUTO_SAVE_IMAGES_URL; ?>js/jquery.noty.packaged.min.js"></script>
 		<a href="javascript:" id="save-remote-images-button" class="button save_remote_images" title="<?php _e('Save Remote Images', 'qqworld_auto_save_images'); ?>"><span class="wp-media-buttons-icon"></span><?php _e('Save Remote Images', 'qqworld_auto_save_images'); ?></a>
 		<script>
 		var QQWorld_auto_save_images = {};
 		QQWorld_auto_save_images.post_id = <?php echo $post->ID; ?>;
 		QQWorld_auto_save_images.text = {
-			save_remote_images: '<?php _e('Save Remote Images', 'qqworld_auto_save_images'); ?>',
 			in_process: '<?php _e('In Process...', 'qqworld_auto_save_images'); ?>',
 			succesed_save_remote_images: '<?php _e('Successed save remote images', 'qqworld_auto_save_images'); ?>'
 		}
@@ -71,15 +73,19 @@ class QQWorld_auto_save_images {
 			$(window).on('load', function() {
 				$('.mce-i-save_remote_images').closest('.mce-widget').hide();
 				$(document).on('click', '#save-remote-images-button', function() {
-					var icon = '<span class="wp-media-buttons-icon"></span>',
-					mode = 'text';
+					var mode = 'text';
 					if (tinyMCE.activeEditor) {
 						var id = tinyMCE.activeEditor.id;
 						mode = $('#'+id).is(':visible') ? 'text' : 'virtual';
 					}
 					switch (mode) {
 						case 'text':
-							$('.button.save_remote_images').html(icon+QQWorld_auto_save_images.text.in_process);
+							$('#save-remote-images-button').data('noty', noty({
+								text: QQWorld_auto_save_images.text.in_process,	
+								type: 'notification',
+								layout: 'center',
+								modal: true
+							}) );
 							$.ajax({
 								type: "POST",
 								url: ajaxurl,
@@ -89,17 +95,24 @@ class QQWorld_auto_save_images {
 									content: escape($('#content').val())
 								},
 								success: function(respond) {
-									$('.button.save_remote_images').addClass('success').html(icon+QQWorld_auto_save_images.text.succesed_save_remote_images);
-									var init = function() {
-										$('.button.save_remote_images').removeClass('success').html(icon+QQWorld_auto_save_images.text.save_remote_images);
-									}
-									if (respond) $('#content').val(respond)
-									setTimeout(init, 3000);
+									$('#save-remote-images-button').data('noty').close();
+									var n = noty({
+										text: QQWorld_auto_save_images.text.succesed_save_remote_images,	
+										type: 'success',
+										layout: 'center',
+										timeout: 3000
+									});
+									if (respond) $('#content').val(respond);
 								}
 							});
 							break;
 						case 'virtual':
-							$('.button.save_remote_images').html(icon+QQWorld_auto_save_images.text.in_process);
+							$('#save-remote-images-button').data('noty', noty({
+								text: QQWorld_auto_save_images.text.in_process,	
+								type: 'notification',
+								layout: 'center',
+								modal: true
+							}) );
 							$.ajax({
 								type: "POST",
 								url: ajaxurl,
@@ -109,12 +122,14 @@ class QQWorld_auto_save_images {
 									content: escape(tinyMCE.activeEditor.getContent())
 								},
 								success: function(respond) {
-									$('.button.save_remote_images').addClass('success').html(icon+QQWorld_auto_save_images.text.succesed_save_remote_images);
-									var init = function() {
-										$('.button.save_remote_images').removeClass('success').html(icon+QQWorld_auto_save_images.text.save_remote_images);
-									}
+									$('#save-remote-images-button').data('noty').close();
+									var n = noty({
+										text: QQWorld_auto_save_images.text.succesed_save_remote_images,	
+										type: 'success',
+										layout: 'center',
+										timeout: 3000
+									});
 									if (respond) tinyMCE.activeEditor.setContent(respond);
-									setTimeout(init, 3000);
 								}
 							});
 							break;						
@@ -140,17 +155,20 @@ class QQWorld_auto_save_images {
 	}
 
 	function admin_menu() {
-		add_submenu_page('options-general.php', 'QQWorld Auto Save Images', 'QQWorld Auto Save Images', 'manage_options', 'qqworld-auto-save-images', array($this, 'fn'));
+		add_submenu_page('options-general.php', __('QQWorld Auto Save Images', 'qqworld_auto_save_images'), __('QQWorld Auto Save Images', 'qqworld_auto_save_images'), 'manage_options', 'qqworld-auto-save-images', array($this, 'fn'));
 	}
 
 	function fn() {
 ?>
 <div class="wrap">
-	<h2><?php _e('QQWorld Auto Save Images'); ?></h2>
+	<h2><?php _e('QQWorld Auto Save Images', 'qqworld_auto_save_images'); ?></h2>
 	<?php if ($_GET['updated']=='true') { ?><div class="updated settings-error" id="setting-error-settings_updated"><p><strong><?php _e('Settings saved.'); ?></strong></p></div><?php }; ?>
+	<script src="<?php echo QQWORLD_AUTO_SAVE_IMAGES_URL; ?>js/jquery.noty.packaged.min.js"></script>
+	<link rel='stylesheet' href='<?php echo QQWORLD_AUTO_SAVE_IMAGES_URL; ?>css/style.css' type='text/css' media='all' />
 	<?php if (empty($_POST)) : ?>
 	<form action="options.php" method="post" id="form">
 		<?php settings_fields('qqworld_auto_save_images_settings'); ?>
+		<img src="https://ps.w.org/qqworld-auto-save-images/assets/banner-772x250.png" width="772" height="250" id="banner" />
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
@@ -164,21 +182,6 @@ class QQWorld_auto_save_images {
 							<label for="manual">
 								<input name="qqworld_auto_save_imagess_type" type="radio" id="manual" value="manual" <?php checked('manual', $this->type); ?> />
 								<?php _e('Manually save all remote images to local media libary when you click the button on the top of editor.', 'qqworld_auto_save_images'); ?>
-							</label>
-					</fieldset></td>
-				</tr>
-
-				<tr valign="top">
-					<th scope="row"><label><?php _e('Automatically Set Featured Image', 'qqworld_auto_save_images'); ?></label></th>
-					<td><fieldset>
-						<legend class="screen-reader-text"><span><?php _e('Automatically Set Featured Image', 'qqworld_auto_save_images'); ?></span></legend>
-							<label for="qqworld_auto_save_imagess_set_featured_image_yes">
-								<input name="qqworld_auto_save_imagess_set_featured_image" type="radio" id="qqworld_auto_save_imagess_set_featured_image_yes" value="yes" <?php checked('yes', $this->featured_image); ?> />
-								<?php _e('Yes'); ?>
-							</label><br />
-							<label for="qqworld_auto_save_imagess_set_featured_image_no">
-								<input name="qqworld_auto_save_imagess_set_featured_image" type="radio" id="qqworld_auto_save_imagess_set_featured_image_no" value="no" <?php checked('no', $this->featured_image); ?> />
-								<?php _e('No'); ?>
 							</label>
 					</fieldset></td>
 				</tr>
@@ -199,10 +202,25 @@ class QQWorld_auto_save_images {
 				</tr>
 
 				<tr valign="top">
+					<th scope="row"><label><?php _e('Automatically Set Featured Image', 'qqworld_auto_save_images'); ?></label></th>
+					<td><fieldset>
+						<legend class="screen-reader-text"><span><?php _e('Automatically Set Featured Image', 'qqworld_auto_save_images'); ?></span></legend>
+							<label for="qqworld_auto_save_imagess_set_featured_image_yes">
+								<input name="qqworld_auto_save_imagess_set_featured_image" type="radio" id="qqworld_auto_save_imagess_set_featured_image_yes" value="yes" <?php checked('yes', $this->featured_image); ?> />
+								<?php _e('Yes'); ?>
+							</label><br />
+							<label for="qqworld_auto_save_imagess_set_featured_image_no">
+								<input name="qqworld_auto_save_imagess_set_featured_image" type="radio" id="qqworld_auto_save_imagess_set_featured_image_no" value="no" <?php checked('no', $this->featured_image); ?> />
+								<?php _e('No'); ?>
+							</label>
+					</fieldset></td>
+				</tr>
+
+				<tr valign="top">
 					<th scope="row"><label><?php _e('Scan Old Posts', 'qqworld_auto_save_images'); ?></label></th>
 					<td>
-					<p><?php _e('Post types which you want to scan:', 'qqworld_auto_save_images'); ?></p>
-					<p>
+					<p><?php _e('Select post types you want to scan:', 'qqworld_auto_save_images'); ?></p>
+					<p id="post_types_list">
 					<?php
 					$post_types = get_post_types('', 'objects');
 					foreach ($post_types as $name => $post_type) : ?>
@@ -212,34 +230,78 @@ class QQWorld_auto_save_images {
 					</p>
 					<fieldset>
 						<legend class="screen-reader-text"><span><?php _e('Scan Old Posts', 'qqworld_auto_save_images'); ?></span></legend>
-							<label for="qqworld_auto_save_imagess_scan_old_posts">
-								<input name="qqworld_auto_save_imagess_scan_old_posts" type="button" class="button-primary" id="qqworld_auto_save_imagess_scan_old_posts" value="<?php _e('Scan', 'qqworld_auto_save_images'); ?>" />
+							<label for="scan_old_posts">
+								<input name="scan_old_posts" type="submit" class="button-primary" id="scan_old_posts" value="<?php _e('Scan', 'qqworld_auto_save_images'); ?>" />
 							</label>
-							<p class="description"><?php _e('Scan posts and save remote images in all posts to local media library. Maybe take a long time.', 'qqworld_auto_save_images'); ?></p>
+							<p class="description"><?php _e('Scan posts and keep remote images in all posts to local media library. Maybe take a long time.', 'qqworld_auto_save_images'); ?></p>
 					</fieldset></td>
 				</tr>
 			</tbody>
 		</table>
 		<script>
-		jQuery('#auto').on('click', function() {
-			jQuery('#second_level').fadeIn('fast');
-		});
-		jQuery('#manual').on('click', function() {
-			jQuery('#second_level').fadeOut('fast');
-		});
-		jQuery('#qqworld_auto_save_imagess_scan_old_posts').on('click', function() {
-			if (confirm('<?php _e('Are you sure?', 'qqworld_auto_save_images'); ?>')) {
-				jQuery('#form').attr('action', '').submit();
-			}
-		});
+		if (!QQWorld_auto_save_images) var QQWorld_auto_save_images = {};
+		QQWorld_auto_save_images.are_your_sure = '<?php _e('Are you sure? Before you click the yes button, I recommend you backup the website database.', 'qqworld_auto_save_images'); ?>';
+		QQWorld_auto_save_images.events = function() {
+			var $ = jQuery;
+			$('#auto').on('click', function() {
+				$('#second_level').fadeIn('fast');
+			});
+			$('#manual').on('click', function() {
+				$('#second_level').fadeOut('fast');
+			});
+			$('#scan_old_posts').on('click', function() {
+				if (jQuery('input[name="qqworld_auto_save_imagess_post_types[]"]:checked').length) {
+					var n = noty({
+						text: QQWorld_auto_save_images.are_your_sure,	
+						type: 'warning',
+						dismissQueue: true,
+						layout: 'center',
+						modal: true,
+						buttons: [
+							{
+								addClass: 'button button-primary',
+								text: '<?php _e('Yes'); ?>',
+								onClick: function ($noty) {
+									$noty.close();
+									$('#form').attr('action', '').submit();
+								}
+							},
+							{
+								addClass: 'button button-primary',
+								text: '<?php _e('No'); ?>',
+								onClick: function ($noty) {
+									$noty.close();
+								}
+							}
+						]
+					});
+				} else {
+					var n = noty({
+						text: '<?php _e('Please select the post type you want to scan.', 'qqworld_auto_save_images'); ?>',	
+						type: 'error',
+						dismissQueue: true,
+						layout: 'bottomCenter',
+						timeout: 3000
+					});
+				}
+				return false;
+			});
+		};
+		QQWorld_auto_save_images.events();
 		</script>
 		<p class="submit"><input type="submit" value="<?php _e('Save Changes') ?>" class="button-primary" name="Submit" /></p>
 	</form>
-	<?php else: ?>
-	<p><?php _e('Scanning...', 'qqworld_auto_save_images'); ?><p>
+	<?php elseif ( isset($_POST['qqworld_auto_save_imagess_post_types']) ): ?>
+	<script>
+	var n = noty({
+		text: '<?php _e('Scanning...', 'qqworld_auto_save_images'); ?>',	
+		type: 'notification',
+		layout: 'topCenter'
+	});
+	</script>
 	<?php
 	set_time_limit(0);
-	$post_types = isset($_POST['qqworld_auto_save_imagess_post_types']) ? $_POST['qqworld_auto_save_imagess_post_types'] : 'post';
+	$post_types = $_POST['qqworld_auto_save_imagess_post_types'];
 	$args = array(
 		'posts_per_page' => -1,
 		'order' => 'ASC',
@@ -282,26 +344,16 @@ class QQWorld_auto_save_images {
 	<?php endforeach; ?>
 			</tbody>
 		</table>
-		<p><?php _e('All done.', 'qqworld_auto_save_images'); ?></p>
-		<style>
-		#scan_old_post_list {
-			border-collapse: collapse;
-			width: 100%;
-			border: 1px solid #d4d4d4;
-			text-align: left;
-		}
-		#scan_old_post_list tbody tr:hover {
-			background: #f7f7f7;
-		}
-		#scan_old_post_list thead tr {
-			background: #ccc;
-			border-bottom: 2px solid #aaa;
-		}
-		#scan_old_post_list td, #scan_old_post_list th {
-			padding: 5px 20px;
-			border-bottom: 1px solid #d4d4d4;
-		}
-		</style>
+		<script>
+		n.close();
+		noty({
+			text: '<?php _e('All done.', 'qqworld_auto_save_images'); ?>',	
+			type: 'success',
+			layout: 'topCenter',
+			timeout: 3000
+		});
+		</script>
+		<p><a href="<?php echo menu_page_url( 'qqworld-auto-save-images', 0 ); ?>" class="button button-primary"><?php _e('Return', 'qqworld_auto_save_images') ?></a></p>
 	<?php endif;
 	endif; ?>
 <?php
