@@ -55,8 +55,8 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 == Installation ==
 
 <ol>
-<li>Make sure the server configuration allow_url_fopen=1 in php.ini.<br />
-请确保php.ini的设置中 allow_url_fopen=1</li>
+<li>Make sure the server configuration <strong>allow_url_fopen=1</strong> in php.ini.<br />
+请确保php.ini的设置中 <strong>allow_url_fopen=1</strong></li>
 
 <li>Warning: If your website domain had changed, you must modify all image link to new domain from database, or else all images which not modified in post content will be save again.<br />
 警告：如果你的网站域名更改了，必须在数据库中将所有的图片链接更新到新域名，否则插件会把未更改的图片再保存一次。</li>
@@ -69,7 +69,7 @@ New feature: Scan posts and save remote images in all posts to local media libra
 新功能：扫描所有的文章，将所有远程图片保存到本地，可能需要很长时间。
 
 = 1.4.3 =
-Now you can choose auto set featured image or not.<br />
+Now you can choose automatically set featured image or not.<br />
 现在你可以选择是否自动设置特色图片。
 
 = 1.4.2 =
