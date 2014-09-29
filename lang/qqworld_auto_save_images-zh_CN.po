@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: QQworld Auto Save Images\n"
 "Report-Msgid-Bugs-To: http://www.qqworld.org\n"
 "POT-Creation-Date: 2011-12-10 19:47:15+00:00\n"
-"PO-Revision-Date: 2014-09-29 14:56+0800\n"
+"PO-Revision-Date: 2014-09-29 17:06+0800\n"
 "Last-Translator: Michael Wang <admin@qqworld.org>\n"
 "Language-Team: QQWorld <admin@qqworld.org>\n"
 "Language: zh_CN\n"
@@ -44,3 +44,29 @@ msgstr "当单击编辑器顶部的按钮时，手动将所有远程图像保存
 
 msgid "Automatically Set Featured Image"
 msgstr "自动设置特色图片"
+
+msgid "Scan Old Posts"
+msgstr "扫描旧的文章"
+
+msgid "Scan"
+msgstr "扫描"
+
+msgid "Are you sure?"
+msgstr "你确定吗？"
+
+msgid ""
+"Scan posts and save remote images in all posts to local media library. Maybe "
+"take a long time."
+msgstr "扫描所有的文章，将所有远程图片保存到本地，可能需要很长时间。"
+
+msgid "Scanning..."
+msgstr "扫描中……"
+
+msgid "Post types which you want to scan:"
+msgstr "你想要扫描的文件类型："
+
+msgid "All done."
+msgstr "全部完成。"
+
+msgid "Post Type"
+msgstr "文章类型"

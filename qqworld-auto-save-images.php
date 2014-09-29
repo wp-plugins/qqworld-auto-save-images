@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.4.3
+Version: 1.5
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 */
@@ -148,7 +148,8 @@ class QQWorld_auto_save_images {
 <div class="wrap">
 	<h2><?php _e('QQWorld Auto Save Images'); ?></h2>
 	<?php if ($_GET['updated']=='true') { ?><div class="updated settings-error" id="setting-error-settings_updated"><p><strong><?php _e('Settings saved.'); ?></strong></p></div><?php }; ?>
-	<form action="options.php" method="post">
+	<?php if (empty($_POST)) : ?>
+	<form action="options.php" method="post" id="form">
 		<?php settings_fields('qqworld_auto_save_images_settings'); ?>
 		<table class="form-table">
 			<tbody>
@@ -196,6 +197,27 @@ class QQWorld_auto_save_images {
 							</label>
 					</fieldset></td>
 				</tr>
+
+				<tr valign="top">
+					<th scope="row"><label><?php _e('Scan Old Posts', 'qqworld_auto_save_images'); ?></label></th>
+					<td>
+					<p><?php _e('Post types which you want to scan:', 'qqworld_auto_save_images'); ?></p>
+					<p>
+					<?php
+					$post_types = get_post_types('', 'objects');
+					foreach ($post_types as $name => $post_type) : ?>
+						<label><input name="qqworld_auto_save_imagess_post_types[]" type="checkbox" value="<?php echo $name; ?>" /> <?php echo $post_type->labels->name; ?></label>
+					<?php endforeach;
+					?>
+					</p>
+					<fieldset>
+						<legend class="screen-reader-text"><span><?php _e('Scan Old Posts', 'qqworld_auto_save_images'); ?></span></legend>
+							<label for="qqworld_auto_save_imagess_scan_old_posts">
+								<input name="qqworld_auto_save_imagess_scan_old_posts" type="button" class="button-primary" id="qqworld_auto_save_imagess_scan_old_posts" value="<?php _e('Scan', 'qqworld_auto_save_images'); ?>" />
+							</label>
+							<p class="description"><?php _e('Scan posts and save remote images in all posts to local media library. Maybe take a long time.', 'qqworld_auto_save_images'); ?></p>
+					</fieldset></td>
+				</tr>
 			</tbody>
 		</table>
 		<script>
@@ -205,9 +227,83 @@ class QQWorld_auto_save_images {
 		jQuery('#manual').on('click', function() {
 			jQuery('#second_level').fadeOut('fast');
 		});
+		jQuery('#qqworld_auto_save_imagess_scan_old_posts').on('click', function() {
+			if (confirm('<?php _e('Are you sure?', 'qqworld_auto_save_images'); ?>')) {
+				jQuery('#form').attr('action', '').submit();
+			}
+		});
 		</script>
 		<p class="submit"><input type="submit" value="<?php _e('Save Changes') ?>" class="button-primary" name="Submit" /></p>
 	</form>
+	<?php else: ?>
+	<p><?php _e('Scanning...', 'qqworld_auto_save_images'); ?><p>
+	<?php
+	set_time_limit(0);
+	$post_types = isset($_POST['qqworld_auto_save_imagess_post_types']) ? $_POST['qqworld_auto_save_imagess_post_types'] : 'post';
+	$args = array(
+		'posts_per_page' => -1,
+		'order' => 'ASC',
+		'post_type' => $post_types,
+	);
+	$posts = get_posts($args);
+	if (!empty($posts)) : ?>
+		<table id="scan_old_post_list">
+			<thead>
+				<th><?php _e('ID'); ?></th>
+				<th><?php _e('Post Type', 'qqworld_auto_save_images'); ?></th>
+				<th><?php _e('Title'); ?></th>
+				<th><?php _e('Status'); ?></th>
+			</thead>
+			<tbody>
+		<?php foreach ($posts as $post) :
+			$post_id = $post->ID;
+			$post_type =  $post->post_type;
+			$content = $post->post_content;
+			$title = $post->post_title;
+			$preg=preg_match_all('/<img.*?src="((?![\"\']).*?)((?![\"\'])\?.*?)?"/',stripslashes($content),$matches);
+			if($preg){
+				foreach($matches[1] as $image_url){
+					if(empty($image_url)) continue;
+					$pos=strpos($image_url,get_bloginfo('url'));
+					if($pos===false){
+						if ($res=$this->save_images($image_url,$post_id)) {
+							$replace=$res['url'];
+							$content=str_replace($image_url,$replace,$content);
+						}
+					}
+				}
+			}
+			wp_update_post(array('ID' => $post_id, 'post_content' => $content)); ?>
+			<tr>
+				<td><?php echo $post_id; ?></td>
+				<td><?php echo $post_type; ?></td>
+				<td><a href="<?php echo get_edit_post_link($post_id); ?>" target="_blank"><?php echo $title; ?></a></td>
+				<td><?php _e('Done'); ?></td></tr>
+	<?php endforeach; ?>
+			</tbody>
+		</table>
+		<p><?php _e('All done.', 'qqworld_auto_save_images'); ?></p>
+		<style>
+		#scan_old_post_list {
+			border-collapse: collapse;
+			width: 100%;
+			border: 1px solid #d4d4d4;
+			text-align: left;
+		}
+		#scan_old_post_list tbody tr:hover {
+			background: #f7f7f7;
+		}
+		#scan_old_post_list thead tr {
+			background: #ccc;
+			border-bottom: 2px solid #aaa;
+		}
+		#scan_old_post_list td, #scan_old_post_list th {
+			padding: 5px 20px;
+			border-bottom: 1px solid #d4d4d4;
+		}
+		</style>
+	<?php endif;
+	endif; ?>
 <?php
 	}
 

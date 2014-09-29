@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.4.3
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,10 +54,19 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 == Installation ==
 
-Make sure the server configuration allow_url_fopen=1 in php.ini.
-请确保php.ini的设置中 allow_url_fopen=1
+<ol>
+<li>Make sure the server configuration allow_url_fopen=1 in php.ini.
+请确保php.ini的设置中 allow_url_fopen=1</li>
+
+<li>Warning: If your website domain had changed, you must modify all image link to new domain from database, or else all images which not modified in post content will be save again.
+警告：如果你的网站域名更改了，必须在数据库中将所有的图片链接更新到新域名，否则插件会把未更改的图片再保存一次。</li>
+</ol>
 
 == Changelog ==
+
+= 1.5 =
+New feature: Scan posts and save remote images in all posts to local media library. Maybe take a long time.
+新功能：扫描所有的文章，将所有远程图片保存到本地，可能需要很长时间。
 
 = 1.4.3 =
 Now you can choose auto set featured image or not.
