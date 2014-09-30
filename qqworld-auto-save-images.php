@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.5.4
+Version: 1.5.5
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 */
@@ -56,34 +56,38 @@ class QQWorld_auto_save_images {
 	}
 
 	public function save_remote_images_after_scan() {
+		set_time_limit(0);
 		if ( !current_user_can( 'manage_options' ) ) return;
-		$post_id = $_POST['post_id'];
-		$post = get_post($post_id);
-		$post_id = $post->ID;
-		$post_type =  $post->post_type;
-		$content = $post->post_content;
-		$title = $post->post_title;
-		$preg=preg_match_all('/<img.*?src="((?![\"\']).*?)((?![\"\'])\?.*?)?"/',stripslashes($content),$matches);
-		if($preg){
-			foreach($matches[1] as $image_url){
-				if(empty($image_url)) continue;
-				$pos=strpos($image_url,get_bloginfo('url'));
-				if($pos===false){
-					if ($res=$this->save_images($image_url,$post_id)) {
-						$replace=$res['url'];
-						$content=str_replace($image_url,$replace,$content);
+		$post_ids = $_REQUEST['post_id'];
+		if (!empty($post_ids)) foreach ($post_ids as $post_id) :
+			$post = get_post($post_id);
+			$post_id = $post->ID;
+			$post_type =  $post->post_type;
+			$content = $post->post_content;
+			$title = $post->post_title;
+			$preg=preg_match_all('/<img.*?src="((?![\"\']).*?)((?![\"\'])\?.*?)?"/',stripslashes($content),$matches);
+			if($preg){
+				foreach($matches[1] as $image_url){
+					if(empty($image_url)) continue;
+					$pos=strpos($image_url,get_bloginfo('url'));
+					if($pos===false){
+						if ($res=$this->save_images($image_url,$post_id)) {
+							$replace=$res['url'];
+							$content=str_replace($image_url,$replace,$content);
+						}
 					}
 				}
 			}
-		}
-		wp_update_post(array('ID' => $post_id, 'post_content' => $content)); ?>
-		<tr>
-			<td><?php echo $post_id; ?></td>
-			<td><?php echo $post_type; ?></td>
-			<td><a href="<?php echo get_edit_post_link($post_id); ?>" target="_blank"><?php echo $title; ?></a></td>
-			<td><?php _e('Done'); ?></td>
-		</tr>
-		<?php
+			wp_update_post(array('ID' => $post_id, 'post_content' => $content));
+?>
+			<tr>
+				<td><?php echo $post_id; ?></td>
+				<td><?php echo $post_type; ?></td>
+				<td><a href="<?php echo get_edit_post_link($post_id); ?>" target="_blank"><?php echo $title; ?></a></td>
+				<td><?php _e('Done'); ?></td>
+			</tr>
+<?php
+		endforeach;
 		exit;
 	}
 
@@ -192,7 +196,6 @@ class QQWorld_auto_save_images {
 				});
 			})
 		});
-
 		</script>
 	<?php
 	}
@@ -293,8 +296,14 @@ class QQWorld_auto_save_images {
 					
 					<fieldset>
 						<legend class="screen-reader-text"><span><?php _e('Scan Old Posts', 'qqworld_auto_save_images'); ?></span></legend>
+							<?php _e('Speed:', 'qqworld_auto_save_images'); ?>
+							<select name="speed">
+								<?php for ($i=1; $i<=10; $i++) : ?>
+								<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+								<?php endfor; ?>
+							</select>
 							<label for="scan_old_posts">
-								<input name="scan_old_posts" type="button" class="button-primary" id="scan_old_posts" value="<?php _e('Scan', 'qqworld_auto_save_images'); ?>" />
+								<input name="scan_old_posts" type="button" class="button-primary" id="scan_old_posts" value="<?php _e('Scan', 'qqworld_auto_save_images'); ?> &#8667;" />
 							</label>
 							<p class="description"><?php _e('Scan posts and keep remote images in all posts to local media library. Maybe take a long time.', 'qqworld_auto_save_images'); ?></p>
 					</fieldset>
@@ -313,23 +322,26 @@ class QQWorld_auto_save_images {
 					text: '<?php _e('All done.', 'qqworld_auto_save_images'); ?>',	
 					type: 'success',
 					layout: 'bottomCenter',
-					dismissQueue: true,
-					timeout: 3000
+					dismissQueue: true
 				});
 				$('#scan_old_posts').removeAttr('disabled');
 				return;
 			}
-			var data = {
-				action: 'save_remote_images_after_scan',
-				post_id: respond[r]['ID']
-			};
+			var speed = parseInt($('select[name="speed"]').val()),
+			post_id = new Array;
+			var data = 'action=save_remote_images_after_scan';
+			for (var p=r; p<r+speed; p++) {
+				if (typeof respond[p] != 'undefined') data += '&post_id[]='+respond[p]['ID'];
+			}
 			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
 				data: data,
 				success: function(data) {
+					data = $(data);
 					$('#scan_old_post_list tbody').append(data);
-					r++;
+					data.hide().fadeIn('fast');
+					r += speed;
 					QQWorld_auto_save_images.scan(respond, r);
 				}
 			});
@@ -488,6 +500,7 @@ class QQWorld_auto_save_images {
 				}
 			}
 		}
+		wp_update_post(array('ID' => $post_id, 'post_content' => $content));
 		echo $content;
 		exit;
 	}

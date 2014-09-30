@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.5.4
+Stable tag: 1.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,10 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 </ol>
 
 == Changelog ==
+
+= 1.5.5 =
+Enhance the scanning speed of up to 10 times.<br />
+可提升最多10倍扫描速度
 
 = 1.5.4 =
 Because of PHP runs for a limited time, so now using ajax to scan posts. but it runs slower than 1.5.3.<br />
