@@ -283,7 +283,7 @@ class QQWorld_auto_save_images {
 							<label><input name="qqworld_auto_save_imagess_post_types[]" type="checkbox" value="<?php echo $name; ?>" /> <?php echo $post_type->labels->name; ?></label>
 						<?php endforeach;
 						?></p>
-						<p><?php _e('Filter:', 'qqworld_auto_save_images'); ?> <?php printf(__('Start from %s Scan', 'qqworld_auto_save_images'), '<input type="number" name="offset" value="0" disabled />'); ?>
+						<p><?php _e('Filter:', 'qqworld_auto_save_images'); ?> <?php printf(__('Start from %s Scan', 'qqworld_auto_save_images'), '<input type="number" class="small-text" name="offset" value="0" disabled />'); ?>
 							<select name="posts_per_page">
 								<option value="-1"><?php _e('All'); ?></option>
 								<?php for ($i=1; $i<=10; $i++) : ?>
