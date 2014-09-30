@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,10 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 </ol>
 
 == Changelog ==
+
+= 1.5.4 =
+Because of PHP runs for a limited time, so now using ajax to scan posts. but it runs slower than 1.5.3.<br />
+因为PHP有运行时间限制，所以现在改为使用AJAX来扫描文章。但运行速度比1.5.3慢。
 
 = 1.5.3 =
 Added a filter set scan range for scanner<br />
