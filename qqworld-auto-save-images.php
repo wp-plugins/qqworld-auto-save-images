@@ -41,7 +41,7 @@ class QQWorld_auto_save_images {
 
 	public function get_scan_list() {
 		if ( !current_user_can( 'manage_options' ) ) return;
-		$post_types = $_REQUEST['qqworld_auto_save_imagess_post_types'];
+		$post_types = isset($_REQUEST['qqworld_auto_save_imagess_post_types']) ? $_REQUEST['qqworld_auto_save_imagess_post_types'] : 'post';
 		$offset = empty($_REQUEST['offset']) ? 0 : $_POST['offset'];
 		$posts_per_page = $_REQUEST['posts_per_page'];
 		$args = array(
@@ -312,7 +312,8 @@ class QQWorld_auto_save_images {
 				noty({
 					text: '<?php _e('All done.', 'qqworld_auto_save_images'); ?>',	
 					type: 'success',
-					layout: 'topCenter',
+					layout: 'bottomCenter',
+					dismissQueue: true,
 					timeout: 3000
 				});
 				$('#scan_old_posts').removeAttr('disabled');
@@ -380,7 +381,8 @@ class QQWorld_auto_save_images {
 											$('body').data('noty', noty({
 												text: '<?php _e('Scanning...', 'qqworld_auto_save_images'); ?>',	
 												type: 'notification',
-												layout: 'topCenter'
+												layout: 'bottomCenter',
+												dismissQueue: true
 											}) );
 											QQWorld_auto_save_images.scan(respond, 0);
 										}
