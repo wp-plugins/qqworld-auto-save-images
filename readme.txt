@@ -13,7 +13,7 @@ Automatically keep the all remote picture to the local media libary when you pub
 
 Automatically keep the all remote picture to the local media libary when you publishing posts, and automatically set featured image.
 
-This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://", for example:
+This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://" and not Dynamic link, for example:
 
 <ul>
 <li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
@@ -25,6 +25,7 @@ The examples not working code:
 <li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li>
 <li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li>
 <li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li>
+<li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
 </ul>
 
 I tried to fix this out, but i can't let the program get the host name to full the image src.
@@ -35,7 +36,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 在发布文章时自动保存远程图片到本地媒体库，自动设置特色图片，并且支持机器人采集软件从外部提交。
 
-该插件有个小问题是，所有的图片URL必须是完整的，就是说必须得包含"http(s)://"，举例：
+该插件有个小问题是，所有的图片URL必须是完整的，就是说必须得包含"http(s)://"，并且非动态链接，比如：
 
 <ul>
 <li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
@@ -47,6 +48,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 <li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li>
 <li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li>
 <li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li>
+<li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
 </ul>
 
 我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整。
