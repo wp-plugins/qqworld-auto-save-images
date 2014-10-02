@@ -17,6 +17,7 @@ This plugin has a little problem that is all the image url must be full url, it 
 
 <ul>
 <li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
+<li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?data=20140218&quot; /&gt;</li>
 </ul>
 
 The examples not working code:
@@ -40,6 +41,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 <ul>
 <li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
+<li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?data=20140218&quot; /&gt;</li>
 </ul>
 
 不能保存图片的例子：
