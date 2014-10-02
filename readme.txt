@@ -37,7 +37,7 @@ I tried to fix this out, but i can't let the program get the host name to full t
 
 So if you encounter these codes, plaese manually fix the images src to full url.
 
-------------------------------------------------------------------------------
+////////////////////////////////////////////////////
 
 在发布文章时自动保存远程图片到本地媒体库，自动设置特色图片，并且支持机器人采集软件从外部提交。
 
