@@ -13,6 +13,10 @@ Automatically keep the all remote picture to the local media libary when you pub
 
 Automatically keep the all remote picture to the local media libary when you publishing posts, and automatically set featured image.
 
+And more powerful functional is waiting for you. What exactly is it? Hehe...
+
+<h3>Notice:</h3>
+
 This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://" and not Dynamic link, for example:
 
 <ul>
@@ -33,9 +37,13 @@ I tried to fix this out, but i can't let the program get the host name to full t
 
 So if you encounter these codes, plaese manually fix the images src to full url.
 
-<hr />
+------------------------------------------------------------------------------
 
 在发布文章时自动保存远程图片到本地媒体库，自动设置特色图片，并且支持机器人采集软件从外部提交。
+
+还有更强大的功能等着你，到底是什么呢？呵呵……
+
+<h3>注意：</h3>
 
 该插件有个小问题是，所有的图片URL必须是完整的，就是说必须得包含"http(s)://"，并且非动态链接，比如：
 
