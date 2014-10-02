@@ -17,7 +17,7 @@ And more powerful functional is waiting for you. What exactly is it? Hehe...
 
 <h3>Notice:</h3>
 
-This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://" and not Dynamic link, for example:
+This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://", and not Dynamic link, for example:
 
 <ul>
 <li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
@@ -62,6 +62,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 </ul>
 
 我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整。
+
 所以，如果你碰到这样的代码，请手动将图片地址改成完整的，或者使用采集工具自动补完图片的URL然后从外部提交给Wordpress。
 
 == Installation ==
