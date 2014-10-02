@@ -17,7 +17,7 @@ And more powerful functional is waiting for you. What exactly is it? Hehe...
 
 <h3>Notice:</h3>
 
-This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://", and not Dynamic link, for example:
+This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://", and not dynamic link, for example:
 
 <ul>
 <li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
@@ -33,7 +33,7 @@ The examples not working code:
 <li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
 </ul>
 
-I tried to fix this out, but i can't let the program get the host name to full the image src.
+I tried to figure this out, but i couldn't get the host name to make image src full or get remote image from dynamic link.
 
 So if you encounter these codes, plaese manually fix the images src to full url.
 
@@ -45,7 +45,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 <h3>注意：</h3>
 
-该插件有个小问题是，所有的图片URL必须是完整的，就是说必须得包含"http(s)://"，并且非动态链接，比如：
+该插件有个小问题，所有的远程图像的URL必须是完整的，就是说必须得包含"http(s)://"，并且非动态链接，比如：
 
 <ul>
 <li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
@@ -61,7 +61,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 <li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
 </ul>
 
-我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整。
+我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整或是从动态链接获取图像。
 
 所以，如果你碰到这样的代码，请手动将图片地址改成完整的，或者使用采集工具自动补完图片的URL然后从外部提交给Wordpress。
 
