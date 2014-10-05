@@ -78,7 +78,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 == Changelog ==
 
 = 1.5.6 =
-New feature:
+New features:
 <ol>
 <li>Set scope of ID for scan.</li>
 <li>List posts including remote images and handle them manually.</li>
