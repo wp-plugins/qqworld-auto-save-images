@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: QQworld Auto Save Images\n"
 "Report-Msgid-Bugs-To: http://www.qqworld.org\n"
 "POT-Creation-Date: 2011-12-10 19:47:15+00:00\n"
-"PO-Revision-Date: 2014-10-05 19:18+0800\n"
+"PO-Revision-Date: 2014-10-06 07:27+0800\n"
 "Last-Translator: Michael Wang <admin@qqworld.org>\n"
 "Language-Team: QQWorld <admin@qqworld.org>\n"
 "Language: zh_CN\n"
@@ -133,7 +133,7 @@ msgstr "正常"
 msgid "No posts found."
 msgstr "未找到任何文章。"
 
-msgid "Including remote images those not exist."
+msgid "Has missing images."
 msgstr "有不存在的远程图像。"
 
 msgid "All remote images have been saved."
@@ -145,10 +145,10 @@ msgstr "已扫描%d篇文章。"
 msgid "%d posts have been scanned."
 msgstr "已扫描%d篇文章。"
 
-msgid "%d post including remote images have been processed."
+msgid "%d post included remote images processed."
 msgstr "已处理%d篇包含远程图像的文章。"
 
-msgid "%d posts including remote images have been processed."
+msgid "%d posts included remote images processed."
 msgstr "已处理%d篇包含远程图像的文章。"
 
 msgid "found %d post including remote images."
@@ -157,16 +157,16 @@ msgstr "找到%d篇包含远程图像的文章。"
 msgid "found %d posts including remote images."
 msgstr "找到%d篇包含远程图像的文章。"
 
-msgid "And with %d post including remote images those not exist."
+msgid "And with %d post has missing images."
 msgstr "其中有%d篇文章包含不存在的远程图像。"
 
-msgid "And with %d posts including remote images those not exist."
+msgid "And with %d posts have missing images."
 msgstr "其中有%d篇文章包含不存在的远程图像。"
 
-msgid "%d post including remote images those not exist couldn't be processed."
+msgid "%d post has missing images couldn't be processed."
 msgstr "%d篇包含不存在的远程图像的文章无法处理。"
 
-msgid "%d posts including remote images those not exist couldn't be processed."
+msgid "%d posts have missing images couldn't be processed."
 msgstr "%d篇包含不存在的远程图像的文章无法处理。"
 
 msgid "Scope of Post ID:"

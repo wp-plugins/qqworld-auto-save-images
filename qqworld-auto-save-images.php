@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.5.6
+Version: 1.5.7
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 */
@@ -83,7 +83,9 @@ class QQWorld_auto_save_images {
 			'post__in' => $post__in
 		);
 		$posts = get_posts($args);
-		echo json_encode($posts);
+		$result=array();
+		foreach ($posts as $post) array_push($result, $post->ID);
+		echo json_encode($result);
 		exit;
 	}
 
@@ -124,7 +126,7 @@ class QQWorld_auto_save_images {
 				<td><a href="<?php echo get_edit_post_link($post_id); ?>" target="_blank"><?php echo $title; ?> &#8667;</a></td>
 				<td><?php
 					if ($has_remote_images) {
-						echo $has_not_exits_remote_images ? '<span class="red">'.__('Including remote images those not exist.', 'qqworld_auto_save_images').'</span>' : '<span class="green">'.__('All remote images have been saved.', 'qqworld_auto_save_images').'</span>';
+						echo $has_not_exits_remote_images ? '<span class="red">'.__('Has missing images.', 'qqworld_auto_save_images').'</span>' : '<span class="green">'.__('All remote images have been saved.', 'qqworld_auto_save_images').'</span>';
 					} else _e('No remote images found.', 'qqworld_auto_save_images')
 				?></td>
 			</tr>
@@ -165,7 +167,7 @@ class QQWorld_auto_save_images {
 				<td><?php echo $post_id; ?></td>
 				<td><?php echo $post_type_object->labels->name; ?></td>
 				<td><a href="<?php echo get_edit_post_link($post_id); ?>" target="_blank"><?php echo $title; ?> &#8667;</a></td>
-				<td><?php echo $has_not_exits_remote_images ? '<span class="red">'.__('Including remote images those not exist.', 'qqworld_auto_save_images').'</span>' : __('Normal', 'qqworld_auto_save_images'); ?></a></td>
+				<td><?php echo $has_not_exits_remote_images ? '<span class="red">'.__('Has missing images.', 'qqworld_auto_save_images').'</span>' : __('Normal', 'qqworld_auto_save_images'); ?></a></td>
 				<td id="list-<?php echo $post_id; ?>"><input type="button" post-id="<?php echo $post_id; ?>" class="fetch-remote-images button button-primary" value="&#9997; <?php _e('Fetch', 'qqworld_auto_save_images'); ?>" /></td>
 			</tr>
 <?php
@@ -469,11 +471,11 @@ class QQWorld_auto_save_images {
 					else count_html = sprintf("<?php _e( '%d posts have been scanned.', 'qqworld_auto_save_images'); ?>", count);
 					if (count_remote_images) {
 						count_remote_images = count_remote_images - count_not_exits_remote_images;
-						if (count_remote_images<=1) count_html += sprintf("<br /><?php _e( '%d post including remote images have been processed.', 'qqworld_auto_save_images'); ?>", count_remote_images);
-						else count_html += sprintf("<br /><?php _e( '%d posts including remote images have been processed.', 'qqworld_auto_save_images'); ?>", count_remote_images);
+						if (count_remote_images<=1) count_html += sprintf("<br /><?php _e( '%d post included remote images processed.', 'qqworld_auto_save_images'); ?>", count_remote_images);
+						else count_html += sprintf("<br /><?php _e( '%d posts included remote images processed.', 'qqworld_auto_save_images'); ?>", count_remote_images);
 						if (count_not_exits_remote_images) {
-							if (count_remote_images==1) count_html += sprintf("<br /><?php _e( "%d post including remote images those not exist couldn't be processed.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
-							else count_html += sprintf("<br /><?php _e( "%d posts including remote images those not exist couldn't be processed.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
+							if (count_not_exits_remote_images==1) count_html += sprintf("<br /><?php _e( "%d post has missing images couldn't be processed.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
+							else count_html += sprintf("<br /><?php _e( "%d posts have missing images couldn't be processed.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
 						}
 					}
 				} else {
@@ -495,7 +497,7 @@ class QQWorld_auto_save_images {
 			post_id = new Array;
 			var data = 'action=save_remote_images_after_scan';
 			for (var p=r; p<r+speed; p++) {
-				if (typeof respond[p] != 'undefined') data += '&post_id[]='+respond[p]['ID'];
+				if (typeof respond[p] != 'undefined') data += '&post_id[]='+respond[p];
 			}
 			$.ajax({
 				type: 'POST',
@@ -526,8 +528,8 @@ class QQWorld_auto_save_images {
 						if (count_remote_images==1) count_html += sprintf("<br /><?php _e( 'found %d post including remote images.', 'qqworld_auto_save_images'); ?>", count_remote_images);
 						else count_html += sprintf("<br /><?php _e( 'found %d posts including remote images.', 'qqworld_auto_save_images'); ?>", count_remote_images);
 						if (count_not_exits_remote_images) {
-							if (count_remote_images==1) count_html += sprintf("<br /><?php _e( "And with %d post including remote images those not exist.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
-							else count_html += sprintf("<br /><?php _e( "And with %d posts including remote images those not exist.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
+							if (count_not_exits_remote_images==1) count_html += sprintf("<br /><?php _e( "And with %d post has missing images.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
+							else count_html += sprintf("<br /><?php _e( "And with %d posts have missing images.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
 						}
 					} else count_html += '<br /><?php _e('No post has remote images found.', 'qqworld_auto_save_images'); ?>';
 				} else {
@@ -549,7 +551,7 @@ class QQWorld_auto_save_images {
 			post_id = new Array;
 			var data = 'action=save_remote_images_list_all_posts';
 			for (var p=r; p<r+speed; p++) {
-				if (typeof respond[p] != 'undefined') data += '&post_id[]='+respond[p]['ID'];
+				if (typeof respond[p] != 'undefined') data += '&post_id[]='+respond[p];
 			}
 			$.ajax({
 				type: 'POST',

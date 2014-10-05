@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.5.6
+Stable tag: 1.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,14 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 </ol>
 
 == Changelog ==
+
+= 1.5.7 =
+Fixed:<br />
+A bug of the stops process by some special characters.<br />
+some english error messages.<br />
+修复:<br />
+一些特殊字符停止程序进程的bug。<br />
+一些英文错误消息。<br />
 
 = 1.5.6 =
 New features:
