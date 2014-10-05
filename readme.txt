@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.5.5
+Stable tag: 1.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,7 +33,7 @@ The examples not working code:
 <li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
 </ul>
 
-I tried to figure this out, but i couldn't get the host name to make image src full or get remote image from dynamic link.
+I tried to figure this out, but i couldn't get the host name to make image src full, nor get remote image from dynamic link.
 
 So if you encounter these codes, plaese manually fix the images src to full url.
 
@@ -76,6 +76,18 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 </ol>
 
 == Changelog ==
+
+= 1.5.6 =
+New feature:
+<ol>
+<li>Set scope of ID for scan.</li>
+<li>List posts including remote images and handle them manually.</li>
+</ol>
+新功能：
+<ol>
+<li>设置文章ID的扫描范围。</li>
+<li>列出包含远程图像的文章，并且手动处理它们。</li>
+</ol>
 
 = 1.5.5 =
 Enhance the scanning speed of up to 10 times.<br />
