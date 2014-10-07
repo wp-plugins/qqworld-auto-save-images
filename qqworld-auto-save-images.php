@@ -496,9 +496,19 @@ class QQWorld_auto_save_images {
 			});
 			$('#scan_old_posts').removeAttr('disabled');
 			$('#list_all_posts').removeAttr('disabled');
+			$('body').data('r', $('body').data('r')+$('body').data('speed'));
+			switch ($('body').data('scan-mode')) {
+				case 'scan':
+					QQWorld_auto_save_images.scan($('body').data('respond'), $('body').data('r'));
+					break;
+				case 'list':
+					QQWorld_auto_save_images.list($('body').data('respond'), $('body').data('r'));
+					break;
+			}
 		};
 		QQWorld_auto_save_images.scan = function(respond, r) {
 			var $ = jQuery;
+			$('body').data('scan-mode', 'scan').data('r', r);
 			if (typeof respond[r] == 'undefined') {
 				$('#scan-result').effect( 'shake', null, 500 );
 				$('#form').slideDown('slow');
@@ -534,12 +544,14 @@ class QQWorld_auto_save_images {
 				$('#list_all_posts').removeAttr('disabled');
 				return;
 			}
-			var speed = parseInt($('select[name="speed"]').val()),
+			var speed = parseInt($('select[name="speed"]').val());
 			post_id = new Array;
+			$('body').data('speed', speed);
 			var data = 'action=save_remote_images_after_scan';
 			for (var p=r; p<r+speed; p++) {
 				if (typeof respond[p] != 'undefined') data += '&post_id[]='+respond[p];
 			}
+			console.log(data);
 			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
@@ -556,6 +568,7 @@ class QQWorld_auto_save_images {
 		};
 		QQWorld_auto_save_images.list = function(respond, r) {
 			var $ = jQuery;
+			$('body').data('scan-mode', 'list').data('r', r);
 			if (typeof respond[r] == 'undefined') {
 				$('#scan-result').effect( 'shake', null, 500 );
 				$('#form').slideDown('slow');
@@ -589,12 +602,14 @@ class QQWorld_auto_save_images {
 				$('#list_all_posts').removeAttr('disabled');
 				return;
 			}
-			var speed = parseInt($('select[name="speed"]').val()),
+			var speed = parseInt($('select[name="speed"]').val());
 			post_id = new Array;
+			$('body').data('speed', speed);
 			var data = 'action=save_remote_images_list_all_posts';
 			for (var p=r; p<r+speed; p++) {
 				if (typeof respond[p] != 'undefined') data += '&post_id[]='+respond[p];
 			}
+			console.log(data);
 			$.ajax({
 				type: 'POST',
 				url: ajaxurl,
@@ -662,6 +677,7 @@ class QQWorld_auto_save_images {
 										data: data,
 										dataType: 'json',
 										success: function(respond) {
+											QQWorld_auto_save_images.respond = respond;
 											$('#scan-result').html('<table id="scan_old_post_list">\
 											\	<thead>\
 											\		<th><?php _e('ID'); ?></th>\
@@ -678,7 +694,7 @@ class QQWorld_auto_save_images {
 												layout: 'center',
 												dismissQueue: true
 											}) );
-											QQWorld_auto_save_images.scan(respond, 0);
+											QQWorld_auto_save_images.scan(QQWorld_auto_save_images.respond, 0);
 										},
 										error: QQWorld_auto_save_images.catch_errors
 									});
@@ -707,6 +723,7 @@ class QQWorld_auto_save_images {
 						data: data,
 						dataType: 'json',
 						success: function(respond) {
+							$('body').data('respond', respond);
 							$('#scan-result').html('<table id="scan_old_post_list">\
 							\	<thead>\
 							\		<th><?php _e('ID'); ?></th>\
