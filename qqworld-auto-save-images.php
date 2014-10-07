@@ -486,7 +486,7 @@ class QQWorld_auto_save_images {
 			error += '</div>';
 			$('#form').slideDown('slow');
 			$('body').data('noty').close();
-			$('#scan_old_post_list').slideUp('slow');
+			if (!$('#scan_old_post_list tbody tr').length) $('#scan_old_post_list').slideUp('slow');
 			noty({
 				text: error,	
 				type: 'error',
