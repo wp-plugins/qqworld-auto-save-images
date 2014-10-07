@@ -456,23 +456,34 @@ class QQWorld_auto_save_images {
 		QQWorld_auto_save_images.are_your_sure = '<?php _e('Are you sure?<br />Before you click the yes button, I recommend backup site database.', 'qqworld_auto_save_images'); ?>';
 		QQWorld_auto_save_images.pls_select_post_types = '<?php _e('Please select post types.', 'qqworld_auto_save_images'); ?>';
 		QQWorld_auto_save_images.catch_errors = function(XMLHttpRequest, textStatus, errorThrown) {
-			var $=jQuery, error = '', args=new Array;
-			error += '<div style="text-align: left;"><h4>Options:</h4> ';
+			var $=jQuery, error='', args=new Array;
+			error += '<div style="text-align: left;"><center>Options</center>';
 			for (var t in this) {
-				args.push(t + ': ' + this[t]);
+				switch (t) {
+					case 'url':
+					case 'data':
+						args.push(t + ': ' + this[t]);
+						break;
+				}
+				
 			}
-			error += args.join(',', args);
+			error += args.join('<br />');
 			if (XMLHttpRequest) {
-				error += '<h4>XML Http Request:</h4>';
+				error += '<hr /><center>XML Http Request</center>';
 				args = new Array;
 				for (var x in XMLHttpRequest) {
-					args.push( x + ': ' + XMLHttpRequest[x] );
+					switch (x) {
+						case 'readyState':
+						case 'responseText':
+						case 'status':
+							args.push( x + ': ' + XMLHttpRequest[x] );
+							break;
+					}
 				}
 				error += args.join('<br />', args);
 			}
-			if (textStatus) error += '<br />text Status: ' + textStatus;
-			if (errorThrown) error += '<br />error Thrown: ' + errorThrown;
-			error += '<br />';
+			error += '<hr /><center>Status & Results</center>' + textStatus + ': ' + errorThrown;
+			error += '</div>';
 			$('#form').slideDown('slow');
 			$('body').data('noty').close();
 			$('#scan_old_post_list').slideUp('slow');
@@ -484,6 +495,8 @@ class QQWorld_auto_save_images {
 				modal: true,
 				closeWith: ['button']
 			});
+			$('#scan_old_posts').removeAttr('disabled');
+			$('#list_all_posts').removeAttr('disabled');
 		};
 		QQWorld_auto_save_images.scan = function(respond, r) {
 			var $ = jQuery;
