@@ -455,21 +455,21 @@ class QQWorld_auto_save_images {
 		if (!QQWorld_auto_save_images) var QQWorld_auto_save_images = {};
 		QQWorld_auto_save_images.are_your_sure = '<?php _e('Are you sure?<br />Before you click the yes button, I recommend backup site database.', 'qqworld_auto_save_images'); ?>';
 		QQWorld_auto_save_images.pls_select_post_types = '<?php _e('Please select post types.', 'qqworld_auto_save_images'); ?>';
+		QQWorld_auto_save_images.maybe_problem = '<?php _e('May be a problem with some posts: ', 'qqworld_auto_save_images'); ?>';
 		QQWorld_auto_save_images.catch_errors = function(XMLHttpRequest, textStatus, errorThrown) {
 			var $=jQuery, error='', args=new Array;
-			error += '<div style="text-align: left;"><center>Options</center>';
-			for (var t in this) {
-				switch (t) {
-					case 'url':
-					case 'data':
-						args.push(t + ': ' + this[t]);
-						break;
+			error += '<div style="text-align: left;">';
+			var query = this.data.split('&');
+			var data = new Array;
+			for (var d in query) {
+				var q = query[d].split('=');
+				if (q[0]=='post_id[]') {
+					data.push(q[1]);
 				}
-				
 			}
-			error += args.join('<br />');
+			error += QQWorld_auto_save_images.maybe_problem + data.join(', ');
 			if (XMLHttpRequest) {
-				error += '<hr /><center>XML Http Request</center>';
+				error += '<hr />';
 				args = new Array;
 				for (var x in XMLHttpRequest) {
 					switch (x) {
@@ -482,7 +482,7 @@ class QQWorld_auto_save_images {
 				}
 				error += args.join('<br />', args);
 			}
-			error += '<hr /><center>Status & Results</center>' + textStatus + ': ' + errorThrown;
+			error += '<br />' + textStatus + ': ' + errorThrown;
 			error += '</div>';
 			$('#form').slideDown('slow');
 			$('body').data('noty').close();
@@ -492,7 +492,6 @@ class QQWorld_auto_save_images {
 				type: 'error',
 				layout: 'bottom',
 				dismissQueue: true,
-				modal: true,
 				closeWith: ['button']
 			});
 			$('#scan_old_posts').removeAttr('disabled');
