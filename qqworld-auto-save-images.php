@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.5.7
+Version: 1.5.7.1
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 */
@@ -139,7 +139,6 @@ class QQWorld_auto_save_images {
 		set_time_limit(0);
 		if ( !current_user_can( 'manage_options' ) ) return;
 		$post_ids = $_REQUEST['post_id'];
-		echo 1;
 		if (!empty($post_ids)) foreach ($post_ids as $post_id) :
 			$post = get_post($post_id);
 			$post_id = $post->ID;
@@ -456,6 +455,21 @@ class QQWorld_auto_save_images {
 		if (!QQWorld_auto_save_images) var QQWorld_auto_save_images = {};
 		QQWorld_auto_save_images.are_your_sure = '<?php _e('Are you sure?<br />Before you click the yes button, I recommend backup site database.', 'qqworld_auto_save_images'); ?>';
 		QQWorld_auto_save_images.pls_select_post_types = '<?php _e('Please select post types.', 'qqworld_auto_save_images'); ?>';
+		QQWorld_auto_save_images.catch_errors = function(XMLHttpRequest, textStatus, errorThrown) {
+			var error;
+			if (XMLHttpRequest) error += 'XML Http Request: ' + XMLHttpRequest;
+			if (textStatus) error += '<br />text Status: ' + textStatus;
+			if (errorThrown) error += '<br />error Thrown: ' + errorThrown;
+			console.log(this);
+			noty({
+				text: error,	
+				type: 'error',
+				layout: 'bottomCenter',
+				dismissQueue: true,
+				modal: true,
+				closeWith: ['button']
+			});
+		};
 		QQWorld_auto_save_images.scan = function(respond, r) {
 			var $ = jQuery;
 			if (typeof respond[r] == 'undefined') {
@@ -509,7 +523,8 @@ class QQWorld_auto_save_images {
 					data.hide().fadeIn('fast');
 					r += speed;
 					QQWorld_auto_save_images.scan(respond, r);
-				}
+				},
+				error: QQWorld_auto_save_images.catch_errors
 			});
 		};
 		QQWorld_auto_save_images.list = function(respond, r) {
@@ -558,18 +573,14 @@ class QQWorld_auto_save_images {
 				url: ajaxurl,
 				data: data,
 				success: function(data) {
+					console.log(data);
 					data = $(data);
 					$('#scan_old_post_list tbody').append(data);
 					data.hide().fadeIn('fast');
 					r += speed;
 					QQWorld_auto_save_images.list(respond, r);
 				},
-				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					if (XMLHttpRequest) console.log('XMLHttpRequest: ' + XMLHttpRequest);
-					else if (textStatus) console.log('textStatus: ' + textStatus);
-					else if (errorThrown) console.log('errorThrown' + errorThrown);
-					console.log(this);
-				}
+				error: QQWorld_auto_save_images.catch_errors
 			});
 		};
 		QQWorld_auto_save_images.if_not_select_post_type = function() {
@@ -642,7 +653,8 @@ class QQWorld_auto_save_images {
 												dismissQueue: true
 											}) );
 											QQWorld_auto_save_images.scan(respond, 0);
-										}
+										},
+										error: QQWorld_auto_save_images.catch_errors
 									});
 								}
 							},
@@ -687,7 +699,8 @@ class QQWorld_auto_save_images {
 								dismissQueue: true
 							}) );
 							QQWorld_auto_save_images.list(respond, 0);
-						}
+						},
+						error: QQWorld_auto_save_images.catch_errors
 					});
 				} else QQWorld_auto_save_images.if_not_select_post_type();
 			});
@@ -702,7 +715,8 @@ class QQWorld_auto_save_images {
 					data: data,
 					success: function(data) {
 						$('#list-'+post_id).html('<span class="green"><?php _e('Done'); ?></span>');
-					}
+					},
+					error: QQWorld_auto_save_images.catch_errors
 				});
 			})
 		};

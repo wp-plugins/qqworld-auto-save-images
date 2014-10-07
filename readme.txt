@@ -77,6 +77,10 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 == Changelog ==
 
+= 1.5.7.1 =
+Debug system added<br />
+增加调试系统
+
 = 1.5.7 =
 Fixed:<br />
 A bug of the stops process by some special characters.<br />
