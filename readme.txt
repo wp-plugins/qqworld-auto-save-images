@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.5.7.1
+Stable tag: 1.5.7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,10 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 </ol>
 
 == Changelog ==
+
+= 1.5.7.2 =
+The debug system can pass errors let process go to the end<br />
+增加调试系统可以跳过错误让进程运行到底
 
 = 1.5.7.1 =
 Debug system added<br />
