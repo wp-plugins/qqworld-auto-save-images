@@ -456,15 +456,30 @@ class QQWorld_auto_save_images {
 		QQWorld_auto_save_images.are_your_sure = '<?php _e('Are you sure?<br />Before you click the yes button, I recommend backup site database.', 'qqworld_auto_save_images'); ?>';
 		QQWorld_auto_save_images.pls_select_post_types = '<?php _e('Please select post types.', 'qqworld_auto_save_images'); ?>';
 		QQWorld_auto_save_images.catch_errors = function(XMLHttpRequest, textStatus, errorThrown) {
-			var error;
-			if (XMLHttpRequest) error += 'XML Http Request: ' + XMLHttpRequest;
+			var $=jQuery, error = '', args=new Array;
+			error += '<div style="text-align: left;"><h4>Options:</h4> ';
+			for (var t in this) {
+				args.push(t + ': ' + this[t]);
+			}
+			error += args.join(',', args);
+			if (XMLHttpRequest) {
+				error += '<h4>XML Http Request:</h4>';
+				args = new Array;
+				for (var x in XMLHttpRequest) {
+					args.push( x + ': ' + XMLHttpRequest[x] );
+				}
+				error += args.join('<br />', args);
+			}
 			if (textStatus) error += '<br />text Status: ' + textStatus;
 			if (errorThrown) error += '<br />error Thrown: ' + errorThrown;
-			console.log(this);
+			error += '<br />';
+			$('#form').slideDown('slow');
+			$('body').data('noty').close();
+			$('#scan_old_post_list').slideUp('slow');
 			noty({
 				text: error,	
 				type: 'error',
-				layout: 'bottomCenter',
+				layout: 'bottom',
 				dismissQueue: true,
 				modal: true,
 				closeWith: ['button']
@@ -573,7 +588,6 @@ class QQWorld_auto_save_images {
 				url: ajaxurl,
 				data: data,
 				success: function(data) {
-					console.log(data);
 					data = $(data);
 					$('#scan_old_post_list tbody').append(data);
 					data.hide().fadeIn('fast');
