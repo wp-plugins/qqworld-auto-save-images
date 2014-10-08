@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.5.7.3
+Version: 1.5.7.4
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 */
@@ -45,12 +45,49 @@ class QQWorld_auto_save_images {
 	}
 
 	public function options_general_add_js() {
-		?><script src="<?php echo QQWORLD_AUTO_SAVE_IMAGES_URL; ?>js/jquery.noty.packaged.min.js"></script>
-		<link rel='stylesheet' href='<?php echo QQWORLD_AUTO_SAVE_IMAGES_URL; ?>css/style.css' type='text/css' media='all' />
-		<link rel='stylesheet' href='<?php echo QQWORLD_AUTO_SAVE_IMAGES_URL; ?>css/jquery-ui/jquery-ui.min.css' type='text/css' media='all' /><?php
-		wp_enqueue_script('jquery-ui-tooltip');
-		wp_enqueue_script('jquery-effects-core');
-		wp_enqueue_script('jquery-effects-shake');
+		if (isset($_GET['page']) && $_GET['page'] == 'qqworld-auto-save-images') :
+			wp_register_script('noty', QQWORLD_AUTO_SAVE_IMAGES_URL . 'js/jquery.noty.packaged.min.js', array('jquery') );
+			wp_enqueue_script('noty');
+			wp_register_style('qqworld-auto-save-images-style', QQWORLD_AUTO_SAVE_IMAGES_URL . 'css/style.css' );
+			wp_enqueue_style('qqworld-auto-save-images-style');
+			wp_register_style('jquery-ui-style', QQWORLD_AUTO_SAVE_IMAGES_URL . 'css/jquery-ui/jquery-ui.min.css' );
+			wp_enqueue_style('jquery-ui-style');
+			wp_enqueue_script('jquery-ui-tooltip');
+			wp_enqueue_script('jquery-effects-core');
+			wp_enqueue_script('jquery-effects-shake');
+			wp_register_script('qqworld-auto-save-images-script', QQWORLD_AUTO_SAVE_IMAGES_URL . 'js/script.js', array('jquery') );
+			wp_enqueue_script('qqworld-auto-save-images-script');
+			$translation_array = array(
+				'are_your_sure' => __('Are you sure?<br />Before you click the yes button, I recommend backup site database.', 'qqworld_auto_save_images'),
+				'pls_select_post_types' => __('Please select post types.', 'qqworld_auto_save_images'),
+				'maybe_problem' => __('May be a problem with some posts: ', 'qqworld_auto_save_images'),
+				'n_post_has_been_scanned' => __( '%d post has been scanned.', 'qqworld_auto_save_images'),
+				'n_posts_have_been_scanned' => __( '%d posts have been scanned.', 'qqworld_auto_save_images'),
+				'n_post_included_remote_images_processed' => __( '%d post included remote images processed.', 'qqworld_auto_save_images'),
+				'n_posts_included_remote_images_processed' => __( '%d posts included remote images processed.', 'qqworld_auto_save_images'),
+				'n_post_has_missing_images_couldnt_be_processed' => __( "%d post has missing images couldn't be processed.", 'qqworld_auto_save_images'),
+				'n_posts_have_missing_images_couldnt_be_processed' => __( "%d posts have missing images couldn't be processed.", 'qqworld_auto_save_images'),
+				'found_n_post_including_remote_images' => __( 'found %d post including remote images.', 'qqworld_auto_save_images'),
+				'found_n_posts_including_remote_images' => __( 'found %d posts including remote images.', 'qqworld_auto_save_images'),
+				'and_with_n_post_has_missing_images' => __( "And with %d post has missing images.", 'qqworld_auto_save_images'),
+				'and_with_n_posts_have_missing_images' => __( "And with %d posts have missing images.", 'qqworld_auto_save_images'),
+				'no_posts_processed' => __( "No posts processed.", 'qqworld_auto_save_images'),
+				'no_post_has_remote_images_found' => __('No post has remote images found.', 'qqworld_auto_save_images'),
+				'no_posts_found' => __('No posts found.', 'qqworld_auto_save_images'),
+				'all_done' => __('All done.', 'qqworld_auto_save_images'),
+				'yes' => __('Yes'),
+				'no' => __('No'),
+				'scanning' => __('Scanning...', 'qqworld_auto_save_images'),
+				'listing' => __('Listing...', 'qqworld_auto_save_images'),
+				'id' => __('ID'),
+				'post_type' => __('Post Type', 'qqworld_auto_save_images'),
+				'title' => __('Title'),
+				'status' => __('Status'),
+				'control' => __('Control', 'qqworld_auto_save_images'),
+				'done' => __('Done')
+			);
+			wp_localize_script('qqworld-auto-save-images-script', 'QASI', $translation_array, '3.0.0');
+		endif;
 	}
 
 	public function get_scan_list() {
@@ -116,20 +153,24 @@ class QQWorld_auto_save_images {
 			}
 			wp_update_post(array('ID' => $post_id, 'post_content' => $content));
 			$post_type_object = get_post_type_object($post_type);
-			if ($has_remote_images && $has_not_exits_remote_images) $class =' class="has_remote_images has_not_exits_remote_images"';
-			else $class = $has_remote_images ? ' class="has_remote_images"' : '';
+			if ($has_remote_images) :
+				$class = 'has_remote_images';
+				if ($has_not_exits_remote_images) $class += ' has_not_exits_remote_images';
+				$class = ' class="' . $class . '"';
 ?>
 			<tr<?php echo $class; ?>>
 				<td><?php echo $post_id; ?></td>
 				<td><?php echo $post_type_object->labels->name; ?></td>
 				<td><a href="<?php echo get_edit_post_link($post_id); ?>" target="_blank"><?php echo $title; ?> &#8667;</a></td>
-				<td><?php
-					if ($has_remote_images) {
-						echo $has_not_exits_remote_images ? '<span class="red">'.__('Has missing images.', 'qqworld_auto_save_images').'</span>' : '<span class="green">'.__('All remote images have been saved.', 'qqworld_auto_save_images').'</span>';
-					} else _e('No remote images found.', 'qqworld_auto_save_images')
-				?></td>
+				<td><?php echo $has_not_exits_remote_images ? '<span class="red">'.__('Has missing images.', 'qqworld_auto_save_images').'</span>' : '<span class="green">'.__('All remote images have been saved.', 'qqworld_auto_save_images').'</span>'; ?></td>
 			</tr>
 <?php
+			else:
+?>
+			<tr>
+				<td colspan="4" class="hr"></td>
+			</tr>
+<?php		endif;
 		endforeach;
 		exit;
 	}
@@ -406,378 +447,6 @@ class QQWorld_auto_save_images {
 			</tbody>
 		</table>
 		<script>
-		function str_repeat(i, m) {
-			for (var o = []; m > 0; o[--m] = i);
-			return o.join('');
-		}
-		function sprintf() {
-			var i = 0, a, f = arguments[i++], o = [], m, p, c, x, s = '';
-			while (f) {
-				if (m = /^[^\x25]+/.exec(f)) {
-					o.push(m[0]);
-				}
-				else if (m = /^\x25{2}/.exec(f)) {
-					o.push('%');
-				}
-				else if (m = /^\x25(?:(\d+)\$)?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-fosuxX])/.exec(f)) {
-					if (((a = arguments[m[1] || i++]) == null) || (a == undefined)) {
-						throw('Too few arguments.');
-					}
-					if (/[^s]/.test(m[7]) && (typeof(a) != 'number')) {
-						throw('Expecting number but found ' + typeof(a));
-					}
-					switch (m[7]) {
-						case 'b': a = a.toString(2); break;
-						case 'c': a = String.fromCharCode(a); break;
-						case 'd': a = parseInt(a); break;
-						case 'e': a = m[6] ? a.toExponential(m[6]) : a.toExponential(); break;
-						case 'f': a = m[6] ? parseFloat(a).toFixed(m[6]) : parseFloat(a); break;
-						case 'o': a = a.toString(8); break;
-						case 's': a = ((a = String(a)) && m[6] ? a.substring(0, m[6]) : a); break;
-						case 'u': a = Math.abs(a); break;
-						case 'x': a = a.toString(16); break;
-						case 'X': a = a.toString(16).toUpperCase(); break;
-					}
-					a = (/[def]/.test(m[7]) && m[2] && a >= 0 ? '+'+ a : a);
-					c = m[3] ? m[3] == '0' ? '0' : m[3].charAt(1) : ' ';
-					x = m[5] - String(a).length - s.length;
-					p = m[5] ? str_repeat(c, x) : '';
-					o.push(s + (m[4] ? a + p : p + a));
-				}
-				else {
-					throw('Huh ?!');
-				}
-				f = f.substring(m[0].length);
-			}
-			return o.join('');
-		}
-		if (!QQWorld_auto_save_images) var QQWorld_auto_save_images = {};
-		QQWorld_auto_save_images.scan_posts = function() {
-			var _this = this,
-			$ = jQuery;
-			QQWorld_auto_save_images.are_your_sure = '<?php _e('Are you sure?<br />Before you click the yes button, I recommend backup site database.', 'qqworld_auto_save_images'); ?>';
-			QQWorld_auto_save_images.pls_select_post_types = '<?php _e('Please select post types.', 'qqworld_auto_save_images'); ?>';
-			QQWorld_auto_save_images.maybe_problem = '<?php _e('May be a problem with some posts: ', 'qqworld_auto_save_images'); ?>';
-
-			this.action = {};
-			this.action.catch_errors = function(XMLHttpRequest, textStatus, errorThrown) {
-				var error='', args=new Array;
-				error += '<div style="text-align: left;">';
-				var query = this.data.split('&');
-				var data = new Array;
-				var offset_from_id = $('input[name="offset"]').val();
-				var temp_r = $('body').data('r') + parseInt(offset_from_id);
-				for (var d in query) {
-					var q = query[d].split('=');
-					if (q[0]=='post_id[]') {
-						temp_r++;
-						data.push(q[1]+'(No. '+temp_r+')');
-					}
-				}
-				error += QQWorld_auto_save_images.maybe_problem + data.join(', ');
-				if (XMLHttpRequest) {
-					error += '<hr />';
-					args = new Array;
-					for (var x in XMLHttpRequest) {
-						switch (x) {
-							case 'readyState':
-							case 'responseText':
-							case 'status':
-								args.push( x + ': ' + XMLHttpRequest[x] );
-								break;
-						}
-					}
-					error += args.join('<br />', args);
-				}
-				error += '<br />' + textStatus + ': ' + errorThrown;
-				error += '</div>';
-				$('#form').slideDown('slow');
-				$('body').data('noty').close();
-				noty({
-					text: error,	
-					type: 'error',
-					layout: 'bottom',
-					dismissQueue: true,
-					closeWith: ['button']
-				});
-				$('#scan_old_posts').removeAttr('disabled');
-				$('#list_all_posts').removeAttr('disabled');
-				$('body').data('r', $('body').data('r')+$('body').data('speed'));
-				switch ($('body').data('scan-mode')) {
-					case 'scan':
-						_this.action.scan($('body').data('respond'), $('body').data('r'));
-						break;
-					case 'list':
-						_this.action.list($('body').data('respond'), $('body').data('r'));
-						break;
-				}
-			};
-			this.action.scan = function(respond, r) {
-				var $ = jQuery;
-				$('body').data('scan-mode', 'scan').data('r', r);
-				if (typeof respond[r] == 'undefined') {
-					$('#scan-result').effect( 'shake', null, 500 );
-					$('#form').slideDown('slow');
-					$('body').data('noty').close();
-					var count = $('#scan_old_post_list tbody tr').length;
-					var count_remote_images = $('#scan_old_post_list tbody tr.has_remote_images').length;
-					var count_not_exits_remote_images = $('#scan_old_post_list tbody tr.has_not_exits_remote_images').length;
-					var count = $('#scan_old_post_list tbody tr').length;
-					if (count) {
-						if (count==1) count_html = sprintf("<?php _e( '%d post has been scanned.', 'qqworld_auto_save_images'); ?>", count);
-						else count_html = sprintf("<?php _e( '%d posts have been scanned.', 'qqworld_auto_save_images'); ?>", count);
-						if (count_remote_images) {
-							count_remote_images = count_remote_images - count_not_exits_remote_images;
-							if (count_remote_images<=1) count_html += sprintf("<br /><?php _e( '%d post included remote images processed.', 'qqworld_auto_save_images'); ?>", count_remote_images);
-							else count_html += sprintf("<br /><?php _e( '%d posts included remote images processed.', 'qqworld_auto_save_images'); ?>", count_remote_images);
-							if (count_not_exits_remote_images) {
-								if (count_not_exits_remote_images==1) count_html += sprintf("<br /><?php _e( "%d post has missing images couldn't be processed.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
-								else count_html += sprintf("<br /><?php _e( "%d posts have missing images couldn't be processed.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
-							}
-						}
-					} else {
-						$('#scan_old_post_list').slideUp('slow');
-						count_html = '<?php _e('No posts found.', 'qqworld_auto_save_images'); ?>';
-					}
-					noty({
-						text: '<?php _e('All done.', 'qqworld_auto_save_images'); ?><br />'+count_html,	
-						type: 'success',
-						layout: 'center',
-						dismissQueue: true,
-						modal: true
-					});
-					$('#scan_old_posts').removeAttr('disabled');
-					$('#list_all_posts').removeAttr('disabled');
-					return;
-				}
-				var speed = parseInt($('select[name="speed"]').val());
-				post_id = new Array;
-				$('body').data('speed', speed);
-				var data = 'action=save_remote_images_after_scan';
-				for (var p=r; p<r+speed; p++) {
-					if (typeof respond[p] != 'undefined') data += '&post_id[]='+respond[p];
-				}
-				console.log(data);
-				$.ajax({
-					type: 'POST',
-					url: ajaxurl,
-					data: data,
-					success: function(data) {
-						data = $(data);
-						$('#scan_old_post_list tbody').append(data);
-						data.hide().fadeIn('fast');
-						r += speed;
-						_this.action.scan(respond, r);
-					},
-					error: _this.action.catch_errors
-				});
-			};
-			this.action.list = function(respond, r) {
-				var $ = jQuery;
-				$('body').data('scan-mode', 'list').data('r', r);
-				if (typeof respond[r] == 'undefined') {
-					$('#scan-result').effect( 'shake', null, 500 );
-					$('#form').slideDown('slow');
-					$('body').data('noty').close();
-					var count = $('#scan_old_post_list tbody tr').length;
-					var count_remote_images = $('#scan_old_post_list tbody tr.has_remote_images').length;
-					var count_not_exits_remote_images = $('#scan_old_post_list tbody tr.has_not_exits_remote_images').length;
-					if (count) {
-						if (count==1) count_html = sprintf("<?php _e( '%d post has been scanned.', 'qqworld_auto_save_images'); ?>", count);
-						else count_html = sprintf("<?php _e( '%d posts have been scanned.', 'qqworld_auto_save_images'); ?>", count);
-						if (count_remote_images) {
-							if (count_remote_images==1) count_html += sprintf("<br /><?php _e( 'found %d post including remote images.', 'qqworld_auto_save_images'); ?>", count_remote_images);
-							else count_html += sprintf("<br /><?php _e( 'found %d posts including remote images.', 'qqworld_auto_save_images'); ?>", count_remote_images);
-							if (count_not_exits_remote_images) {
-								if (count_not_exits_remote_images==1) count_html += sprintf("<br /><?php _e( "And with %d post has missing images.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
-								else count_html += sprintf("<br /><?php _e( "And with %d posts have missing images.", 'qqworld_auto_save_images'); ?>", count_not_exits_remote_images);
-							}
-						} else count_html += '<br /><?php _e('No post has remote images found.', 'qqworld_auto_save_images'); ?>';
-					} else {
-						$('#scan_old_post_list').slideUp('slow');
-						count_html = '<?php _e('No posts found.', 'qqworld_auto_save_images'); ?>';
-					}
-					noty({
-						text: '<?php _e('All done.', 'qqworld_auto_save_images'); ?><br />'+count_html,	
-						type: 'success',
-						layout: 'center',
-						dismissQueue: true,
-						modal: true
-					});
-					$('#scan_old_posts').removeAttr('disabled');
-					$('#list_all_posts').removeAttr('disabled');
-					return;
-				}
-				var speed = parseInt($('select[name="speed"]').val());
-				post_id = new Array;
-				$('body').data('speed', speed);
-				var data = 'action=save_remote_images_list_all_posts';
-				for (var p=r; p<r+speed; p++) {
-					if (typeof respond[p] != 'undefined') data += '&post_id[]='+respond[p];
-				}
-				console.log(data);
-				$.ajax({
-					type: 'POST',
-					url: ajaxurl,
-					data: data,
-					success: function(data) {
-						data = $(data);
-						$('#scan_old_post_list tbody').append(data);
-						data.hide().fadeIn('fast');
-						r += speed;
-						_this.action.list(respond, r);
-					},
-					error: _this.action.catch_errors
-				});
-			};
-
-
-			this.action.if_not_select_post_type = function() {
-				var $ = jQuery;
-				$('#post_types_list').effect( 'shake', null, 500 );
-				var n = noty({
-					text: QQWorld_auto_save_images.pls_select_post_types,	
-					type: 'error',
-					dismissQueue: true,
-					layout: 'bottomCenter',
-					timeout: 3000
-				});
-			}
-
-			this.create = {};
-			this.create.events = function() {
-				$(".icon.help").tooltip({
-					show: {
-						effect: "slideDown",
-						delay: 250
-					}
-				});
-				$('select[name="posts_per_page"]').on('change', function() {
-					if ($(this).val() == '-1') $('input[name="offset"]').attr('disabled', true);
-					else $('input[name="offset"]').removeAttr('disabled', true);
-				});
-				$('#auto').on('click', function() {
-					$('#second_level').fadeIn('fast');
-				});
-				$('#manual').on('click', function() {
-					$('#second_level').fadeOut('fast');
-				});
-				$('#scan_old_posts').on('click', function() {
-					if (jQuery('input[name="qqworld_auto_save_imagess_post_types[]"]:checked').length) {
-						var n = noty({
-							text: QQWorld_auto_save_images.are_your_sure,	
-							type: 'warning',
-							dismissQueue: true,
-							layout: 'center',
-							modal: true,
-							buttons: [
-								{
-									addClass: 'button button-primary',
-									text: '<?php _e('Yes'); ?>',
-									onClick: function ($noty) {
-										$('#form').slideUp('slow');
-										$noty.close();
-										$('#scan_old_posts').attr('disabled', true);
-										$('#list_all_posts').attr('disabled', true);
-										var data = $('#form').serialize()+'&action=get_scan_list';
-										$.ajax({
-											type: 'POST',
-											url: ajaxurl,
-											data: data,
-											dataType: 'json',
-											success: function(respond) {
-												$('body').data('respond', respond);
-												$('#scan-result').html('<table id="scan_old_post_list">\
-												\	<thead>\
-												\		<th><?php _e('ID'); ?></th>\
-												\		<th><?php _e('Post Type', 'qqworld_auto_save_images'); ?></th>\
-												\		<th><?php _e('Title'); ?></th>\
-												\		<th><?php _e('Status'); ?></th>\
-												\	</thead>\
-												\	<tbody>\
-												\	</tbody>\
-												\</table>');
-												$('body').data('noty', noty({
-													text: '<?php _e('Scanning...', 'qqworld_auto_save_images'); ?>',	
-													type: 'notification',
-													layout: 'center',
-													dismissQueue: true
-												}) );
-												_this.action.scan(respond, 0);
-											},
-											error: _this.action.catch_errors
-										});
-									}
-								},
-								{
-									addClass: 'button button-primary',
-									text: '<?php _e('No'); ?>',
-									onClick: function ($noty) {
-										$noty.close();
-									}
-								}
-							]
-						});
-					} else _this.action.if_not_select_post_type();
-				});
-				$('#list_all_posts').on('click', function() {
-					if (jQuery('input[name="qqworld_auto_save_imagess_post_types[]"]:checked').length) {
-						$('#form').slideUp('slow');
-						$('#scan_old_posts').attr('disabled', true);
-						$('#list_all_posts').attr('disabled', true);
-						var data = $('#form').serialize()+'&action=get_scan_list';
-						$.ajax({
-							type: 'POST',
-							url: ajaxurl,
-							data: data,
-							dataType: 'json',
-							success: function(respond) {
-								$('body').data('respond', respond);
-								$('#scan-result').html('<table id="scan_old_post_list">\
-								\	<thead>\
-								\		<th><?php _e('ID'); ?></th>\
-								\		<th><?php _e('Post Type', 'qqworld_auto_save_images'); ?></th>\
-								\		<th><?php _e('Title'); ?></th>\
-								\		<th><?php _e('Status'); ?></th>\
-								\		<th><?php _e('Control', 'qqworld_auto_save_images'); ?></th>\
-								\	</thead>\
-								\	<tbody>\
-								\	</tbody>\
-								\</table>');
-								$('body').data('noty', noty({
-									text: '<?php _e('Listing...', 'qqworld_auto_save_images'); ?>',	
-									type: 'notification',
-									layout: 'center',
-									dismissQueue: true
-								}) );
-								_this.action.list(respond, 0);
-							},
-							error: _this.action.catch_errors
-						});
-					} else _this.action.if_not_select_post_type();
-				});
-				$(document).on('click', '#scan_old_post_list .fetch-remote-images', function() {
-					var wait = '<img src="data:image/gif;base64,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" />';
-					var post_id = $(this).attr('post-id');
-					$(this).hide().after(wait);
-					var data = 'action=save_remote_images_after_scan&post_id[]='+post_id;
-					$.ajax({
-						type: 'POST',
-						url: ajaxurl,
-						data: data,
-						success: function(data) {
-							$('#list-'+post_id).html('<span class="green"><?php _e('Done'); ?></span>');
-						},
-						error: _this.action.catch_errors
-					});
-				})
-			};
-
-			this.create.init = function() {
-				_this.create.events();
-			};
-			this.create.init();
-		};
 		jQuery(function($) {
 			QQWorld_auto_save_images.scan_posts();
 		});

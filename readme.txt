@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.5.7.3
+Stable tag: 1.5.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,10 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 </ol>
 
 == Changelog ==
+
+= 1.5.7.4 =
+Hide posts do not have remote images from list in automatic mode.<br />
+在自动扫描的列表中隐藏没有远程图像的文章。
 
 = 1.5.7.3 =
 Show post number in error notification<br />
