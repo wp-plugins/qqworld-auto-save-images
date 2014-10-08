@@ -13,6 +13,7 @@ define('QQWORLD_AUTO_SAVE_IMAGES_URL', plugin_dir_url(__FILE__));
 class QQWorld_auto_save_images {
 	var $using_action;
 	var $type;
+	var $post_type;
 	var $preg = '/<img.*?src="((?![\"\']).*?)((?![\"\'])\?.*?)?".*?>/';
 	function __construct() {
 		$this->using_action = get_option('using_action', 'publish');
@@ -42,7 +43,6 @@ class QQWorld_auto_save_images {
 		add_filter( 'plugin_row_meta', array($this, 'registerPluginLinks'),10,2 );
 
 		add_action( 'admin_head', array($this, 'options_general_add_js') );
-
 	}
 
 	public function options_general_add_js() {
@@ -779,25 +779,48 @@ class QQWorld_auto_save_images {
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_imagess_set_featured_image');
 	}
 
+	/**
+	* gets the current post type in the WordPress Admin
+	*/
+	public function get_current_post_type() {
+		global $post, $typenow, $current_screen;
+
+		if (isset($_GET['post']) && $_GET['post']) {
+			$post_type = get_post_type($_GET['post']);
+			return $post_type;
+		}
+
+		//we have a post so we can just get the post type from that
+		if ( $post && $post->post_type )
+			return $post->post_type;
+
+		//check the global $typenow - set in admin.php
+		elseif( $typenow )
+			return $typenow;
+
+		//check the global $current_screen object - set in sceen.php
+		elseif( $current_screen && $current_screen->post_type )
+			return $current_screen->post_type;
+
+		//lastly check the post_type querystring
+		elseif( isset( $_REQUEST['post_type'] ) )
+			return sanitize_key( $_REQUEST['post_type'] );
+
+		//we do not know the post type!
+		return null;
+	}
+
 	function add_actions() {
-		switch ($this->using_action) {
-			case 'publish':
-				add_action('publish_post', array($this, 'fetch_images') );
-				break;
-			case 'save':
-				add_action('save_post', array($this, 'fetch_images') );
-				break;
+		$post_type = $this->get_current_post_type();
+		if ($post_type) {
+			add_action($this->using_action.'_'.$post_type, array($this, 'fetch_images') );
 		}
 	}
 
 	function remove_actions() {
-		switch ($this->using_action) {
-			case 'publish':
-				remove_action('publish_post', array($this, 'fetch_images') );
-				break;
-			case 'save':
-				remove_action('save_post', array($this, 'fetch_images') );
-				break;
+		$post_type = $this->get_current_post_type();
+		if ($post_type) {
+			remove_action($this->using_action.'_'.$post_type, array($this, 'fetch_images') );
 		}
 	}
 
