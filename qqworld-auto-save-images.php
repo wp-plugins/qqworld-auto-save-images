@@ -461,12 +461,12 @@ class QQWorld_auto_save_images {
 			var query = this.data.split('&');
 			var data = new Array;
 			var offset_from_id = $('input[name="offset"]').val();
-			var temp_r = $('body').data('r') + offset_from_id;
+			var temp_r = $('body').data('r') + parseInt(offset_from_id);
 			for (var d in query) {
 				var q = query[d].split('=');
 				if (q[0]=='post_id[]') {
 					temp_r++;
-					data.push(q[1]+'('+temp_r+')');
+					data.push(q[1]+'(No. '+temp_r+')');
 				}
 			}
 			error += QQWorld_auto_save_images.maybe_problem + data.join(', ');
