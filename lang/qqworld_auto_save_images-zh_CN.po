@@ -1,0 +1,192 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: QQworld Auto Save Images\n"
+"Report-Msgid-Bugs-To: http://www.qqworld.org\n"
+"POT-Creation-Date: 2011-12-10 19:47:15+00:00\n"
+"PO-Revision-Date: 2014-10-07 14:37+0800\n"
+"Last-Translator: Michael Wang <admin@qqworld.org>\n"
+"Language-Team: QQWorld <admin@qqworld.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.6.9\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+msgid "QQWorld Auto Save Images"
+msgstr "QQWorld自动保存图片"
+
+msgid "Save Remote Images"
+msgstr "保存远程图片"
+
+msgid "When"
+msgstr "什么时候"
+
+msgid "Save post (Publish, save draft or pedding review)."
+msgstr "保存文章时（发布文章，保存草稿或提交审核）。"
+
+msgid "Publish post only."
+msgstr "仅发布文章时。"
+
+msgid "In Process..."
+msgstr "正在保存……"
+
+msgid "Successed save remote images"
+msgstr "成功保存远程图片"
+
+msgid ""
+"Automatically save all remote images to local media libary when you save or "
+"publish post."
+msgstr "在保存或发布文章时，自动将所有远程图像保存到本地媒体库。"
+
+msgid ""
+"Manually save all remote images to local media libary when you click the "
+"button on the top of editor."
+msgstr "当单击编辑器顶部的按钮时，手动将所有远程图像保存到本地媒体库。"
+
+msgid "Automatically Set Featured Image"
+msgstr "自动设置特色图片"
+
+msgid "Scan Posts"
+msgstr "扫描文章"
+
+msgid "Automatic"
+msgstr "自动"
+
+msgid "Manual"
+msgstr "手动"
+
+msgid ""
+"Are you sure?<br />Before you click the yes button, I recommend backup site "
+"database."
+msgstr "你确定吗？<br />在点击确定按钮之前，我建议你备份网站的数据库。"
+
+msgid ""
+"Scan posts and keep remote images in all posts to local media library. Maybe "
+"take a long time."
+msgstr "扫描所有的文章，将所有远程图片保存到本地，可能需要很长时间。"
+
+msgid "Scanning..."
+msgstr "扫描中……"
+
+msgid "Listing..."
+msgstr "显示列表中……"
+
+msgid "Select post types:"
+msgstr "选择文章类型："
+
+msgid "All done."
+msgstr "全部完成。"
+
+msgid "Post Type"
+msgstr "文章类型"
+
+msgid "Please select post types."
+msgstr "请选择文章类型。"
+
+msgid "Offset:"
+msgstr "偏移："
+
+msgid "Start from %s to Scan"
+msgstr "从 %s 开始扫描"
+
+msgid ""
+"Default scan all posts. If you want to scan 50-150 posts, please type '50' "
+"in the textfield and select '100'."
+msgstr ""
+"默认扫秒全部文章，如果想扫描50-150篇文章，请在文本框中输入“50”并在下拉菜单中"
+"选择“100”。"
+
+msgid ""
+"If you have too many posts to be scan, sometimes in process looks like "
+"stopping, but it may be fake. please be patient."
+msgstr ""
+"如果有太多文章需要扫描，有时候在扫描过程中看起来像是停止了，但可能是假停止，"
+"请耐心等待。"
+
+msgid "Speed:"
+msgstr "速度："
+
+msgid ""
+"The list displayed will show you which posts including remote images, then "
+"you can keep them to local manually via click \"Fetch\" button."
+msgstr ""
+"显示的列表中将告诉你哪些文章包含远程图片，然后你可以通过点击“抓取”按钮手动保"
+"存。"
+
+msgid "Fetch"
+msgstr "抓取"
+
+msgid "No post has remote images found."
+msgstr "没有文章包含远程图像。"
+
+msgid "No remote images found."
+msgstr "未包含远程图像"
+
+msgid "Control"
+msgstr "控制"
+
+msgid "Normal"
+msgstr "正常"
+
+msgid "No posts found."
+msgstr "未找到任何文章。"
+
+msgid "Has missing images."
+msgstr "有不存在的远程图像。"
+
+msgid "All remote images have been saved."
+msgstr "已保存所有远程图像。"
+
+msgid "%d post has been scanned."
+msgstr "已扫描%d篇文章。"
+
+msgid "%d posts have been scanned."
+msgstr "已扫描%d篇文章。"
+
+msgid "%d post included remote images processed."
+msgstr "已处理%d篇包含远程图像的文章。"
+
+msgid "%d posts included remote images processed."
+msgstr "已处理%d篇包含远程图像的文章。"
+
+msgid "found %d post including remote images."
+msgstr "找到%d篇包含远程图像的文章。"
+
+msgid "found %d posts including remote images."
+msgstr "找到%d篇包含远程图像的文章。"
+
+msgid "And with %d post has missing images."
+msgstr "其中有%d篇文章包含不存在的远程图像。"
+
+msgid "And with %d posts have missing images."
+msgstr "其中有%d篇文章包含不存在的远程图像。"
+
+msgid "%d post has missing images couldn't be processed."
+msgstr "%d篇包含不存在的远程图像的文章无法处理。"
+
+msgid "%d posts have missing images couldn't be processed."
+msgstr "%d篇包含不存在的远程图像的文章无法处理。"
+
+msgid "Scope of Post ID:"
+msgstr "文章ID范围："
+
+msgid "From %1$s to %2$s"
+msgstr "从 %1$s 到 %2$s"
+
+msgid ""
+"Default empty for scan all posts ID. If you want to scan posts ID from 50 to "
+"100. please type '50' and '100' or '100' and '50', The order in which two "
+"numbers can be reversed. If you only type one number, system would only scan "
+"that ID."
+msgstr ""
+"默认留空扫描所有文章ID，如果要扫描50-100的文章ID，请输入'50'和'100'或"
+"者'100'和'50'，两个数字的顺序可以颠倒。如果你只输入了1个数字，则系统只会扫描"
+"该ID。"
+
+msgid "If the server is too much stress may be appropriately reduced speed."
+msgstr "如果服务器压力过大，可以适当调低速度。"
+
+msgid "May be a problem with some posts: "
+msgstr "也许一些文章有问题："
