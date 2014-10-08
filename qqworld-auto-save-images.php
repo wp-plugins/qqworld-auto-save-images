@@ -13,7 +13,6 @@ define('QQWORLD_AUTO_SAVE_IMAGES_URL', plugin_dir_url(__FILE__));
 class QQWorld_auto_save_images {
 	var $using_action;
 	var $type;
-	var $post_type;
 	var $preg = '/<img.*?src="((?![\"\']).*?)((?![\"\'])\?.*?)?".*?>/';
 	function __construct() {
 		$this->using_action = get_option('using_action', 'publish');
@@ -461,7 +460,8 @@ class QQWorld_auto_save_images {
 			error += '<div style="text-align: left;">';
 			var query = this.data.split('&');
 			var data = new Array;
-			var temp_r = $('body').data('r');
+			var offset_from_id = $('input[name="offset"]').val();
+			var temp_r = $('body').data('r') + offset_from_id;
 			for (var d in query) {
 				var q = query[d].split('=');
 				if (q[0]=='post_id[]') {
