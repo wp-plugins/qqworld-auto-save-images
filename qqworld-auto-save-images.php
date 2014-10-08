@@ -356,17 +356,17 @@ class QQWorld_auto_save_images {
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
-					<th scope="row"><label><?php _e('Type'); ?></label></th>
+					<th scope="row"><label><?php _e('Mode', 'qqworld_auto_save_images'); ?></label></th>
 					<td><fieldset>
-						<legend class="screen-reader-text"><span><?php _e('Type'); ?></span></legend>
+						<legend class="screen-reader-text"><span><?php _e('Mode', 'qqworld_auto_save_images'); ?></span></legend>
 							<label for="auto">
 								<input name="qqworld_auto_save_imagess_type" type="radio" id="auto" value="auto" <?php checked('auto', $this->type); ?> />
-								<?php _e('Automatically save all remote images to local media libary when you save or publish post.', 'qqworld_auto_save_images'); ?>
-							</label><br />
+								<?php _e('Automatic', 'qqworld_auto_save_images'); ?>
+							</label> <span class="icon help" title="<?php _e('Automatically save all remote images to local media libary when you save or publish post.', 'qqworld_auto_save_images'); ?>"></span><br />
 							<label for="manual">
 								<input name="qqworld_auto_save_imagess_type" type="radio" id="manual" value="manual" <?php checked('manual', $this->type); ?> />
-								<?php _e('Manually save all remote images to local media libary when you click the button on the top of editor.', 'qqworld_auto_save_images'); ?>
-							</label>
+								<?php _e('Manual', 'qqworld_auto_save_images'); ?>
+							</label> <span class="icon help" title="<?php _e('Manually save all remote images to local media libary when you click the button on the top of editor.', 'qqworld_auto_save_images'); ?>"></span>
 					</fieldset></td>
 				</tr>
 				
