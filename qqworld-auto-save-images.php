@@ -239,7 +239,7 @@ class QQWorld_auto_save_images {
 								data: {
 									action: 'save_remote_images',
 									post_id: QQWorld_auto_save_images.post_id,
-									content: escape($('#content').val())
+									content: encodeURI(encodeURI($('#content').val()))
 								},
 								success: function(respond) {
 									$('#save-remote-images-button').data('noty').close();
@@ -267,7 +267,7 @@ class QQWorld_auto_save_images {
 								data: {
 									action: 'save_remote_images',
 									post_id: QQWorld_auto_save_images.post_id,
-									content: escape(tinyMCE.activeEditor.getContent())
+									content: encodeURI(encodeURI(tinyMCE.activeEditor.getContent()))
 								},
 								success: function(respond) {
 									$('#save-remote-images-button').data('noty').close();
@@ -824,22 +824,9 @@ class QQWorld_auto_save_images {
 		}
 	}
 
-	function js_unescape($str) { // ucseacape escape content via js
-		$ret = '';
-		$len = strlen($str);
-		for ($i = 0; $i < $len; $i++) {
-			if ($str[$i] == '%' && $str[$i+1] == 'u') {
-				$val = hexdec(substr($str, $i+2, 4));
-				if ($val < 0x7f) $ret .= chr($val);
-				else if($val < 0x800) $ret .= chr(0xc0|($val>>6)).chr(0x80|($val&0x3f));
-				else $ret .= chr(0xe0|($val>>12)).chr(0x80|(($val>>6)&0x3f)).chr(0x80|($val&0x3f));
-				$i += 5;
-			} else if ($str[$i] == '%') {
-				$ret .= urldecode(substr($str, $i, 3));
-				$i += 2;
-			} else $ret .= $str[$i];
-		}
-		return $ret;
+	function utf8_urldecode($str) {
+		$str = preg_replace("/%u([0-9a-f]{3,4})/i","&#x\\\\1;",urldecode($str));
+		return html_entity_decode($str, null, 'UTF-8');
 	}
 
 	function save_remote_images() {
@@ -853,7 +840,7 @@ class QQWorld_auto_save_images {
 		if ( !current_user_can('edit_post', $post_id) ) 
 		return;
 
-		$content = $this->js_unescape($_POST['content']);
+		$content = $this->utf8_urldecode($this->utf8_urldecode($_POST['content']));
 
 		$preg=preg_match_all($this->preg,stripslashes($content),$matches);
 		if($preg){
