@@ -368,3 +368,6 @@ QQWorld_auto_save_images.scan_posts = function() {
 	};
 	this.create.init();
 };
+jQuery(function($) {
+	QQWorld_auto_save_images.scan_posts();
+});

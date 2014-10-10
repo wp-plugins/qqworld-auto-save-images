@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.5.7.4
+Stable tag: 1.5.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ Automatically keep the all remote picture to the local media libary when you pub
 
 And more powerful functional is waiting for you. What exactly is it? Hehe...
 
-<h3>Notice:</h3>
+<h4>Notice:</h4>
 
 This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://", and not dynamic link, for example:
 
@@ -43,7 +43,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 还有更强大的功能等着你，到底是什么呢？呵呵……
 
-<h3>注意：</h3>
+<h4>注意：</h4>
 
 该插件有个小问题，所有的远程图像的URL必须是完整的，就是说必须得包含"http(s)://"，并且非动态链接，比如：
 
@@ -76,6 +76,10 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 </ol>
 
 == Changelog ==
+
+= 1.5.7.5 =
+fixed a bug of regular expression.<br />
+修复正则表达式的bug。
 
 = 1.5.7.4 =
 Hide posts do not have remote images from list in automatic mode.<br />
