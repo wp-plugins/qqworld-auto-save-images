@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.5.7.5
+Stable tag: 1.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,8 +78,8 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 == Changelog ==
 
 = 1.5.8 =
-New feature: supported XMLRPC, means remote publishing is working. such as IFTTT.<br />
-新特性：支持XMLRPC，意味着支持远程发布，如IFTTT。
+New feature: supported XMLRPC, means remote publishing from IFTTT.<br />
+新特性：支持XMLRPC，意味着支持从IFTTT远程发布。
 
 = 1.5.7.5 =
 fixed a bug of regular expression.<br />
