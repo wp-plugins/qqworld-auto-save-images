@@ -77,6 +77,10 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 == Changelog ==
 
+= 1.5.8 =
+New feature: supported XMLRPC, means remote publishing is working. such as IFTTT.<br />
+新特性：支持XMLRPC，意味着支持远程发布，如IFTTT。
+
 = 1.5.7.5 =
 fixed a bug of regular expression.<br />
 修复正则表达式的bug。
@@ -156,9 +160,9 @@ New functional optimized<br />
 优化了新功能
 
 = 1.4 =
-Add a new type allow user manually save remote images via click a button on the top of editor, and don't forget after you saved images, you still need to submit the post.<br />
+Add a new type allow user manually save remote images via click a button on the top of editor.<br />
 You can change the Type in the plugin's setting page.<br />
-添加一个新类型允许用户通过单击编辑器顶部的按钮手动保存远程图像，别忘记了在保存图片后提交文章哦。<br />
+添加一个新类型允许用户通过单击编辑器顶部的按钮手动保存远程图像。<br />
 你可以在插件的设置页面更改类型。
 
 = 1.3 =
