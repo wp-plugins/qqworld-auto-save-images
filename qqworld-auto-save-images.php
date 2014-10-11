@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.5.9.1
+Version: 1.6
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -14,7 +14,7 @@ define('QQWORLD_AUTO_SAVE_IMAGES_URL', plugin_dir_url(__FILE__));
 class QQWorld_auto_save_images {
 	var $using_action;
 	var $type;
-	var $preg = '/<img.*?src=[\"\']((?![\"\']).*?\.(jpg|gif|bmp|bnp|png))((?![\"\'])\?.*?)?[\"\']/i';
+	var $preg = '/<img.*?src=[\"\']((?![\"\']).*?)((?![\"\'])\?.*?)?[\"\']/i';
 	var $exclude_domain;
 	function __construct() {
 		$this->using_action = get_option('using_action', 'publish');
@@ -568,12 +568,64 @@ class QQWorld_auto_save_images {
 		set_time_limit(0);
 		if ( $file=@file_get_contents($image_url) ) {
 			$filename=basename($image_url);
-			preg_match( '/(.*?)(\.\w+)$/', $filename, $match );
-			$im_name = $match[1].$match[2];
-			$res=wp_upload_bits($im_name,'',$file);
+			preg_match( '/(.*?)(\.(jpg|jpeg|png|gif|bmp))$/i', $filename, $match );
+			if ( empty($match) ) {
+				if ($filetype = $this->getFileType($file) ) {
+					preg_match( '/(.*?)$/i', $filename, $match );
+					$img_name = $match[0] . '.' . $filetype;
+				} else return false;
+			} else {
+				$img_name = $match[1].$match[2];
+			}
+			$res=wp_upload_bits($img_name,'',$file);
 			$attach_id = $this->insert_attachment($res['file'],$post_id);
 			if( !has_post_thumbnail($post_id) && $this->featured_image=='yes' ) set_post_thumbnail( $post_id, $attach_id );
 			return $res;
+		}
+		return false;
+	}
+
+	public function getFileType($file){
+		$bin = substr($file,0,2);
+		$strInfo = @unpack("C2chars", $bin);
+		$typeCode = intval($strInfo['chars1'].$strInfo['chars2']);
+		$fileType = '';
+		switch ($typeCode) {
+			case 7790:
+				$fileType = 'exe';
+				return false;
+				break;
+			case 7784:
+				$fileType = 'midi';
+				return false;
+				break;
+			case 8297:
+				$fileType = 'rar';
+				return false;
+				break;
+			case 255216:
+				$fileType = 'jpg';
+				$mime = 'image/jpeg';
+				return $fileType;
+				break;
+			case 7173:
+				$fileType = 'gif';
+				$mime = 'image/gif';
+				return $fileType;
+				break;
+			case 6677:
+				$fileType = 'bmp';
+				$mime = 'image/bmp';
+				return $fileType;
+				break;
+			case 13780:
+				$fileType = 'png';
+				$mime = 'image/png';
+				return $fileType;
+				break;
+			default:
+				return false;
+				break;
 		}
 		return false;
 	}
