@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QQworld Auto Save Images\n"
 "Report-Msgid-Bugs-To: http://www.qqworld.org\n"
-"POT-Creation-Date: 2011-12-10 19:47:15+00:00\n"
-"PO-Revision-Date: 2014-10-11 09:55+0800\n"
+"POT-Creation-Date: 2014-10-11 11:50+0800\n"
+"PO-Revision-Date: 2014-10-11 14:45+0800\n"
 "Last-Translator: Michael Wang <admin@qqworld.org>\n"
 "Language-Team: QQWorld <admin@qqworld.org>\n"
 "Language: zh_CN\n"
@@ -13,94 +13,235 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 1.6.9\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
 
-msgid "QQWorld Auto Save Images"
-msgstr "QQWorld自动保存图片"
-
-msgid "Mode"
-msgstr "模式"
-
-msgid "Save Remote Images"
-msgstr "保存远程图片"
-
-msgid "When"
-msgstr "什么时候"
-
-msgid "Save post (Publish, save draft or pedding review)."
-msgstr "保存文章时（发布文章，保存草稿或提交审核）。"
-
-msgid "Publish post only."
-msgstr "仅发布文章时。"
-
+#: qqworld-auto-save-images.php:59
 msgid "In Process..."
 msgstr "正在保存……"
 
+#: qqworld-auto-save-images.php:60
 msgid "Successed save remote images"
 msgstr "成功保存远程图片"
 
-msgid ""
-"Automatically save all remote images to local media libary when you save or "
-"publish post."
-msgstr "在保存或发布文章时，自动将所有远程图像保存到本地媒体库。"
-
-msgid ""
-"Manually save all remote images to local media libary when you click the "
-"button on the top of editor."
-msgstr "当单击编辑器顶部的按钮时，手动将所有远程图像保存到本地媒体库。"
-
-msgid "Automatically Set Featured Image"
-msgstr "自动设置特色图片"
-
-msgid "Scan Posts"
-msgstr "扫描文章"
-
-msgid "Automatic"
-msgstr "自动"
-
-msgid "Manual"
-msgstr "手动"
-
+#: qqworld-auto-save-images.php:80
 msgid ""
 "Are you sure?<br />Before you click the yes button, I recommend backup site "
 "database."
 msgstr "你确定吗？<br />在点击确定按钮之前，我建议你备份网站的数据库。"
 
-msgid ""
-"Scan posts and keep remote images in all posts to local media library. Maybe "
-"take a long time."
-msgstr "扫描所有的文章，将所有远程图片保存到本地，可能需要很长时间。"
-
-msgid "Scanning..."
-msgstr "扫描中……"
-
-msgid "Listing..."
-msgstr "显示列表中……"
-
-msgid "Select post types:"
-msgstr "选择文章类型："
-
-msgid "All done."
-msgstr "全部完成。"
-
-msgid "Post Type"
-msgstr "文章类型"
-
+#: qqworld-auto-save-images.php:81
 msgid "Please select post types."
 msgstr "请选择文章类型。"
 
-msgid "Offset:"
-msgstr "偏移："
+#: qqworld-auto-save-images.php:82
+msgid "May be a problem with some posts: "
+msgstr "也许一些文章有问题："
 
-msgid "Start from %s to Scan"
-msgstr "从 %s 开始扫描"
+#: qqworld-auto-save-images.php:83
+#, php-format
+msgid "%d post has been scanned."
+msgstr "已扫描%d篇文章。"
 
-msgid ""
-"Default scan all posts. If you want to scan 50-150 posts, please type '50' "
-"in the textfield and select '100'."
+#: qqworld-auto-save-images.php:84
+#, php-format
+msgid "%d posts have been scanned."
+msgstr "已扫描%d篇文章。"
+
+#: qqworld-auto-save-images.php:85
+#, php-format
+msgid "%d post included remote images processed."
+msgstr "已处理%d篇包含远程图像的文章。"
+
+#: qqworld-auto-save-images.php:86
+#, php-format
+msgid "%d posts included remote images processed."
+msgstr "已处理%d篇包含远程图像的文章。"
+
+#: qqworld-auto-save-images.php:87
+#, php-format
+msgid "%d post has missing images couldn't be processed."
+msgstr "%d篇包含不存在的远程图像的文章无法处理。"
+
+#: qqworld-auto-save-images.php:88
+#, php-format
+msgid "%d posts have missing images couldn't be processed."
+msgstr "%d篇包含不存在的远程图像的文章无法处理。"
+
+#: qqworld-auto-save-images.php:89
+#, php-format
+msgid "found %d post including remote images."
+msgstr "找到%d篇包含远程图像的文章。"
+
+#: qqworld-auto-save-images.php:90
+#, php-format
+msgid "found %d posts including remote images."
+msgstr "找到%d篇包含远程图像的文章。"
+
+#: qqworld-auto-save-images.php:91
+#, php-format
+msgid "And with %d post has missing images."
+msgstr "其中有%d篇文章包含不存在的远程图像。"
+
+#: qqworld-auto-save-images.php:92
+#, php-format
+msgid "And with %d posts have missing images."
+msgstr "其中有%d篇文章包含不存在的远程图像。"
+
+#: qqworld-auto-save-images.php:93
+msgid "No posts processed."
+msgstr "未处理任何文章。"
+
+#: qqworld-auto-save-images.php:94
+msgid "No post has remote images found."
+msgstr "没有文章包含远程图像。"
+
+#: qqworld-auto-save-images.php:95
+msgid "No posts found."
+msgstr "未找到任何文章。"
+
+#: qqworld-auto-save-images.php:96
+msgid "All done."
+msgstr "全部完成。"
+
+#: qqworld-auto-save-images.php:97 qqworld-auto-save-images.php:347
+msgid "Yes"
 msgstr ""
-"默认扫秒全部文章，如果想扫描50-150篇文章，请在文本框中输入“50”并在下拉菜单中"
-"选择“100”。"
 
+#: qqworld-auto-save-images.php:98 qqworld-auto-save-images.php:351
+msgid "No"
+msgstr ""
+
+#: qqworld-auto-save-images.php:99
+msgid "Scanning..."
+msgstr "扫描中……"
+
+#: qqworld-auto-save-images.php:100
+msgid "Listing..."
+msgstr "显示列表中……"
+
+#: qqworld-auto-save-images.php:101
+msgid "ID"
+msgstr ""
+
+#: qqworld-auto-save-images.php:102
+msgid "Post Type"
+msgstr "文章类型"
+
+#: qqworld-auto-save-images.php:103
+msgid "Title"
+msgstr ""
+
+#: qqworld-auto-save-images.php:104
+msgid "Status"
+msgstr ""
+
+#: qqworld-auto-save-images.php:105
+msgid "Control"
+msgstr "控制"
+
+#: qqworld-auto-save-images.php:106
+msgid "Done"
+msgstr ""
+
+#: qqworld-auto-save-images.php:107 qqworld-auto-save-images.php:365
+msgid "Delete"
+msgstr ""
+
+#: qqworld-auto-save-images.php:194 qqworld-auto-save-images.php:244
+msgid "Has missing images."
+msgstr "有不存在的远程图像。"
+
+#: qqworld-auto-save-images.php:194
+msgid "All remote images have been saved."
+msgstr "已保存所有远程图像。"
+
+#: qqworld-auto-save-images.php:244
+msgid "Normal"
+msgstr "正常"
+
+#: qqworld-auto-save-images.php:245
+msgid "Fetch"
+msgstr "抓取"
+
+#: qqworld-auto-save-images.php:281
+msgid "Save Remote Images"
+msgstr "保存远程图片"
+
+#: qqworld-auto-save-images.php:292
+msgid "Settings"
+msgstr ""
+
+#: qqworld-auto-save-images.php:298 qqworld-auto-save-images.php:304
+msgid "QQWorld Auto Save Images"
+msgstr "QQWorld自动保存图片"
+
+#: qqworld-auto-save-images.php:312 qqworld-auto-save-images.php:314
+msgid "Mode"
+msgstr "模式"
+
+#: qqworld-auto-save-images.php:317 qqworld-auto-save-images.php:410
+msgid "Automatic"
+msgstr "自动"
+
+#: qqworld-auto-save-images.php:318
+msgid ""
+"Automatically save all remote images to local media libary when you save or "
+"publish post."
+msgstr "在保存或发布文章时，自动将所有远程图像保存到本地媒体库。"
+
+#: qqworld-auto-save-images.php:321 qqworld-auto-save-images.php:413
+msgid "Manual"
+msgstr "手动"
+
+#: qqworld-auto-save-images.php:322
+msgid ""
+"Manually save all remote images to local media libary when you click the "
+"button on the top of editor."
+msgstr "当单击编辑器顶部的按钮时，手动将所有远程图像保存到本地媒体库。"
+
+#: qqworld-auto-save-images.php:327 qqworld-auto-save-images.php:329
+msgid "When"
+msgstr "什么时候"
+
+#: qqworld-auto-save-images.php:332
+msgid "Save post (Publish, save draft or pedding review)."
+msgstr "保存文章时（发布文章，保存草稿或提交审核）。"
+
+#: qqworld-auto-save-images.php:336
+msgid "Publish post only."
+msgstr "仅发布文章时。"
+
+#: qqworld-auto-save-images.php:342 qqworld-auto-save-images.php:344
+msgid "Automatically Set Featured Image"
+msgstr "自动设置特色图片"
+
+#: qqworld-auto-save-images.php:357
+msgid "Exclude Domain/Keyword"
+msgstr "排除域名/关键词"
+
+#: qqworld-auto-save-images.php:357
+msgid "Images will not be saved, if that url contains Exclude-Domain/Keyword."
+msgstr "如果图片地址包含排除域名/关键词，则不会保存该图片。"
+
+#: qqworld-auto-save-images.php:359
+msgid "Exclude Domain"
+msgstr ""
+
+#: qqworld-auto-save-images.php:369
+msgid "Add a Domain/Keyword"
+msgstr "添加域名/关键词"
+
+#: qqworld-auto-save-images.php:375 qqworld-auto-save-images.php:401
+msgid "Scan Posts"
+msgstr "扫描文章"
+
+#: qqworld-auto-save-images.php:375
 msgid ""
 "If you have too many posts to be scan, sometimes in process looks like "
 "stopping, but it may be fake. please be patient."
@@ -108,76 +249,20 @@ msgstr ""
 "如果有太多文章需要扫描，有时候在扫描过程中看起来像是停止了，但可能是假停止，"
 "请耐心等待。"
 
-msgid "Speed:"
-msgstr "速度："
+#: qqworld-auto-save-images.php:378
+msgid "Select post types:"
+msgstr "选择文章类型："
 
-msgid ""
-"The list displayed will show you which posts including remote images, then "
-"you can keep them to local manually via click \"Fetch\" button."
-msgstr ""
-"显示的列表中将告诉你哪些文章包含远程图片，然后你可以通过点击“抓取”按钮手动保"
-"存。"
-
-msgid "Fetch"
-msgstr "抓取"
-
-msgid "No post has remote images found."
-msgstr "没有文章包含远程图像。"
-
-msgid "No posts processed."
-msgstr "未处理任何文章。"
-
-msgid "Control"
-msgstr "控制"
-
-msgid "Normal"
-msgstr "正常"
-
-msgid "No posts found."
-msgstr "未找到任何文章。"
-
-msgid "Has missing images."
-msgstr "有不存在的远程图像。"
-
-msgid "All remote images have been saved."
-msgstr "已保存所有远程图像。"
-
-msgid "%d post has been scanned."
-msgstr "已扫描%d篇文章。"
-
-msgid "%d posts have been scanned."
-msgstr "已扫描%d篇文章。"
-
-msgid "%d post included remote images processed."
-msgstr "已处理%d篇包含远程图像的文章。"
-
-msgid "%d posts included remote images processed."
-msgstr "已处理%d篇包含远程图像的文章。"
-
-msgid "found %d post including remote images."
-msgstr "找到%d篇包含远程图像的文章。"
-
-msgid "found %d posts including remote images."
-msgstr "找到%d篇包含远程图像的文章。"
-
-msgid "And with %d post has missing images."
-msgstr "其中有%d篇文章包含不存在的远程图像。"
-
-msgid "And with %d posts have missing images."
-msgstr "其中有%d篇文章包含不存在的远程图像。"
-
-msgid "%d post has missing images couldn't be processed."
-msgstr "%d篇包含不存在的远程图像的文章无法处理。"
-
-msgid "%d posts have missing images couldn't be processed."
-msgstr "%d篇包含不存在的远程图像的文章无法处理。"
-
+#: qqworld-auto-save-images.php:389
 msgid "Scope of Post ID:"
 msgstr "文章ID范围："
 
+#: qqworld-auto-save-images.php:389
+#, php-format
 msgid "From %1$s to %2$s"
 msgstr "从 %1$s 到 %2$s"
 
+#: qqworld-auto-save-images.php:389
 msgid ""
 "Default empty for scan all posts ID. If you want to scan posts ID from 50 to "
 "100. please type '50' and '100' or '100' and '50', The order in which two "
@@ -188,17 +273,58 @@ msgstr ""
 "者'100'和'50'，两个数字的顺序可以颠倒。如果你只输入了1个数字，则系统只会扫描"
 "该ID。"
 
+#: qqworld-auto-save-images.php:391
+msgid "Offset:"
+msgstr "偏移："
+
+#: qqworld-auto-save-images.php:391
+#, php-format
+msgid "Start from %s to Scan"
+msgstr "从 %s 开始扫描"
+
+#: qqworld-auto-save-images.php:393
+msgid "All"
+msgstr ""
+
+#: qqworld-auto-save-images.php:397
+msgid "Posts"
+msgstr ""
+
+#: qqworld-auto-save-images.php:397
+msgid ""
+"Default scan all posts. If you want to scan 50-150 posts, please type '50' "
+"in the textfield and select '100'."
+msgstr ""
+"默认扫秒全部文章，如果想扫描50-150篇文章，请在文本框中输入“50”并在下拉菜单中"
+"选择“100”。"
+
+#: qqworld-auto-save-images.php:402
+msgid "Speed:"
+msgstr "速度："
+
+#: qqworld-auto-save-images.php:408
 msgid "If the server is too much stress may be appropriately reduced speed."
 msgstr "如果服务器压力过大，可以适当调低速度。"
 
-msgid "May be a problem with some posts: "
-msgstr "也许一些文章有问题："
+#: qqworld-auto-save-images.php:411
+msgid ""
+"Scan posts and keep remote images in all posts to local media library. Maybe "
+"take a long time."
+msgstr "扫描所有的文章，将所有远程图片保存到本地，可能需要很长时间。"
 
-msgid "Exclude Domain/Keyword"
-msgstr "排除域名/关键词"
+#: qqworld-auto-save-images.php:414
+msgid ""
+"The list displayed will show you which posts including remote images, then "
+"you can keep them to local manually via click \"Fetch\" button."
+msgstr ""
+"显示的列表中将告诉你哪些文章包含远程图片，然后你可以通过点击“抓取”按钮手动保"
+"存。"
 
-msgid "Add a Domain/Keyword"
-msgstr "添加域名/关键词"
+msgid ""
+"Automatically keep the all remote picture to the local, and automatically "
+"set featured image."
+msgstr ""
+"自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。"
 
-msgid "Images will not be saved, if that url contains Exclude-Domain/Keyword."
-msgstr "如果图片地址包含排除域名/关键词，则不会保存该图片。"
+msgid "Michael Wang"
+msgstr "王晓骞"
