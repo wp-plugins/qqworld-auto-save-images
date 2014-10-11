@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.5.8
+Stable tag: 1.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,10 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 </ol>
 
 == Changelog ==
+
+= 1.5.9 =
+New feature: Set Exclude-Domain/Keyword.<br />
+新特性：设置排除域名/关键词。
 
 = 1.5.8 =
 New feature: supported XMLRPC, means remote publishing from IFTTT.<br />

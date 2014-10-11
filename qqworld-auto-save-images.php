@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image. 自动保存远程图片到本地，自动设置特色图片，并且支持机器人采集软件从外部提交。
-Version: 1.5.8
+Version: 1.5.9
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 */
@@ -14,10 +14,12 @@ class QQWorld_auto_save_images {
 	var $using_action;
 	var $type;
 	var $preg = '/<img.*?src=[\"\']((?![\"\']).*?)((?![\"\'])\?.*?)?[\"\']/';
+	var $exclude_domain;
 	function __construct() {
 		$this->using_action = get_option('using_action', 'publish');
 		$this->type = get_option('qqworld_auto_save_imagess_type', 'auto');
 		$this->featured_image = get_option('qqworld_auto_save_imagess_set_featured_image', 'yes');
+		$this->exclude_domain = get_option('qqworld-auto-save-images-exclude-domain');
 		switch ($this->type) {
 			case 'auto':
 				$this->add_actions();
@@ -101,7 +103,9 @@ class QQWorld_auto_save_images {
 				'title' => __('Title'),
 				'status' => __('Status'),
 				'control' => __('Control', 'qqworld_auto_save_images'),
-				'done' => __('Done')
+				'done' => __('Done'),
+				'delete' => __('Delete'),
+				'scheme' => is_ssl() ? 'https://' : 'http://'
 			);
 			wp_localize_script('qqworld-auto-save-images-script', 'QASI', $translation_array, '3.0.0');
 		}
@@ -158,13 +162,21 @@ class QQWorld_auto_save_images {
 			if($preg){
 				foreach($matches[1] as $image_url){
 					if(empty($image_url)) continue;
-					$pos=strpos($image_url,get_bloginfo('url'));
-					if($pos===false){
-						$has_remote_images = true;
-						if ($res=$this->save_images($image_url,$post_id)) {
-							$replace=$res['url'];
-							$content=str_replace($image_url,$replace,$content);
-						} else $has_not_exits_remote_images = true;
+					// exclude domain
+					$allow=true;
+					if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) {
+						$pos=strpos($image_url, $domain);
+						if($pos) $allow=false;
+					}
+					if ($allow) {
+						$pos=strpos($image_url,get_bloginfo('url'));
+						if($pos===false){
+							$has_remote_images = true;
+							if ($res=$this->save_images($image_url,$post_id)) {
+								$replace=$res['url'];
+								$content=str_replace($image_url,$replace,$content);
+							} else $has_not_exits_remote_images = true;
+						}
 					}
 				}
 			}
@@ -206,10 +218,18 @@ class QQWorld_auto_save_images {
 			if($preg){
 				foreach($matches[1] as $image_url){
 					if(empty($image_url)) continue;
-					$pos=strpos($image_url,get_bloginfo('url'));
-					if($pos===false) {
-						$has_remote_images = true;
-						$has_not_exits_remote_images = @!fopen( $image_url, 'r' );
+					// exclude domain
+					$allow=true;
+					if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) {
+						$pos=strpos($image_url, $domain);
+						if($pos) $allow=false;
+					}
+					if ($allow) {
+						$pos=strpos($image_url,get_bloginfo('url'));
+						if($pos===false) {
+							$has_remote_images = true;
+							$has_not_exits_remote_images = @!fopen( $image_url, 'r' );
+						}
 					}
 				}
 			}
@@ -334,6 +354,24 @@ class QQWorld_auto_save_images {
 				</tr>
 
 				<tr valign="top">
+					<th scope="row"><label><?php _e('Exclude Domain/Keyword', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Images will not be saved, if that url contains Exclude-Domain/Keyword.", 'qqworld_auto_save_images'); ?>"></span></th>
+					<td><fieldset>
+						<legend class="screen-reader-text"><span><?php _e('Exclude Domain', 'qqworld_auto_save_images'); ?></span></legend>
+							<ul id="exclude_domain_list">
+							<?php
+							if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) :
+								if (!empty($domain)) :
+							?>
+							<li><?php echo is_ssl() ? 'https://' : 'http://' ?> <input type="text" name="qqworld-auto-save-images-exclude-domain[]" class="regular-text" value="<?php echo $domain; ?>" /><input type="button" class="button delete-exclude-domain" value="<?php _e('Delete'); ?>"></li>
+								<?php endif;
+							endforeach; ?>
+							</ul>
+							<input type="button" id="add_exclude_domain" class="button button-primary" value="<?php _e('Add a Domain/Keyword', 'qqworld_auto_save_images');?>" />
+					</fieldset></td>
+				</tr>
+
+
+				<tr valign="top">
 					<th scope="row"><label><?php _e('Scan Posts', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("If you have too many posts to be scan, sometimes in process looks like stopping, but it may be fake. please be patient.", 'qqworld_auto_save_images') ?>"></span></th>
 					<td>
 					<div id="post_types_list">
@@ -388,6 +426,7 @@ class QQWorld_auto_save_images {
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_imagess_type');
 		register_setting('qqworld_auto_save_images_settings', 'using_action');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_imagess_set_featured_image');
+		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-exclude-domain');
 	}
 
 	/**
@@ -442,7 +481,7 @@ class QQWorld_auto_save_images {
 		return html_entity_decode($str, null, 'UTF-8');
 	}
 
-	function save_remote_images() {
+	function save_remote_images() { // for manual mode
 		set_time_limit(0);
 		//Check to make sure function is not executed more than once on save
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
@@ -459,11 +498,19 @@ class QQWorld_auto_save_images {
 		if($preg){
 			foreach($matches[1] as $image_url){
 				if(empty($image_url)) continue;
+				// exclude domain
+				$allow=true;
+				if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) {
+					$pos=strpos($image_url, $domain);
+					if($pos) $allow=false;
+				}
+				if ($allow) {
 				$pos=strpos($image_url,get_bloginfo('url'));
-				if($pos===false){
-					if ($res=$this->save_images($image_url,$post_id)) {
-						$replace=$res['url'];
-						$content=str_replace($image_url,$replace,$content);
+					if($pos===false){
+						if ($res=$this->save_images($image_url,$post_id)) {
+							$replace=$res['url'];
+							$content=str_replace($image_url,$replace,$content);
+						}
 					}
 				}
 			}
@@ -473,7 +520,7 @@ class QQWorld_auto_save_images {
 		exit;
 	}
 
-	function fetch_images($post_id) {
+	function fetch_images($post_id) { // for automatic mode
 		set_time_limit(0);
 		//Check to make sure function is not executed more than once on save
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
@@ -490,11 +537,19 @@ class QQWorld_auto_save_images {
 		if($preg){
 			foreach($matches[1] as $image_url){
 				if(empty($image_url)) continue;
-				$pos=strpos($image_url,get_bloginfo('url'));
-				if($pos===false){
-					if ($res=$this->save_images($image_url,$post_id)) {
-						$replace=$res['url'];
-						$content=str_replace($image_url,$replace,$content);
+				// exclude domain
+				$allow=true;
+				if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) {
+					$pos=strpos($image_url, $domain);
+					if($pos) $allow=false;
+				}
+				if ($allow) {
+					$pos=strpos($image_url,get_bloginfo('url'));
+					if($pos===false){
+						if ($res=$this->save_images($image_url,$post_id)) {
+							$replace=$res['url'];
+							$content=str_replace($image_url,$replace,$content);
+						}
 					}
 				}
 			}

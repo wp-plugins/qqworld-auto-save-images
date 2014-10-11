@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: QQworld Auto Save Images\n"
 "Report-Msgid-Bugs-To: http://www.qqworld.org\n"
 "POT-Creation-Date: 2011-12-10 19:47:15+00:00\n"
-"PO-Revision-Date: 2014-10-08 13:38+0800\n"
+"PO-Revision-Date: 2014-10-11 09:55+0800\n"
 "Last-Translator: Michael Wang <admin@qqworld.org>\n"
 "Language-Team: QQWorld <admin@qqworld.org>\n"
 "Language: zh_CN\n"
@@ -193,3 +193,12 @@ msgstr "如果服务器压力过大，可以适当调低速度。"
 
 msgid "May be a problem with some posts: "
 msgstr "也许一些文章有问题："
+
+msgid "Exclude Domain/Keyword"
+msgstr "排除域名/关键词"
+
+msgid "Add a Domain/Keyword"
+msgstr "添加域名/关键词"
+
+msgid "Images will not be saved, if that url contains Exclude-Domain/Keyword."
+msgstr "如果图片地址包含排除域名/关键词，则不会保存该图片。"
