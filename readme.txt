@@ -31,6 +31,7 @@ The examples not working code:
 <li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li>
 <li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li>
 <li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
+<li>&lt;img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li>
 </ul>
 
 I tried to figure this out, but i couldn't get the host name to make image src full, nor get remote image from dynamic link.
@@ -59,6 +60,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 <li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li>
 <li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li>
 <li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
+<li>&lt;img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li>
 </ul>
 
 我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整或是从动态链接获取图像。
