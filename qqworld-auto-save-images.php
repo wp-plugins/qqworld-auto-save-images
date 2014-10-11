@@ -6,6 +6,7 @@ Description: Automatically keep the all remote picture to the local, and automat
 Version: 1.5.9
 Author: Michael Wang
 Author URI: http://www.qqworld.org
+Text Domain: qqworld_auto_save_images
 */
 define('QQWORLD_AUTO_SAVE_IMAGES_DIR', __DIR__ . DIRECTORY_SEPARATOR);
 define('QQWORLD_AUTO_SAVE_IMAGES_URL', plugin_dir_url(__FILE__));
@@ -286,7 +287,7 @@ class QQWorld_auto_save_images {
 	}
 
 	public function load_language() {
-		load_plugin_textdomain( 'qqworld_auto_save_images', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
+		load_plugin_textdomain( 'qqworld_auto_save_images', dirname( __FILE__ ) . '/lang' . 'lang', basename( dirname( __FILE__ ) ) . '/lang' );
 	}
 
 	function registerPluginLinks($links, $file) {
