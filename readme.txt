@@ -77,6 +77,11 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 警告：如果你的网站域名更改了，必须在数据库中将所有的图片链接更新到新域名，否则插件会把未更改的图片再保存一次。</li>
 </ol>
 
+== Screenshots ==
+
+1. User interface
+2. 用户界面
+
 == Changelog ==
 
 = 1.6 =
