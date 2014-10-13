@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.6
+Stable tag: 1.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,21 +17,21 @@ And more powerful functional is waiting for you. What exactly is it? Hehe...
 
 <h4>Notice:</h4>
 
-This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://", and not some dynamic link, for example:
+This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://", for example:
 
 <ul>
 <li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
 <li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li>
 <li>&lt;img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li>
+<li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
 </ul>
 
-The examples not working code:
+The examples that not working:
 
 <ul>
 <li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li>
 <li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li>
 <li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li>
-<li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
 </ul>
 
 I tried to figure this out, but i couldn't get the host name to make image src full, nor get remote image from dynamic link.
@@ -46,21 +46,21 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 <h4>注意：</h4>
 
-该插件有个小问题，所有的远程图像的URL必须是完整的，就是说必须得包含"http(s)://"，并且非某些动态链接，比如：
+该插件有个小问题，所有的远程图像的URL必须是完整的，就是说必须得包含"http(s)://"，比如：
 
 <ul>
 <li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
 <li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li>
 <li>&lt;img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li>
+<li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
 </ul>
 
-不能保存图片的例子：
+不能保存的例子：
 
 <ul>
 <li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li>
 <li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li>
 <li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li>
-<li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
 </ul>
 
 我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整或是从动态链接获取图像。
@@ -83,6 +83,14 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 2. 用户界面
 
 == Changelog ==
+
+= 1.6.1 =
+New features:<br />
+Supported more type of dynamic link.<br />
+More detail notifications for automatic/manual mode.<br />
+新特性：<br />
+支持更多类型的动态连接。<br />
+自动/手动模式拥有更详细的通知信息
 
 = 1.6 =
 New feature: Supported fetching images from some dynamic link.<br />

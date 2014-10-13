@@ -1,5 +1,6 @@
 jQuery(function($) {
 	$(window).on('load', function() {
+		var noty_theme = typeof qqworld_ajax == 'object' ? 'qqworldTheme' : 'defaultTheme';
 		$('.mce-i-save_remote_images').closest('.mce-widget').hide();
 		$(document).on('click', '#save-remote-images-button', function() {
 			var mode = 'text';
@@ -14,25 +15,33 @@ jQuery(function($) {
 						type: 'notification',
 						layout: 'center',
 						modal: true,
-						closeWith: ['button']
+						closeWith: ['button'],
+						theme: noty_theme
 					}) );
 					$.ajax({
 						type: "POST",
 						url: ajaxurl,
+						dataType: 'json',
 						data: {
 							action: 'save_remote_images',
 							post_id: QASI.post_id,
 							content: encodeURI(encodeURI($('#content').val()))
 						},
 						success: function(respond) {
+							switch (respond.type) {
+								case 1: var type = 'warning'; break;
+								case 2: var type = 'success'; break;
+								case 3: var type = 'error'; break;
+							}
 							$('#save-remote-images-button').data('noty').close();
 							var n = noty({
-								text: QASI.succesed_save_remote_images,	
-								type: 'success',
+								text: respond.msg,
+								type: type,
 								layout: 'center',
-								timeout: 3000
+								timeout: 3000,
+								theme: noty_theme
 							});
-							if (respond) $('#content').val(respond);
+							if (respond.content) $('#content').val(respond.content);
 						}
 					});
 					break;
@@ -42,25 +51,33 @@ jQuery(function($) {
 						type: 'notification',
 						layout: 'center',
 						modal: true,
-						closeWith: ['button']
+						closeWith: ['button'],
+						theme: noty_theme
 					}) );
 					$.ajax({
 						type: "POST",
 						url: ajaxurl,
+						dataType: 'json',
 						data: {
 							action: 'save_remote_images',
 							post_id: QASI.post_id,
 							content: encodeURI(encodeURI(tinyMCE.activeEditor.getContent()))
 						},
 						success: function(respond) {
+							switch (respond.type) {
+								case 1: var type = 'warning'; break;
+								case 2: var type = 'success'; break;
+								case 3: var type = 'error'; break;
+							}
 							$('#save-remote-images-button').data('noty').close();
 							var n = noty({
-								text: QASI.succesed_save_remote_images,	
-								type: 'success',
+								text: respond.msg,
+								type: type,
 								layout: 'center',
-								timeout: 3000
+								timeout: 3000,
+								theme: noty_theme
 							});
-							if (respond) tinyMCE.activeEditor.setContent(respond);
+							if (respond.content) tinyMCE.activeEditor.setContent(respond.content);
 						}
 					});
 					break;						

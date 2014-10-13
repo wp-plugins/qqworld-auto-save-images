@@ -7,7 +7,9 @@
 	box-sizing: border-box;
 	box-shadow: 3px 3px 3px rgba(0,0,0,.1);
 }
-
+#post_types_list, #exclude_domain_list {
+	margin: 0;
+}
 #scan_old_post_list {
 	border-collapse: collapse;
 	width: 100%;

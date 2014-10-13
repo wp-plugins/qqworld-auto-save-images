@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.6
+Version: 1.6.1
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -14,9 +14,12 @@ define('QQWORLD_AUTO_SAVE_IMAGES_URL', plugin_dir_url(__FILE__));
 class QQWorld_auto_save_images {
 	var $using_action;
 	var $type;
-	var $preg = '/<img.*?src=[\"\']((?![\"\']).*?)((?![\"\'])\?.*?)?[\"\']/i';
+	var $preg = '/<img.*?src=[\"\']((?![\"\']).*?)[\"\']/i';
+	var $has_remote_image;
+	var $has_missing_image;
 	var $exclude_domain;
 	function __construct() {
+		__('Michael Wang', 'qqworld_auto_save_images');
 		$this->using_action = get_option('using_action', 'publish');
 		$this->type = get_option('qqworld_auto_save_imagess_type', 'auto');
 		$this->featured_image = get_option('qqworld_auto_save_imagess_set_featured_image', 'yes');
@@ -46,6 +49,24 @@ class QQWorld_auto_save_images {
 
 		add_action( 'admin_enqueue_scripts', array($this, 'add_to_post_php') );
 		add_action( 'admin_enqueue_scripts', array($this, 'add_to_page_qqworld_auto_save_images') );
+
+		add_filter( 'post_updated_messages', array($this, 'post_updated_messages') );
+	}
+
+	public function post_updated_messages($messages) {
+		global $post, $post_ID;
+		$post_type = get_post_type( $post_ID );
+		$messages[$post_type][21] = __('All remote images have been saved.', 'qqworld_auto_save_images') . sprintf( __(' <a href="%s">View</a>', 'qqworld_auto_save_images'), esc_url( get_permalink($post_ID) ) );
+		$messages[$post_type][22] = __('Has missing images or image which could not download.', 'qqworld_auto_save_images') . sprintf( __(' <a href="%s">View</a>', 'qqworld_auto_save_images'), esc_url( get_permalink($post_ID) ) );
+		return $messages;
+	}
+
+	public function redirect_post_location($location, $post_id) {
+		if ($this->has_remote_image) {
+			if ($this->has_missing_image) $location = add_query_arg( 'message', 22, get_edit_post_link( $post_id, 'url' ) );
+			else $location = add_query_arg( 'message', 21, get_edit_post_link( $post_id, 'url' ) );
+		}		
+		return $location;
 	}
 
 	public function add_to_post_php() {
@@ -57,8 +78,7 @@ class QQWorld_auto_save_images {
 			wp_enqueue_script('qqworld-auto-save-images-script-post');
 			$translation_array = array(
 				'post_id' => $post->ID,
-				'in_process' => __('In Process...', 'qqworld_auto_save_images'),
-				'succesed_save_remote_images' => __('Successed save remote images', 'qqworld_auto_save_images')
+				'in_process' => __('In Process...', 'qqworld_auto_save_images')
 			);
 			wp_localize_script('qqworld-auto-save-images-script-post', 'QASI', $translation_array, '3.0.0');
 		}
@@ -306,10 +326,12 @@ class QQWorld_auto_save_images {
 ?>
 <div class="wrap">
 	<h2><?php _e('QQWorld Auto Save Images', 'qqworld_auto_save_images'); ?></h2>
+	<p><?php _e('Automatically keep the all remote picture to the local, and automatically set featured image.', 'qqworld_auto_save_images'); ?>
 	<div id="scan-result"></div>
 	<form action="options.php" method="post" id="form">
 		<?php settings_fields('qqworld_auto_save_images_settings'); ?>
 		<img src="https://ps.w.org/qqworld-auto-save-images/assets/banner-772x250.png" width="772" height="250" id="banner" />
+		<h2><?php _e('Settings'); ?></h2>
 		<table class="form-table">
 			<tbody>
 				<tr valign="top">
@@ -343,12 +365,12 @@ class QQWorld_auto_save_images {
 				</tr>
 
 				<tr valign="top">
-					<th scope="row"><label><?php _e('Automatically Set Featured Image', 'qqworld_auto_save_images'); ?></label></th>
+					<th scope="row"><label><?php _e('Set Featured Image', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Set first one of the remote images as featured image.", 'qqworld_auto_save_images'); ?>"></span></th>
 					<td><fieldset>
-						<legend class="screen-reader-text"><span><?php _e('Automatically Set Featured Image', 'qqworld_auto_save_images'); ?></span></legend>
+						<legend class="screen-reader-text"><span><?php _e('Set Featured Image', 'qqworld_auto_save_images'); ?></span></legend>
 							<label for="qqworld_auto_save_imagess_set_featured_image_yes">
 								<input name="qqworld_auto_save_imagess_set_featured_image" type="radio" id="qqworld_auto_save_imagess_set_featured_image_yes" value="yes" <?php checked('yes', $this->featured_image); ?> />
-								<?php _e('Yes'); ?>
+								<?php _e('Automatic', 'qqworld_auto_save_images'); ?>
 							</label><br />
 							<label for="qqworld_auto_save_imagess_set_featured_image_no">
 								<input name="qqworld_auto_save_imagess_set_featured_image" type="radio" id="qqworld_auto_save_imagess_set_featured_image_no" value="no" <?php checked('no', $this->featured_image); ?> />
@@ -370,58 +392,64 @@ class QQWorld_auto_save_images {
 								<?php endif;
 							endforeach; ?>
 							</ul>
-							<input type="button" id="add_exclude_domain" class="button button-primary" value="<?php _e('Add a Domain/Keyword', 'qqworld_auto_save_images');?>" />
+							<input type="button" id="add_exclude_domain" class="button" value="<?php _e('Add a Domain/Keyword', 'qqworld_auto_save_images');?>" />
 					</fieldset></td>
 				</tr>
-
-
+			</tbody>
+		</table>
+		<?php submit_button(); ?>
+		<h2><?php _e('Scan Posts', 'qqworld_auto_save_images'); ?></h2>
+		<table class="form-table">
+			<tbody>
 				<tr valign="top">
-					<th scope="row"><label><?php _e('Scan Posts', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("If you have too many posts to be scan, sometimes in process looks like stopping, but it may be fake. please be patient.", 'qqworld_auto_save_images') ?>"></span></th>
+					<th scope="row"><label><?php _e('Select post types', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("If you have too many posts to be scan, sometimes in process looks like stopping, but it may be fake. please be patient.", 'qqworld_auto_save_images') ?>"></span></th>
 					<td>
-					<div id="post_types_list">
-						<p><?php _e('Select post types:', 'qqworld_auto_save_images'); ?> <?php
-						$post_types = get_post_types('', 'objects'); ?>
-						<ul>
+						<?php $post_types = get_post_types('', 'objects'); ?>
+						<ul id="post_types_list">
 						<?php foreach ($post_types as $name => $post_type) :
 							if ( !in_array($name, array('attachment', 'revision', 'nav_menu_item') )) : ?>
 							<li><label><input name="qqworld_auto_save_imagess_post_types[]" type="checkbox" value="<?php echo $name; ?>" /> <?php echo $post_type->labels->name; ?> (<?php $count = wp_count_posts($name); echo $count->publish; ?>)</label></li>
 						<?php endif;
 						endforeach;
 						?></ul>
-					</div>
+					</td>
+				</tr>
 
-					<p id="scope-id"><?php _e('Scope of Post ID:', 'qqworld_auto_save_images'); ?> <?php printf(__('From %1$s to %2$s', 'qqworld_auto_save_images'), '<input type="number" class="small-text" name="id_from" />', '<input type="number" class="small-text" name="id_to" />'); ?> <span class="icon help" title="<?php _e("Default empty for scan all posts ID. If you want to scan posts ID from 50 to 100. please type '50' and '100' or '100' and '50', The order in which two numbers can be reversed. If you only type one number, system would only scan that ID.", 'qqworld_auto_save_images'); ?>"></span></p>
-					
-					<p><?php _e('Offset:', 'qqworld_auto_save_images'); ?> <?php printf(__('Start from %s to Scan', 'qqworld_auto_save_images'), '<input type="number" class="small-text" name="offset" value="0" disabled />'); ?>
+				<tr valign="top">
+					<th scope="row"><label><?php _e('Scope of Post ID', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Default empty for scan all posts ID. If you want to scan posts ID from 50 to 100. please type '50' and '100' or '100' and '50', The order in which two numbers can be reversed. If you only type one number, system would only scan that ID.", 'qqworld_auto_save_images'); ?>"></span></th>
+					<td><?php printf(__('From %1$s to %2$s', 'qqworld_auto_save_images'), '<input type="number" class="small-text" name="id_from" />', '<input type="number" class="small-text" name="id_to" />'); ?></td>
+				</tr>
+				
+				<tr valign="top">
+					<th scope="row"><label><?php _e('Offset', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Default scan all posts. If you want to scan 50-150 posts, please type '50' in the textfield and select '100'.", 'qqworld_auto_save_images'); ?>"></span></th>
+					<td>
+						<?php printf(__('Start from %s to Scan', 'qqworld_auto_save_images'), '<input type="number" class="small-text" name="offset" value="0" disabled />'); ?>
 						<select name="posts_per_page">
 							<option value="-1"><?php _e('All'); ?></option>
 							<?php for ($i=1; $i<=10; $i++) : ?>
 							<option value="<?php echo $i*100; ?>"><?php echo $i*100; ?></option>
 							<?php endfor; ?>
-						</select> <?php _e('Posts'); ?> <span class="icon help" title="<?php _e("Default scan all posts. If you want to scan 50-150 posts, please type '50' in the textfield and select '100'.", 'qqworld_auto_save_images'); ?>"></span>
-					</p>
-					
-					<fieldset>
-						<legend class="screen-reader-text"><span><?php _e('Scan Posts', 'qqworld_auto_save_images'); ?></span></legend>
-							<?php _e('Speed:', 'qqworld_auto_save_images'); ?>
-							<select name="speed">
-								<?php for ($i=1; $i<10; $i++) : ?>
-								<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-								<?php endfor; ?>
-								<option value="10" selected>10</option>
-							</select> <span class="icon help" title="<?php _e('If the server is too much stress may be appropriately reduced speed.', 'qqworld_auto_save_images'); ?>"></span><br />
-							<label for="scan_old_posts">
-								<input name="scan_old_posts" type="button" class="button-primary" id="scan_old_posts" value="<?php _e('Automatic', 'qqworld_auto_save_images'); ?> &#8667;" />
-							</label> <span class="icon help" title="<?php _e('Scan posts and keep remote images in all posts to local media library. Maybe take a long time.', 'qqworld_auto_save_images'); ?>"></span>
-							<label for="print_all_posts">
-								<input name="list_all_posts" type="button" class="button-primary" id="list_all_posts" value="<?php _e('Manual', 'qqworld_auto_save_images'); ?> &#9776;" />
-							</label> <span class="icon help" title="<?php _e("The list displayed will show you which posts including remote images, then you can keep them to local manually via click \"Fetch\" button.", 'qqworld_auto_save_images'); ?>"></span>
-					</fieldset>
+						</select> <?php _e('Posts'); ?>
+					</td>
+				</tr>
+				
+				<tr valign="top">
+					<th scope="row"><label><?php _e('Speed', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e('If the server is too much stress may be appropriately reduced speed.', 'qqworld_auto_save_images'); ?>"></span></th>
+					<td>
+						<select name="speed">
+							<?php for ($i=1; $i<10; $i++) : ?>
+							<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+							<?php endfor; ?>
+							<option value="10" selected>10</option>
+						</select><br />
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		<?php submit_button(); ?>
+		<p class="submit">
+			<input name="scan_old_posts" type="button" class="button-primary" id="scan_old_posts" value="<?php _e('Automatic', 'qqworld_auto_save_images'); ?> &#8667;" /> <span class="icon help" title="<?php _e('Scan posts and keep remote images in all posts to local media library. Maybe take a long time.', 'qqworld_auto_save_images'); ?>"></span>
+			<input name="list_all_posts" type="button" class="button-primary" id="list_all_posts" value="<?php _e('Manual', 'qqworld_auto_save_images'); ?> &#9776;" /> <span class="icon help" title="<?php _e("The list displayed will show you which posts including remote images, then you can keep them to local manually via click \"Fetch\" button.", 'qqworld_auto_save_images'); ?>"></span>
+		</p>
 	</form>
 <?php
 	}
@@ -496,6 +524,9 @@ class QQWorld_auto_save_images {
 		if ( !current_user_can('edit_post', $post_id) ) 
 		return;
 
+		$this->has_remote_image = 0;
+		$this->has_missing_image = 0;
+
 		$content = $this->utf8_urldecode($this->utf8_urldecode($_POST['content']));
 
 		$preg=preg_match_all($this->preg,stripslashes($content),$matches);
@@ -511,6 +542,7 @@ class QQWorld_auto_save_images {
 				if ($allow) {
 				$pos=strpos($image_url,get_bloginfo('url'));
 					if($pos===false){
+						$this->has_remote_image = 1;
 						if ($res=$this->save_images($image_url,$post_id)) {
 							$replace=$res['url'];
 							$content=str_replace($image_url,$replace,$content);
@@ -520,7 +552,22 @@ class QQWorld_auto_save_images {
 			}
 		}
 		wp_update_post(array('ID' => $post_id, 'post_content' => $content));
-		echo $content;
+
+		$result = array();
+		if ($this->has_remote_image) {
+			if ($this->has_missing_image) {
+				$result['type'] = 3;
+				$result['msg'] = __('Has Missing/Undownloadable images.', 'qqworld_auto_save_images');
+			} else {
+				$result['type'] = 2;
+				$result['msg'] = __('All remote images have been saved.', 'qqworld_auto_save_images');
+			}
+		} else {
+			$result['type'] = 1;
+			$result['msg'] = __('No remote images found.', 'qqworld_auto_save_images');
+		}
+		$result['content'] = $content;
+		echo json_encode($result);
 		exit;
 	}
 
@@ -532,6 +579,11 @@ class QQWorld_auto_save_images {
 
 		if ( !current_user_can('edit_post', $post_id) ) 
 		return;
+		
+		$this->has_remote_image = 0;
+		$this->has_missing_image = 0;
+		
+		add_filter( 'redirect_post_location', array($this, 'redirect_post_location'), 10, 2);
 
 		$this->remove_actions();
 
@@ -550,6 +602,7 @@ class QQWorld_auto_save_images {
 				if ($allow) {
 					$pos=strpos($image_url,get_bloginfo('url'));
 					if($pos===false){
+						$this->has_remote_image = 1;
 						if ($res=$this->save_images($image_url,$post_id)) {
 							$replace=$res['url'];
 							$content=str_replace($image_url,$replace,$content);
@@ -572,7 +625,9 @@ class QQWorld_auto_save_images {
 			if ( empty($match) ) {
 				if ($filetype = $this->getFileType($file) ) {
 					preg_match( '/(.*?)$/i', $filename, $match );
-					$img_name = $match[0] . '.' . $filetype;
+					$pos=strpos($image_url,'?'); // if has '?', md5()
+					$img_name = $pos ? md5($match[0]) : $match[0];
+					$img_name = $img_name . '.' . $filetype;
 				} else return false;
 			} else {
 				$img_name = $match[1].$match[2];
@@ -581,6 +636,8 @@ class QQWorld_auto_save_images {
 			$attach_id = $this->insert_attachment($res['file'],$post_id);
 			if( !has_post_thumbnail($post_id) && $this->featured_image=='yes' ) set_post_thumbnail( $post_id, $attach_id );
 			return $res;
+		} else {
+			$this->has_missing_image = 1;
 		}
 		return false;
 	}
@@ -589,7 +646,6 @@ class QQWorld_auto_save_images {
 		$bin = substr($file,0,2);
 		$strInfo = @unpack("C2chars", $bin);
 		$typeCode = intval($strInfo['chars1'].$strInfo['chars2']);
-		$fileType = '';
 		switch ($typeCode) {
 			case 7790:
 				$fileType = 'exe';

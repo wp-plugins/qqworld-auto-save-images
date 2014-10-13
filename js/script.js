@@ -1,53 +1,55 @@
-function str_repeat(i, m) {
-	for (var o = []; m > 0; o[--m] = i);
-	return o.join('');
-}
-function sprintf() {
-	var i = 0, a, f = arguments[i++], o = [], m, p, c, x, s = '';
-	while (f) {
-		if (m = /^[^\x25]+/.exec(f)) {
-			o.push(m[0]);
-		}
-		else if (m = /^\x25{2}/.exec(f)) {
-			o.push('%');
-		}
-		else if (m = /^\x25(?:(\d+)\$)?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-fosuxX])/.exec(f)) {
-			if (((a = arguments[m[1] || i++]) == null) || (a == undefined)) {
-				throw('Too few arguments.');
-			}
-			if (/[^s]/.test(m[7]) && (typeof(a) != 'number')) {
-				throw('Expecting number but found ' + typeof(a));
-			}
-			switch (m[7]) {
-				case 'b': a = a.toString(2); break;
-				case 'c': a = String.fromCharCode(a); break;
-				case 'd': a = parseInt(a); break;
-				case 'e': a = m[6] ? a.toExponential(m[6]) : a.toExponential(); break;
-				case 'f': a = m[6] ? parseFloat(a).toFixed(m[6]) : parseFloat(a); break;
-				case 'o': a = a.toString(8); break;
-				case 's': a = ((a = String(a)) && m[6] ? a.substring(0, m[6]) : a); break;
-				case 'u': a = Math.abs(a); break;
-				case 'x': a = a.toString(16); break;
-				case 'X': a = a.toString(16).toUpperCase(); break;
-			}
-			a = (/[def]/.test(m[7]) && m[2] && a >= 0 ? '+'+ a : a);
-			c = m[3] ? m[3] == '0' ? '0' : m[3].charAt(1) : ' ';
-			x = m[5] - String(a).length - s.length;
-			p = m[5] ? str_repeat(c, x) : '';
-			o.push(s + (m[4] ? a + p : p + a));
-		}
-		else {
-			throw('Huh ?!');
-		}
-		f = f.substring(m[0].length);
-	}
-	return o.join('');
-}
-
 if (!QQWorld_auto_save_images) var QQWorld_auto_save_images = {};
 QQWorld_auto_save_images.scan_posts = function() {
 	var _this = this,
-	$ = jQuery;
+	$ = jQuery,
+	noty_theme = typeof qqworld_ajax == 'object' ? 'qqworldTheme' : 'defaultTheme';
+
+	this.lib = {};
+	this.lib.sprintf = function() {
+		var str_repeat = function(i, m) {
+			for (var o = []; m > 0; o[--m] = i);
+			return o.join('');
+		}
+		var i = 0, a, f = arguments[i++], o = [], m, p, c, x, s = '';
+		while (f) {
+			if (m = /^[^\x25]+/.exec(f)) {
+				o.push(m[0]);
+			}
+			else if (m = /^\x25{2}/.exec(f)) {
+				o.push('%');
+			}
+			else if (m = /^\x25(?:(\d+)\$)?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-fosuxX])/.exec(f)) {
+				if (((a = arguments[m[1] || i++]) == null) || (a == undefined)) {
+					throw('Too few arguments.');
+				}
+				if (/[^s]/.test(m[7]) && (typeof(a) != 'number')) {
+					throw('Expecting number but found ' + typeof(a));
+				}
+				switch (m[7]) {
+					case 'b': a = a.toString(2); break;
+					case 'c': a = String.fromCharCode(a); break;
+					case 'd': a = parseInt(a); break;
+					case 'e': a = m[6] ? a.toExponential(m[6]) : a.toExponential(); break;
+					case 'f': a = m[6] ? parseFloat(a).toFixed(m[6]) : parseFloat(a); break;
+					case 'o': a = a.toString(8); break;
+					case 's': a = ((a = String(a)) && m[6] ? a.substring(0, m[6]) : a); break;
+					case 'u': a = Math.abs(a); break;
+					case 'x': a = a.toString(16); break;
+					case 'X': a = a.toString(16).toUpperCase(); break;
+				}
+				a = (/[def]/.test(m[7]) && m[2] && a >= 0 ? '+'+ a : a);
+				c = m[3] ? m[3] == '0' ? '0' : m[3].charAt(1) : ' ';
+				x = m[5] - String(a).length - s.length;
+				p = m[5] ? str_repeat(c, x) : '';
+				o.push(s + (m[4] ? a + p : p + a));
+			}
+			else {
+				throw('Huh ?!');
+			}
+			f = f.substring(m[0].length);
+		}
+		return o.join('');
+	}
 
 	this.action = {};
 	this.action.catch_errors = function(XMLHttpRequest, textStatus, errorThrown) {
@@ -88,7 +90,8 @@ QQWorld_auto_save_images.scan_posts = function() {
 			type: 'error',
 			layout: 'bottom',
 			dismissQueue: true,
-			closeWith: ['button']
+			closeWith: ['button'],
+			theme: noty_theme
 		});
 		$('#scan_old_posts').removeAttr('disabled');
 		$('#list_all_posts').removeAttr('disabled');
@@ -114,15 +117,15 @@ QQWorld_auto_save_images.scan_posts = function() {
 			var count_not_exits_remote_images = $('#scan_old_post_list tbody tr.has_not_exits_remote_images').length;
 			var count = $('#scan_old_post_list tbody tr').length;
 			if (count) {
-				if (count==1) count_html = sprintf(QASI.n_post_has_been_scanned, count);
-				else count_html = sprintf(QASI.n_posts_have_been_scanned, count);
+				if (count==1) count_html = _this.lib.sprintf(QASI.n_post_has_been_scanned, count);
+				else count_html = _this.lib.sprintf(QASI.n_posts_have_been_scanned, count);
 				if (count_remote_images) {
 					count_remote_images = count_remote_images - count_not_exits_remote_images;
-					if (count_remote_images<=1) count_html += sprintf("<br />"+QASI.n_post_included_remote_images_processed, count_remote_images);
-					else count_html += sprintf("<br />"+QASI.n_posts_included_remote_images_processed, count_remote_images);
+					if (count_remote_images<=1) count_html += _this.lib.sprintf("<br />"+QASI.n_post_included_remote_images_processed, count_remote_images);
+					else count_html += _this.lib.sprintf("<br />"+QASI.n_posts_included_remote_images_processed, count_remote_images);
 					if (count_not_exits_remote_images) {
-						if (count_not_exits_remote_images==1) count_html += sprintf("<br />"+QASI.n_post_has_missing_images_couldnt_be_processed, count_not_exits_remote_images);
-						else count_html += sprintf("<br />"+QASI.n_posts_have_missing_images_couldnt_be_processed, count_not_exits_remote_images);
+						if (count_not_exits_remote_images==1) count_html += _this.lib.sprintf("<br />"+QASI.n_post_has_missing_images_couldnt_be_processed, count_not_exits_remote_images);
+						else count_html += _this.lib.sprintf("<br />"+QASI.n_posts_have_missing_images_couldnt_be_processed, count_not_exits_remote_images);
 					}
 				} else count_html += '<br />'+QASI.no_posts_processed;
 			} else {
@@ -134,7 +137,8 @@ QQWorld_auto_save_images.scan_posts = function() {
 				type: 'success',
 				layout: 'center',
 				dismissQueue: true,
-				modal: true
+				modal: true,
+				theme: noty_theme
 			});
 			$('#scan_old_posts').removeAttr('disabled');
 			$('#list_all_posts').removeAttr('disabled');
@@ -173,14 +177,14 @@ QQWorld_auto_save_images.scan_posts = function() {
 			var count_remote_images = $('#scan_old_post_list tbody tr.has_remote_images').length;
 			var count_not_exits_remote_images = $('#scan_old_post_list tbody tr.has_not_exits_remote_images').length;
 			if (count) {
-				if (count==1) count_html = sprintf(QASI.n_post_has_been_scanned, count);
-				else count_html = sprintf(QASI.n_posts_have_been_scanned, count);
+				if (count==1) count_html = _this.lib.sprintf(QASI.n_post_has_been_scanned, count);
+				else count_html = _this.lib.sprintf(QASI.n_posts_have_been_scanned, count);
 				if (count_remote_images) {
-					if (count_remote_images==1) count_html += sprintf("<br />"+QASI.found_n_post_including_remote_images, count_remote_images);
-					else count_html += sprintf("<br />"+QASI.found_n_posts_including_remote_images, count_remote_images);
+					if (count_remote_images==1) count_html += _this.lib.sprintf("<br />"+QASI.found_n_post_including_remote_images, count_remote_images);
+					else count_html += _this.lib.sprintf("<br />"+QASI.found_n_posts_including_remote_images, count_remote_images);
 					if (count_not_exits_remote_images) {
-						if (count_not_exits_remote_images==1) count_html += sprintf("<br />"+QASI.and_with_n_post_has_missing_images, count_not_exits_remote_images);
-						else count_html += sprintf("<br />"+QASI.and_with_n_posts_have_missing_images, count_not_exits_remote_images);
+						if (count_not_exits_remote_images==1) count_html += _this.lib.sprintf("<br />"+QASI.and_with_n_post_has_missing_images, count_not_exits_remote_images);
+						else count_html += _this.lib.sprintf("<br />"+QASI.and_with_n_posts_have_missing_images, count_not_exits_remote_images);
 					}
 				} else count_html += '<br />'+QASI.no_post_has_remote_images_found;
 			} else {
@@ -192,7 +196,8 @@ QQWorld_auto_save_images.scan_posts = function() {
 				type: 'success',
 				layout: 'center',
 				dismissQueue: true,
-				modal: true
+				modal: true,
+				theme: noty_theme
 			});
 			$('#scan_old_posts').removeAttr('disabled');
 			$('#list_all_posts').removeAttr('disabled');
@@ -230,7 +235,8 @@ QQWorld_auto_save_images.scan_posts = function() {
 			type: 'error',
 			dismissQueue: true,
 			layout: 'bottomCenter',
-			timeout: 3000
+			timeout: 3000,
+			theme: noty_theme
 		});
 	}
 
@@ -260,6 +266,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 					dismissQueue: true,
 					layout: 'center',
 					modal: true,
+					theme: noty_theme,
 					buttons: [
 						{
 							addClass: 'button button-primary',
@@ -291,7 +298,8 @@ QQWorld_auto_save_images.scan_posts = function() {
 											text: QASI.scanning,	
 											type: 'notification',
 											layout: 'center',
-											dismissQueue: true
+											dismissQueue: true,
+											theme: noty_theme
 										}) );
 										_this.action.scan(respond, 0);
 									},
@@ -338,7 +346,8 @@ QQWorld_auto_save_images.scan_posts = function() {
 							text: QASI.listing,	
 							type: 'notification',
 							layout: 'center',
-							dismissQueue: true
+							dismissQueue: true,
+							theme: noty_theme
 						}) );
 						_this.action.list(respond, 0);
 					},
