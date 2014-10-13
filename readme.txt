@@ -137,24 +137,36 @@ Debug system added<br />
 增加调试系统
 
 = 1.5.7 =
-Fixed:<br />
-A bug of the stops process by some special characters.<br />
-some english error messages.<br />
-修复:<br />
-一些特殊字符停止程序进程的bug。<br />
-一些英文错误消息。<br />
+<ul>
+	<li>Fixed:
+		<ol>
+			<li>A bug of the stops process by some special characters.</li>
+			<li>some english error messages.</li>
+		</ol>
+	</li>
+	<li>修复:
+		<ol>
+			<li>一些特殊字符停止程序进程的bug。</li>
+			<li>一些英文错误消息。</li>
+		</ol>
+	</li>
+</ul>
 
 = 1.5.6 =
-New features:
-<ol>
-<li>Set scope of ID for scan.</li>
-<li>List posts including remote images and handle them manually.</li>
-</ol>
-新功能：
-<ol>
-<li>设置文章ID的扫描范围。</li>
-<li>列出包含远程图像的文章，并且手动处理它们。</li>
-</ol>
+<ul>
+	<li>New features:
+		<ol>
+			<li>Set scope of ID for scan.</li>
+			<li>List posts including remote images and handle them manually.</li>
+		</ol>
+	</li>
+	<li>新功能：
+		<ol>
+			<li>设置文章ID的扫描范围。</li>
+			<li>列出包含远程图像的文章，并且手动处理它们。</li>
+		</ol>
+	</li>
+</ul>
 
 = 1.5.5 =
 Enhance the scanning speed of up to 10 times.<br />
@@ -201,16 +213,20 @@ You can change the Type in the plugin's setting page.<br />
 你可以在插件的设置页面更改类型。
 
 = 1.3 =
-Fixed 2 bugs:
-<ol>
-<li>Failed to save remote image to local when the image url include "(\?(.*?))?", now it's works.</li>
-<li>If the remote image url is invalid, will not to save it to a blank attachment.</li>
-</ol>
-修复两个bug:
-<ol>
-<li>如果远程图片地址包含 "(\?(.*?))?" 会无法保存到本地，现在工作正常。</li>
-<li>如果远程图片地址无效，则不会保存一个空的附件到本地。</li>
-</ol>
+<ul>
+	<li>Fixed 2 bugs:
+		<ol>
+			<li>Failed to save remote image to local when the image url include "(\?(.*?))?", now it's works.</li>
+			<li>If the remote image url is invalid, will not to save it to a blank attachment.</li>
+		</ol>
+	</li>
+	<li>修复两个bug:
+		<ol>
+			<li>如果远程图片地址包含 "(\?(.*?))?" 会无法保存到本地，现在工作正常。</li>
+			<li>如果远程图片地址无效，则不会保存一个空的附件到本地。</li>
+		</ol>
+	</li>
+</ul>
 
 = 1.2 =
 add admin page to control use which action to save remote image.<br />
@@ -224,8 +240,8 @@ if you want to upload images with chinese file name and server does not support 
 
 = 1.0 =
 Born for Capture.<br />
-为采集而生<br />
 The feature is can automatically change image filename.<br />
+为采集而生<br />
 特色是可以自动更改图片的文件名
 
 == Upgrade Notice ==
