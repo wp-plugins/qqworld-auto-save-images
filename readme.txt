@@ -85,12 +85,20 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 == Changelog ==
 
 = 1.6.1 =
-New features:<br />
-Supported more type of dynamic link.<br />
-More detail notifications for automatic/manual mode.<br />
-新特性：<br />
-支持更多类型的动态连接。<br />
-自动/手动模式拥有更详细的通知信息
+<ul>
+	<li>New features:
+		<ol>
+			<li>Supported more type of dynamic link.</li>
+			<li>More detail notifications for automatic/manual mode.</li>
+		</ol>
+	</li>
+	<li>新特性：
+		<ol>
+			<li>支持更多类型的动态连接。</li>
+			<li>自动/手动模式拥有更详细的通知信息</li>
+		</ol>
+	</li>
+</ul>
 
 = 1.6 =
 New feature: Supported fetching images from some dynamic link.<br />
