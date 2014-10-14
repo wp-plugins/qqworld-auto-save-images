@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.6.1
+Stable tag: 1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,22 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 2. 用户界面
 
 == Changelog ==
+
+= 1.7 =
+<ul>
+	<li>New features:
+		<ol>
+			<li>New interface.</li>
+			<li>Added categories filter for scan-post-mode.</li>
+		</ol>
+	</li>
+	<li>新特性：
+		<ol>
+			<li>新用户界面。</li>
+			<li>扫描文章模式增加分类筛选。</li>
+		</ol>
+	</li>
+</ul>
 
 = 1.6.1 =
 <ul>

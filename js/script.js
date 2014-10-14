@@ -110,7 +110,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 		$('body').data('scan-mode', 'scan').data('r', r);
 		if (typeof respond[r] == 'undefined') {
 			$('#scan-result').effect( 'shake', null, 500 );
-			$('#form').slideDown('slow');
+			$('#scan-post-block').slideDown('normal');
 			$('body').data('noty').close();
 			var count = $('#scan_old_post_list tbody tr').length;
 			var count_remote_images = $('#scan_old_post_list tbody tr.has_remote_images').length;
@@ -127,7 +127,10 @@ QQWorld_auto_save_images.scan_posts = function() {
 						if (count_not_exits_remote_images==1) count_html += _this.lib.sprintf("<br />"+QASI.n_post_has_missing_images_couldnt_be_processed, count_not_exits_remote_images);
 						else count_html += _this.lib.sprintf("<br />"+QASI.n_posts_have_missing_images_couldnt_be_processed, count_not_exits_remote_images);
 					}
-				} else count_html += '<br />'+QASI.no_posts_processed;
+				} else {
+					$('#scan_old_post_list').slideUp('slow');
+					count_html += '<br />'+QASI.no_posts_processed;
+				}
 			} else {
 				$('#scan_old_post_list').slideUp('slow');
 				count_html = QASI.no_posts_found;
@@ -171,7 +174,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 		$('body').data('scan-mode', 'list').data('r', r);
 		if (typeof respond[r] == 'undefined') {
 			$('#scan-result').effect( 'shake', null, 500 );
-			$('#form').slideDown('slow');
+			$('#scan-post-block').slideDown('normal');
 			$('body').data('noty').close();
 			var count = $('#scan_old_post_list tbody tr').length;
 			var count_remote_images = $('#scan_old_post_list tbody tr.has_remote_images').length;
@@ -186,7 +189,10 @@ QQWorld_auto_save_images.scan_posts = function() {
 						if (count_not_exits_remote_images==1) count_html += _this.lib.sprintf("<br />"+QASI.and_with_n_post_has_missing_images, count_not_exits_remote_images);
 						else count_html += _this.lib.sprintf("<br />"+QASI.and_with_n_posts_have_missing_images, count_not_exits_remote_images);
 					}
-				} else count_html += '<br />'+QASI.no_post_has_remote_images_found;
+				} else {
+					$('#scan_old_post_list').slideUp('slow');
+					count_html += '<br />'+QASI.no_post_has_remote_images_found;
+				}
 			} else {
 				$('#scan_old_post_list').slideUp('slow');
 				count_html = QASI.no_posts_found;
@@ -272,7 +278,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 							addClass: 'button button-primary',
 							text: QASI.yes,
 							onClick: function ($noty) {
-								$('#form').slideUp('slow');
+								$('#scan-post-block').slideUp('normal');
 								$noty.close();
 								$('#scan_old_posts').attr('disabled', true);
 								$('#list_all_posts').attr('disabled', true);
@@ -320,10 +326,11 @@ QQWorld_auto_save_images.scan_posts = function() {
 		});
 		$('#list_all_posts').on('click', function() {
 			if (jQuery('input[name="qqworld_auto_save_imagess_post_types[]"]:checked').length) {
-				$('#form').slideUp('slow');
+				$('#scan-post-block').slideUp('normal');
 				$('#scan_old_posts').attr('disabled', true);
 				$('#list_all_posts').attr('disabled', true);
 				var data = $('#form').serialize()+'&action=get_scan_list';
+				console.log(data);
 				$.ajax({
 					type: 'POST',
 					url: ajaxurl,
@@ -383,6 +390,45 @@ QQWorld_auto_save_images.scan_posts = function() {
 				if (!$('#exclude_domain_list li').length) $('#exclude_domain_list').append('<li class="empty"><input type="hidden" name="qqworld-auto-save-images-exclude-domain" value="" /></li>');
 			});
 		});
+		$(document).on('click', '#qqworld-auto-save-images-tabs li', function() {
+			if (!$(this).hasClass('current')) {
+				var index = $('#qqworld-auto-save-images-tabs li').index(this);
+				$('#qqworld-auto-save-images-tabs li').removeClass('current');
+				$(this).addClass('current');
+				$('.tab-content').hide().eq(index).fadeIn('normal');
+			}
+		});
+
+		$(document).on('click', 'input[name="qqworld_auto_save_imagess_post_types[]"]', function() {
+			var checked = $('input[name="qqworld_auto_save_imagess_post_types[]"]:checked');
+			if (checked.length) {
+				$('#categories_block').html('<img src=" data:image/gif;base64,R0lGODlhgAAPAKIAALCvsMPCwz8/PwAAAPv6+wAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQECgAAACwAAAAAgAAPAAAD50ixS/6sPRfDpPGqfKv2HTeBowiZGLORq1lJqfuW7Gud9YzLud3zQNVOGCO2jDZaEHZk+nRFJ7R5i1apSuQ0OZT+nleuNetdhrfob1kLXrvPariZLGfPuz66Hr8f8/9+gVh4YoOChYhpd4eKdgwAkJEAE5KRlJWTD5iZDpuXlZ+SoZaamKOQp5wEm56loK6isKSdprKotqqttK+7sb2zq6y8wcO6xL7HwMbLtb+3zrnNycKp1bjW0NjT0cXSzMLK3uLd5Mjf5uPo5eDa5+Hrz9vt6e/qosO/GvjJ+sj5F/sC+uMHcCCoBAAh+QQECgAAACwAAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALAsAAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsFgAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACwhAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALCwAAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsNwAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACxCAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALE0AAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsWAAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACxjAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALG4AAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAseQAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAA7" />');
+				var temp = '';
+				checked.each(function() {
+					temp += '&posttype[]=' + $(this).val();
+				});
+				var data = 'action=save_remote_images_get_categories_list'+temp;
+				$.ajax({
+					type: 'POST',
+					url: ajaxurl,
+					data: data,
+					success: function(data) {
+						if ($(data).find('div').length) {
+							data = $(data);
+							$('#categories_block').html(data);
+							data.hide().fadeIn('normal');
+							$('#categories_block > div').each(function() {
+								var posttype = $(this).attr('post-type');
+								$(this).find('input').attr('name', 'terms['+posttype+'][]');
+							});
+						} else $('#categories_block').html(data);
+					},
+					error: _this.action.catch_errors
+				});
+			} else {
+				$('#categories_block').html(QASI.pls_select_post_types);
+			}
+		});
 	};
 
 	this.create.init = function() {
@@ -391,5 +437,5 @@ QQWorld_auto_save_images.scan_posts = function() {
 	this.create.init();
 };
 jQuery(function($) {
-	QQWorld_auto_save_images.scan_posts();
+	if ($('#post_types_list').length && $('#second_level').length) QQWorld_auto_save_images.scan_posts();
 });
