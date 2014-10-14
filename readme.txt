@@ -34,7 +34,7 @@ The examples that not working:
 <li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li>
 </ul>
 
-I tried to figure this out, but i couldn't get the host name to make image src full, nor get remote image from dynamic link.
+I have tried to figure this out, but i couldn't get the host name to make image src full, nor get remote image from dynamic link.
 
 So if you encounter these codes, plaese manually fix the images src to full url.
 
