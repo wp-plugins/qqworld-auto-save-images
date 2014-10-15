@@ -2,7 +2,8 @@ if (!QQWorld_auto_save_images) var QQWorld_auto_save_images = {};
 QQWorld_auto_save_images.scan_posts = function() {
 	var _this = this,
 	$ = jQuery,
-	noty_theme = typeof qqworld_ajax == 'object' ? 'qqworldTheme' : 'defaultTheme';
+	noty_theme = typeof qqworld_ajax == 'object' ? 'qqworldTheme' : 'defaultTheme',
+	wait_img = '<img src=" data:image/gif;base64,R0lGODlhgAAPAKIAALCvsMPCwz8/PwAAAPv6+wAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQECgAAACwAAAAAgAAPAAAD50ixS/6sPRfDpPGqfKv2HTeBowiZGLORq1lJqfuW7Gud9YzLud3zQNVOGCO2jDZaEHZk+nRFJ7R5i1apSuQ0OZT+nleuNetdhrfob1kLXrvPariZLGfPuz66Hr8f8/9+gVh4YoOChYhpd4eKdgwAkJEAE5KRlJWTD5iZDpuXlZ+SoZaamKOQp5wEm56loK6isKSdprKotqqttK+7sb2zq6y8wcO6xL7HwMbLtb+3zrnNycKp1bjW0NjT0cXSzMLK3uLd5Mjf5uPo5eDa5+Hrz9vt6e/qosO/GvjJ+sj5F/sC+uMHcCCoBAAh+QQECgAAACwAAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALAsAAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsFgAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACwhAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALCwAAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsNwAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACxCAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALE0AAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsWAAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACxjAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALG4AAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAseQAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAA7" />';
 
 	this.lib = {};
 	this.lib.sprintf = function() {
@@ -83,7 +84,6 @@ QQWorld_auto_save_images.scan_posts = function() {
 		}
 		error += '<br />' + textStatus + ': ' + errorThrown;
 		error += '</div>';
-		$('#form').slideDown('slow');
 		$('body').data('noty').close();
 		noty({
 			text: error,	
@@ -282,7 +282,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 								$noty.close();
 								$('#scan_old_posts').attr('disabled', true);
 								$('#list_all_posts').attr('disabled', true);
-								var data = $('#form').serialize()+'&action=get_scan_list';
+								var data = $('#scan').serialize()+'&action=get_scan_list';
 								$.ajax({
 									type: 'POST',
 									url: ajaxurl,
@@ -301,7 +301,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 										\	</tbody>\
 										\</table>');
 										$('body').data('noty', noty({
-											text: QASI.scanning,	
+											text: wait_img+' &nbsp; '+QASI.scanning,	
 											type: 'notification',
 											layout: 'center',
 											dismissQueue: true,
@@ -329,7 +329,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 				$('#scan-post-block').slideUp('normal');
 				$('#scan_old_posts').attr('disabled', true);
 				$('#list_all_posts').attr('disabled', true);
-				var data = $('#form').serialize()+'&action=get_scan_list';
+				var data = $('#scan').serialize()+'&action=get_scan_list';
 				console.log(data);
 				$.ajax({
 					type: 'POST',
@@ -350,7 +350,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 						\	</tbody>\
 						\</table>');
 						$('body').data('noty', noty({
-							text: QASI.listing,	
+							text: wait_img+' &nbsp; '+QASI.listing,	
 							type: 'notification',
 							layout: 'center',
 							dismissQueue: true,
@@ -402,7 +402,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 		$(document).on('click', 'input[name="qqworld_auto_save_imagess_post_types[]"]', function() {
 			var checked = $('input[name="qqworld_auto_save_imagess_post_types[]"]:checked');
 			if (checked.length) {
-				$('#categories_block').html('<img src=" data:image/gif;base64,R0lGODlhgAAPAKIAALCvsMPCwz8/PwAAAPv6+wAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQECgAAACwAAAAAgAAPAAAD50ixS/6sPRfDpPGqfKv2HTeBowiZGLORq1lJqfuW7Gud9YzLud3zQNVOGCO2jDZaEHZk+nRFJ7R5i1apSuQ0OZT+nleuNetdhrfob1kLXrvPariZLGfPuz66Hr8f8/9+gVh4YoOChYhpd4eKdgwAkJEAE5KRlJWTD5iZDpuXlZ+SoZaamKOQp5wEm56loK6isKSdprKotqqttK+7sb2zq6y8wcO6xL7HwMbLtb+3zrnNycKp1bjW0NjT0cXSzMLK3uLd5Mjf5uPo5eDa5+Hrz9vt6e/qosO/GvjJ+sj5F/sC+uMHcCCoBAAh+QQECgAAACwAAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALAsAAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsFgAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACwhAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALCwAAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsNwAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACxCAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALE0AAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsWAAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACxjAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALG4AAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAseQAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAA7" />');
+				$('#categories_block').html(wait_img);
 				var temp = '';
 				checked.each(function() {
 					temp += '&posttype[]=' + $(this).val();

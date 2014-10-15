@@ -1,9 +1,9 @@
 === QQWorld Auto Save Images ===
 Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
-Requires at least: 3.0
+Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 1.7
+Stable tag: 1.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,24 +16,23 @@ Automatically keep the all remote picture to the local media libary when you pub
 And more powerful functional is waiting for you. What exactly is it? Hehe...
 
 <h4>Notice:</h4>
-
-This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://", for example:
-
 <ul>
-<li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
-<li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li>
-<li>&lt;img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li>
-<li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
+	<li>This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://", for example:
+		<ul>
+			<li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
+			<li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li>
+			<li>&lt;img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li>
+			<li>&lt;img src=&quot;https://example.com/image?id=127457&quot; /&gt;</li>
+		</ul>
+	</li>
+	<li>The examples that not working:
+		<ul>
+			<li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li>
+			<li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li>
+			<li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li>
+		</ul>
+	</li>
 </ul>
-
-The examples that not working:
-
-<ul>
-<li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li>
-<li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li>
-<li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li>
-</ul>
-
 I have tried to figure this out, but i couldn't get the host name to make image src full, nor get remote image from dynamic link.
 
 So if you encounter these codes, plaese manually fix the images src to full url.
@@ -45,24 +44,23 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 还有更强大的功能等着你，到底是什么呢？呵呵……
 
 <h4>注意：</h4>
-
-该插件有个小问题，所有的远程图像的URL必须是完整的，就是说必须得包含"http(s)://"，比如：
-
 <ul>
-<li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
-<li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li>
-<li>&lt;img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li>
-<li>&lt;img src=&quot;http://example.com/image?id=127457&quot; /&gt;</li>
+	<li>该插件有个小问题，所有的远程图像的URL必须是完整的，就是说必须得包含"http(s)://"，比如：
+		<ul>
+			<li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
+			<li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li>
+			<li>&lt;img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li>
+			<li>&lt;img src=&quot;https://example.com/image?id=127457&quot; /&gt;</li>
+		</ul>
+	</li>
+	<li>不能保存的例子：
+		<ul>
+			<li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li>
+			<li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li>
+			<li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li>
+		</ul>
+	</li>
 </ul>
-
-不能保存的例子：
-
-<ul>
-<li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li>
-<li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li>
-<li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li>
-</ul>
-
 我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整或是从动态链接获取图像。
 
 所以，如果你碰到这样的代码，请手动将图片地址改成完整的，或者使用采集工具自动补完图片的URL然后从外部提交给Wordpress。
@@ -84,12 +82,28 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 == Changelog ==
 
+= 1.7.1 =
+<ul>
+	<li>New features:
+		<ol>
+			<li>Auto change image filename, If it is possible to encounter remote images filename containing Chinese or other East Asian characters, i suggest enable it.</li>
+			<li>Added order/orderby/status filter for scan-posts mode.</li>
+		</ol>
+	</li>
+	<li>新特性：
+		<ol>
+			<li>自动图片文件更名，如果你有可能碰到包含中文或其他东亚字符的远程图片文件名，建议开启。</li>
+			<li>扫描文章模式增加 排序/排序依据/状态 筛选。</li>
+		</ol>
+	</li>
+</ul>
+
 = 1.7 =
 <ul>
 	<li>New features:
 		<ol>
 			<li>New interface.</li>
-			<li>Added categories filter for scan-post-mode.</li>
+			<li>Added categories filter for scan-posts mode.</li>
 		</ol>
 	</li>
 	<li>新特性：

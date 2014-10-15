@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7
+Version: 1.7.1
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -14,6 +14,7 @@ define('QQWORLD_AUTO_SAVE_IMAGES_URL', plugin_dir_url(__FILE__));
 class QQWorld_auto_save_images {
 	var $using_action;
 	var $type;
+	var $change_image_name;
 	var $preg = '/<img.*?src=[\"\']((?![\"\']).*?)[\"\']/i';
 	var $has_remote_image;
 	var $has_missing_image;
@@ -23,6 +24,7 @@ class QQWorld_auto_save_images {
 		$this->using_action = get_option('using_action', 'publish');
 		$this->type = get_option('qqworld_auto_save_imagess_type', 'auto');
 		$this->featured_image = get_option('qqworld_auto_save_imagess_set_featured_image', 'yes');
+		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'yes');
 		$this->exclude_domain = get_option('qqworld-auto-save-images-exclude-domain');
 		switch ($this->type) {
 			case 'auto':
@@ -198,7 +200,13 @@ class QQWorld_auto_save_images {
 		$args['posts_per_page'] = $posts_per_page;
 
 		// order
-		$args['order'] = 'ASC';
+		$args['order'] = $_REQUEST['order'];
+
+		// status
+		$args['post_status'] = $_REQUEST['post_status'];
+
+		// orderby
+		$args['orderby'] = $_REQUEST['orderby'];
 
 		//echo '<pre>'; print_r($args); echo '</pre>';
 		$posts = get_posts($args);
@@ -213,47 +221,27 @@ class QQWorld_auto_save_images {
 		if ( !current_user_can( 'manage_options' ) ) return;
 		$post_ids = $_REQUEST['post_id'];
 		if (!empty($post_ids)) foreach ($post_ids as $post_id) :
+			$this->has_remote_image = 0;
+			$this->has_missing_image = 0;
 			$post = get_post($post_id);
 			$post_id = $post->ID;
 			$post_type =  $post->post_type;
 			$content = $post->post_content;
 			$title = $post->post_title;
-			$preg=preg_match_all($this->preg,stripslashes($content),$matches);
-			$has_remote_images = false;
-			$has_not_exits_remote_images = false;
-			if($preg){
-				foreach($matches[1] as $image_url){
-					if(empty($image_url)) continue;
-					// exclude domain
-					$allow=true;
-					if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) {
-						$pos=strpos($image_url, $domain);
-						if($pos) $allow=false;
-					}
-					if ($allow) {
-						$pos=strpos($image_url,get_bloginfo('url'));
-						if($pos===false){
-							$has_remote_images = true;
-							if ($res=$this->save_images($image_url,$post_id)) {
-								$replace=$res['url'];
-								$content=str_replace($image_url,$replace,$content);
-							} else $has_not_exits_remote_images = true;
-						}
-					}
-				}
-			}
+			$content = $this->content_save_pre($content, $post_id);
 			wp_update_post(array('ID' => $post_id, 'post_content' => $content));
+
 			$post_type_object = get_post_type_object($post_type);
-			if ($has_remote_images) :
+			if ($this->has_remote_image) :
 				$class = 'has_remote_images';
-				if ($has_not_exits_remote_images) $class += ' has_not_exits_remote_images';
+				if ($this->has_missing_image) $class += ' has_not_exits_remote_images';
 				$class = ' class="' . $class . '"';
 ?>
 			<tr<?php echo $class; ?>>
 				<td><?php echo $post_id; ?></td>
 				<td><?php echo $post_type_object->labels->name; ?></td>
 				<td><a href="<?php echo get_edit_post_link($post_id); ?>" target="_blank"><?php echo $title; ?> &#8667;</a></td>
-				<td><?php echo $has_not_exits_remote_images ? '<span class="red">'.__('Has missing images.', 'qqworld_auto_save_images').'</span>' : '<span class="green">'.__('All remote images have been saved.', 'qqworld_auto_save_images').'</span>'; ?></td>
+				<td><?php echo $this->has_missing_image ? '<span class="red">'.__('Has missing images.', 'qqworld_auto_save_images').'</span>' : '<span class="green">'.__('All remote images have been saved.', 'qqworld_auto_save_images').'</span>'; ?></td>
 			</tr>
 <?php else: ?>
 			<tr>
@@ -269,41 +257,25 @@ class QQWorld_auto_save_images {
 		if ( !current_user_can( 'manage_options' ) ) return;
 		$post_ids = $_REQUEST['post_id'];
 		if (!empty($post_ids)) foreach ($post_ids as $post_id) :
+			$this->has_remote_image = 0;
+			$this->has_missing_image = 0;
 			$post = get_post($post_id);
 			$post_id = $post->ID;
 			$post_type =  $post->post_type;
 			$content = $post->post_content;
 			$title = $post->post_title;
-			$preg=preg_match_all($this->preg,stripslashes($content),$matches);
-			$has_remote_images = false;
-			$has_not_exits_remote_images = false;
-			if($preg){
-				foreach($matches[1] as $image_url){
-					if(empty($image_url)) continue;
-					// exclude domain
-					$allow=true;
-					if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) {
-						$pos=strpos($image_url, $domain);
-						if($pos) $allow=false;
-					}
-					if ($allow) {
-						$pos=strpos($image_url,get_bloginfo('url'));
-						if($pos===false) {
-							$has_remote_images = true;
-							$has_not_exits_remote_images = @!fopen( $image_url, 'r' );
-						}
-					}
-				}
-			}
-			if ($has_remote_images) :
+
+			$content = $this->content_save_pre($content, $post_id);
+
+			if ($this->has_remote_image) :
 				$post_type_object = get_post_type_object($post_type);
-				$class = $has_not_exits_remote_images ? ' has_not_exits_remote_images' : '';
+				$class = $this->has_missing_image ? ' has_not_exits_remote_images' : '';
 ?>
 			<tr class="has_remote_images<?php echo $class; ?>">
 				<td><?php echo $post_id; ?></td>
 				<td><?php echo $post_type_object->labels->name; ?></td>
 				<td><a href="<?php echo get_edit_post_link($post_id); ?>" target="_blank"><?php echo $title; ?> &#8667;</a></td>
-				<td><?php echo $has_not_exits_remote_images ? '<span class="red">'.__('Has missing images.', 'qqworld_auto_save_images').'</span>' : __('Normal', 'qqworld_auto_save_images'); ?></a></td>
+				<td><?php echo $this->has_missing_image ? '<span class="red">'.__('Has missing images.', 'qqworld_auto_save_images').'</span>' : __('Normal', 'qqworld_auto_save_images'); ?></a></td>
 				<td id="list-<?php echo $post_id; ?>"><input type="button" post-id="<?php echo $post_id; ?>" class="fetch-remote-images button button-primary" value="&#9997; <?php _e('Fetch', 'qqworld_auto_save_images'); ?>" /></td>
 			</tr>
 <?php else: ?>
@@ -413,12 +385,17 @@ class QQWorld_auto_save_images {
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Set Featured Image', 'qqworld_auto_save_images'); ?></span></legend>
 								<label for="qqworld_auto_save_imagess_set_featured_image_yes">
-									<input name="qqworld_auto_save_imagess_set_featured_image" type="radio" id="qqworld_auto_save_imagess_set_featured_image_yes" value="yes" <?php checked('yes', $this->featured_image); ?> />
-									<?php _e('Automatic', 'qqworld_auto_save_images'); ?>
-								</label><br />
-								<label for="qqworld_auto_save_imagess_set_featured_image_no">
-									<input name="qqworld_auto_save_imagess_set_featured_image" type="radio" id="qqworld_auto_save_imagess_set_featured_image_no" value="no" <?php checked('no', $this->featured_image); ?> />
-									<?php _e('No'); ?>
+									<input name="qqworld_auto_save_imagess_set_featured_image" type="checkbox" id="qqworld_auto_save_imagess_set_featured_image_yes" value="yes" <?php checked('yes', $this->featured_image); ?> /> <?php _e('Automatic', 'qqworld_auto_save_images'); ?>
+								</label>
+						</fieldset></td>
+					</tr>
+
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("If you checked this, when the remote image filename have Chinese or other East Asian characters. system will automatically change image filename. I suggest enable it.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld_auto_save_images_auto_change_name">
+									<input name="qqworld_auto_save_images_auto_change_name" type="checkbox" id="qqworld_auto_save_images_auto_change_name" value="yes" <?php checked('yes', $this->change_image_name); ?> /> <?php _e('Automatic', 'qqworld_auto_save_images'); ?>
 								</label>
 						</fieldset></td>
 					</tr>
@@ -426,7 +403,7 @@ class QQWorld_auto_save_images {
 					<tr valign="top">
 						<th scope="row"><label><?php _e('Exclude Domain/Keyword', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Images will not be saved, if that url contains Exclude-Domain/Keyword.", 'qqworld_auto_save_images'); ?>"></span></th>
 						<td><fieldset>
-							<legend class="screen-reader-text"><span><?php _e('Exclude Domain', 'qqworld_auto_save_images'); ?></span></legend>
+							<legend class="screen-reader-text"><span><?php _e('Exclude Domain/Keyword', 'qqworld_auto_save_images'); ?></span></legend>
 								<ul id="exclude_domain_list">
 								<?php
 								if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) :
@@ -443,6 +420,8 @@ class QQWorld_auto_save_images {
 			</table>
 			<?php submit_button(); ?>
 		</div>
+	</form>
+	<form action="" method="post" id="scan">
 		<div class="tab-content hidden">
 			<div id="scan-result"></div>
 			<div id="scan-post-block">
@@ -484,6 +463,51 @@ class QQWorld_auto_save_images {
 								</select> <?php _e('Posts'); ?>
 							</td>
 						</tr>
+
+						<tr valign="top">
+							<th scope="row"><label><?php _e('Status'); ?></label></th>
+							<td>
+								<select name="post_status">
+								<?php
+								global $wp_post_statuses;
+								echo '<option value="any" /> '.__('Any', 'qqworld_auto_save_images').'</option>';
+								foreach ($wp_post_statuses as $slug => $status) {
+									if (!in_array($slug, array('auto-draft', 'inherit', 'trash'))) echo '<option value="'.$slug.'" '.selected('publish', $slug, false).'> '.$status->label.'</option>';
+								}
+								?>
+								</select>
+							</td>
+						</tr>
+
+						<tr valign="top">
+							<th scope="row"><label><?php _e('Order By', 'qqworld_auto_save_images'); ?></label></th>
+							<td>
+								<select name="orderby">
+									<?php
+									$orderby = array(
+										'ID' => __('ID'),
+										'author' => __('Author'),
+										'title' => __('Title'),
+										'date' => __('Date'),
+										'modified' => __('Last Modified'),
+										'comment_count' => __('Comment Count', 'qqworld_auto_save_images')
+									);
+									foreach ($orderby as $key => $name) : ?>
+									<option value="<?php echo $key; ?>"<?php selected('date', $key); ?>><?php echo $name; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</td>
+						</tr>
+
+						<tr valign="top">
+							<th scope="row"><label for="order"><?php _e('Order'); ?></label></th>
+							<td id="categories_block"><fieldset>
+								<select name="order" id="order">
+									<option value="DESC">DESC</option>
+									<option value="ASC">ASC</option>
+								</select>
+							</td>
+						</tr>
 						
 						<tr valign="top">
 							<th scope="row"><label><?php _e('Speed', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e('If the server is too much stress may be appropriately reduced speed.', 'qqworld_auto_save_images'); ?>"></span></th>
@@ -493,7 +517,7 @@ class QQWorld_auto_save_images {
 									<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
 									<?php endfor; ?>
 									<option value="10" selected>10</option>
-								</select><br />
+								</select>
 							</td>
 						</tr>
 					</tbody>
@@ -504,7 +528,7 @@ class QQWorld_auto_save_images {
 				</p>
 			</div>
 		</div>
-	</form>
+	</div>
 <?php
 	}
 
@@ -512,6 +536,7 @@ class QQWorld_auto_save_images {
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_imagess_type');
 		register_setting('qqworld_auto_save_images_settings', 'using_action');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_imagess_set_featured_image');
+		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_auto_change_name');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-exclude-domain');
 	}
 
@@ -581,30 +606,8 @@ class QQWorld_auto_save_images {
 		$this->has_remote_image = 0;
 		$this->has_missing_image = 0;
 
-		$content = $this->utf8_urldecode($this->utf8_urldecode($_POST['content']));
+		$content = $this->content_save_pre($this->utf8_urldecode($this->utf8_urldecode($_POST['content'])), $post_id);
 
-		$preg=preg_match_all($this->preg,stripslashes($content),$matches);
-		if($preg){
-			foreach($matches[1] as $image_url){
-				if(empty($image_url)) continue;
-				// exclude domain
-				$allow=true;
-				if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) {
-					$pos=strpos($image_url, $domain);
-					if($pos) $allow=false;
-				}
-				if ($allow) {
-				$pos=strpos($image_url,get_bloginfo('url'));
-					if($pos===false){
-						$this->has_remote_image = 1;
-						if ($res=$this->save_images($image_url,$post_id)) {
-							$replace=$res['url'];
-							$content=str_replace($image_url,$replace,$content);
-						}
-					}
-				}
-			}
-		}
 		wp_update_post(array('ID' => $post_id, 'post_content' => $content));
 
 		$result = array();
@@ -641,9 +644,15 @@ class QQWorld_auto_save_images {
 
 		$this->remove_actions();
 
-		$post=get_post($post_id);
-		$content=$post->post_content;
-		$preg=preg_match_all($this->preg,stripslashes($content),$matches);
+		$post = get_post($post_id);
+		$content = $this->content_save_pre($post->post_content, $post_id);
+	    //Replace the image in the post
+	    wp_update_post(array('ID' => $post_id, 'post_content' => $content));
+		$this->add_actions();
+	}
+
+	public function content_save_pre($content, $post_id=null) {
+		$preg = preg_match_all($this->preg, stripslashes($content), $matches);
 		if($preg){
 			foreach($matches[1] as $image_url){
 				if(empty($image_url)) continue;
@@ -665,26 +674,41 @@ class QQWorld_auto_save_images {
 				}
 			}
 		}
-	    //Replace the image in the post
-	    wp_update_post(array('ID' => $post_id, 'post_content' => $content));
-		$this->add_actions();
+		return $content;
+	}
+
+	public function change_images_filename($name, $extension) {
+		if ($this->change_image_name) {
+			preg_match( '/^[\x7f-\xff]+$/', $name, $match );
+			if ( !empty($match) ) {
+				return md5($name) . $extension;
+			}
+		}
+		return $name . $extension;
+	}
+
+	public function get_filename_from_url($url) {
+		$url = parse_url($url);
+		$path = $url['path'];
+		$filename = explode('/', $path);
+		return $filename[count($filename)-1];
 	}
 
 	//save exterior images
 	function save_images($image_url, $post_id){
 		set_time_limit(0);
 		if ( $file=@file_get_contents($image_url) ) {
-			$filename=basename($image_url);
+			$filename = $this->get_filename_from_url($image_url);
 			preg_match( '/(.*?)(\.(jpg|jpeg|png|gif|bmp))$/i', $filename, $match );
 			if ( empty($match) ) {
 				if ($filetype = $this->getFileType($file) ) {
 					preg_match( '/(.*?)$/i', $filename, $match );
 					$pos=strpos($image_url,'?'); // if has '?', md5()
 					$img_name = $pos ? md5($match[0]) : $match[0];
-					$img_name = $img_name . '.' . $filetype;
+					$img_name = $this->change_images_filename($img_name, $filetype);
 				} else return false;
 			} else {
-				$img_name = $match[1].$match[2];
+				$img_name = $this->change_images_filename($match[1], $match[2]);
 			}
 			$res=wp_upload_bits($img_name,'',$file);
 			$attach_id = $this->insert_attachment($res['file'],$post_id);
