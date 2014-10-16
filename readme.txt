@@ -33,7 +33,7 @@ And more powerful functional is waiting for you. What exactly is it? Hehe...
 		</ul>
 	</li>
 </ul>
-I have tried to figure this out, but i couldn't get the host name to make image src full, nor get remote image from dynamic link.
+I'v tried to figure this out, but i couldn't get the host name to make image src full, nor get remote image from dynamic link.
 
 So if you encounter these codes, plaese manually fix the images src to full url.
 
@@ -82,12 +82,22 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 == Changelog ==
 
+= 1.7.2 =
+New features:<br />
+In manual mode, Supported auto save images from remote publishing.<br />
+Bugs fixed:<br />
+Some dynamic links had problem with change name.<br /><br />
+新特性：<br />
+支持在手动模式下允许通过远程发布保存图片。<br />
+修复Bugs：<br />
+采集一些动态链接出现Bug
+
 = 1.7.1 =
 <ul>
 	<li>New features:
 		<ol>
-			<li>Auto change image filename, If it is possible to encounter remote images filename containing Chinese or other East Asian characters, i suggest enable it.</li>
-			<li>Added order/orderby/status filter for scan-posts mode.</li>
+			<li>Auto change image filename, If it's possible to encounter remote images filename containing Chinese or other East Asian characters, i suggest enable it.</li>
+			<li>Added Order/Order-by/Status filters for scan-posts mode.</li>
 		</ol>
 	</li>
 	<li>新特性：
