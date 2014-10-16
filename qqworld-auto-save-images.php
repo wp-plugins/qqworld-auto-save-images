@@ -58,7 +58,7 @@ class QQWorld_auto_save_images {
 
 		add_filter( 'post_updated_messages', array($this, 'post_updated_messages') );
 
-		if(get_option('using_action')) add_action( 'admin_notices', array($this, 'error_correction') );
+		if(!get_option('qqworld_auto_save_images_mode')) add_action( 'admin_notices', array($this, 'error_correction') );
 	}
 
 	public function error_correction() {
