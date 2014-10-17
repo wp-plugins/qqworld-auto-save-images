@@ -51,7 +51,13 @@ jQuery(function($) {
 							}
 							$('#save-remote-images-button').data('noty').close();
 							var n = noty(options);
-							if (respond.content) $('#content').val(respond.content);
+							if (respond.content) {
+								console.log(respond.content)
+								$('#content').val(respond.content);
+							}
+						},
+						error: function() {
+							console.log(1);
 						}
 					});
 					break;
@@ -88,6 +94,9 @@ jQuery(function($) {
 								theme: noty_theme
 							});
 							if (respond.content) tinyMCE.activeEditor.setContent(respond.content);
+						},
+						error: function() {
+							console.log(1);
 						}
 					});
 					break;						

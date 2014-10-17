@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 1.7.2
+Stable tag: 1.7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,6 +81,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 2. 用户界面
 
 == Changelog ==
+
+= 1.7.3 =
+Bug fixed:<br />
+Added a backslash "\" in front of apostrophes (') in text mode of editor and in manual mode of plugin.
+修复Bug：<br />
+在插件的手动模式和编辑器的文本模式下，会在(')之前加上"\"
 
 = 1.7.2 =
 New features:<br />
