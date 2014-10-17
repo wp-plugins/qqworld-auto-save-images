@@ -77,16 +77,18 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 == Screenshots ==
 
-1. User interface
-2. 用户界面
+1. User interface - Settings
+2. 用户界面 - 设置
+3. User interface - Scan posts
+4. 用户界面 - 扫描文章
 
 == Changelog ==
 
 = 1.7.3 =
 Bug fixed:<br />
-Added a backslash "\" in front of apostrophes (') in text mode of editor and in manual mode of plugin.
+The bug that Added a backslash "\" in front of apostrophes (') in text mode of editor and in manual mode of plugin.
 修复Bug：<br />
-在插件的手动模式和编辑器的文本模式下，会在(')之前加上"\"
+在插件的手动模式和编辑器的文本模式下，在(')之前加上"\"
 
 = 1.7.2 =
 New features:<br />
