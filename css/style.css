@@ -44,6 +44,54 @@
 	display: none;
 }
 
+#watermark-align-to {
+	border-collapse: collapse;
+	border: 3px solid #ddd;
+
+}
+#watermark-align-to td {
+	border: 1px solid #ddd;
+	background: #fff;
+	padding: 5px;
+}
+#watermark-align-to td:hover {
+	background: #f4f4f4;
+}
+#watermark-align-to td input {
+	margin: 0;
+}
+
+#watermark-position {
+	border: 10px solid #fff;
+	display: inline-block;
+	box-shadow: 3px 3px 3px rgba(0,0,0,.1);
+	position: relative;
+	width: 800px;
+	height: 450px;
+}
+#watermark-test {
+	position: absolute;
+	cursor: move;
+}
+#upload-watermark-image img {
+	width: auto;
+	height: auto;
+}
+
+.readme {
+	background: #fff;
+	margin: 25px 0 15px;
+	border-left: 4px solid #7ad03a;
+	padding: 1px 12px;
+	background-color: #fff;
+	-webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+	box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+.readme p {
+	margin: .5em 0;
+	padding: 2px;
+}
+
 #banner {
 	max-width: 100%;
 	display: block;

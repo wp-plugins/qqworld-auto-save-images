@@ -5,6 +5,21 @@ QQWorld_auto_save_images.scan_posts = function() {
 	noty_theme = typeof qqworld_ajax == 'object' ? 'qqworldTheme' : 'defaultTheme',
 	wait_img = '<img src=" data:image/gif;base64,R0lGODlhgAAPAKIAALCvsMPCwz8/PwAAAPv6+wAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQECgAAACwAAAAAgAAPAAAD50ixS/6sPRfDpPGqfKv2HTeBowiZGLORq1lJqfuW7Gud9YzLud3zQNVOGCO2jDZaEHZk+nRFJ7R5i1apSuQ0OZT+nleuNetdhrfob1kLXrvPariZLGfPuz66Hr8f8/9+gVh4YoOChYhpd4eKdgwAkJEAE5KRlJWTD5iZDpuXlZ+SoZaamKOQp5wEm56loK6isKSdprKotqqttK+7sb2zq6y8wcO6xL7HwMbLtb+3zrnNycKp1bjW0NjT0cXSzMLK3uLd5Mjf5uPo5eDa5+Hrz9vt6e/qosO/GvjJ+sj5F/sC+uMHcCCoBAAh+QQECgAAACwAAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALAsAAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsFgAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACwhAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALCwAAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsNwAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACxCAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALE0AAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAsWAAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAAh+QQECgAAACxjAAAABwAPAAADEUiyq/wwyknjuDjrzfsmGpEAACH5BAQKAAAALG4AAAAHAA8AAAMRSLKr/DDKSeO4OOvN+yYakQAAIfkEBAoAAAAseQAAAAcADwAAAxFIsqv8MMpJ47g46837JhqRAAA7" />';
 
+	this.file_frame;
+
+	this.watermark = {};
+	this.image = {};
+	this.offset = {
+		top: {
+			half: 0,
+			full: 0
+		},
+		left: {
+			half: 0,
+			full: 0
+		}
+	};
+
 	this.lib = {};
 	this.lib.sprintf = function() {
 		var str_repeat = function(i, m) {
@@ -53,6 +68,22 @@ QQWorld_auto_save_images.scan_posts = function() {
 	}
 
 	this.action = {};
+	
+	this.action.set_watermark_opacity = function() {
+		var opacity = $('#watermark-opacity').val();
+		$('#watermark-test').fadeTo('normal', opacity/100);
+	};
+	this.action.get_watermark_size = function() {
+		_this.watermark.width = $('#watermark-test').width();
+		_this.watermark.height = $('#watermark-test').height();
+		_this.image.width = $('#photo-test').width();
+		_this.image.height = $('#photo-test').height();
+		_this.offset.top.full = parseInt(_this.image.height - _this.watermark.height);
+		_this.offset.left.full = parseInt(_this.image.width - _this.watermark.width);
+		_this.offset.top.half = parseInt(_this.offset.top.full/2);
+		_this.offset.left.half = parseInt(_this.offset.left.full/2);
+	};
+
 	this.action.catch_errors = function(XMLHttpRequest, textStatus, errorThrown) {
 		var error='', args=new Array;
 		error += '<div style="text-align: left;">';
@@ -265,7 +296,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 			$('#second_level').fadeOut('fast');
 		});
 		$('#scan_old_posts').on('click', function() {
-			if (jQuery('input[name="qqworld_auto_save_imagess_post_types[]"]:checked').length) {
+			if (jQuery('input[name="qqworld_auto_save_images_post_types[]"]:checked').length) {
 				var n = noty({
 					text: QASI.are_your_sure,	
 					type: 'warning',
@@ -325,7 +356,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 			} else _this.action.if_not_select_post_type();
 		});
 		$('#list_all_posts').on('click', function() {
-			if (jQuery('input[name="qqworld_auto_save_imagess_post_types[]"]:checked').length) {
+			if (jQuery('input[name="qqworld_auto_save_images_post_types[]"]:checked').length) {
 				$('#scan-post-block').slideUp('normal');
 				$('#scan_old_posts').attr('disabled', true);
 				$('#list_all_posts').attr('disabled', true);
@@ -363,9 +394,8 @@ QQWorld_auto_save_images.scan_posts = function() {
 			} else _this.action.if_not_select_post_type();
 		});
 		$(document).on('click', '#scan_old_post_list .fetch-remote-images', function() {
-			var wait = '<img src="data:image/gif;base64,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" />';
 			var post_id = $(this).attr('post-id');
-			$(this).hide().after(wait);
+			$(this).hide().after(wait_img);
 			var data = 'action=save_remote_images_after_scan&post_id[]='+post_id;
 			$.ajax({
 				type: 'POST',
@@ -399,8 +429,8 @@ QQWorld_auto_save_images.scan_posts = function() {
 			}
 		});
 
-		$(document).on('click', 'input[name="qqworld_auto_save_imagess_post_types[]"]', function() {
-			var checked = $('input[name="qqworld_auto_save_imagess_post_types[]"]:checked');
+		$(document).on('click', 'input[name="qqworld_auto_save_images_post_types[]"]', function() {
+			var checked = $('input[name="qqworld_auto_save_images_post_types[]"]:checked');
 			if (checked.length) {
 				$('#categories_block').html(wait_img);
 				var temp = '';
@@ -413,7 +443,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 					url: ajaxurl,
 					data: data,
 					success: function(data) {
-						if ($(data).find('div').length) {
+						if (data.search(/<div>/)>0) {
 							data = $(data);
 							$('#categories_block').html(data);
 							data.hide().fadeIn('normal');
@@ -429,10 +459,142 @@ QQWorld_auto_save_images.scan_posts = function() {
 				$('#categories_block').html(QASI.pls_select_post_types);
 			}
 		});
+
+		$(document).on('change', '#watermark-opacity', _this.action.set_watermark_opacity).on('keyup', '#watermark-opacity', _this.action.set_watermark_opacity);
+
+		// watermark postion
+		$(document).on('click', 'input[name="qqworld-auto-save-images-watermark-align-to"]', function() {
+			var id = $(this).attr('id'),
+			top, right, bottom, left,
+			default_offset = 20,
+			offset = {};
+			switch (id) {
+				case 'lt': offset.x = offset.y = default_offset; top = default_offset; left = default_offset; break;
+				case 'ct': offset.x = 0; offset.y = default_offset; top = default_offset; left = _this.offset.left.half; break;
+				case 'rt': offset.x = -default_offset; offset.y = default_offset; top = default_offset; left = _this.offset.left.full-default_offset; break;
+				case 'lc': offset.x = default_offset; offset.y = 0; top = _this.offset.top.half; left = default_offset; break;
+				case 'cc': offset.x = 0; offset.y = 0; top = _this.offset.top.half; left = _this.offset.left.half; break;
+				case 'rc': offset.x = -default_offset; offset.y = 0; top = _this.offset.top.half; left = _this.offset.left.full-default_offset; break;
+				case 'lb': offset.x = default_offset; offset.y = -default_offset; top = _this.offset.top.full-default_offset; left = default_offset; break;
+				case 'cb': offset.x = 0; offset.y = -default_offset; top = _this.offset.top.full-default_offset; left = _this.offset.left.half; break;
+				case 'rb': offset.x = -default_offset; offset.y = -default_offset; top = _this.offset.top.full-default_offset; left = _this.offset.left.full-default_offset; break;
+			};
+			$('#watermark-test').animate({
+				top : top,
+				left: left
+			}, 'fast');
+			$('#offset-x').val(offset.x);
+			$('#offset-y').val(offset.y);
+		});
+
+		$(document).on('click', '#upload-watermark-image', function(event) {
+			event.preventDefault();
+			var title = $(this).attr('title'),
+			id = $(this).attr('id');
+			if ( typeof _this.file_frame == 'object' ) {
+				_this.file_frame.open();
+				return;
+			}
+			_this.file_frame = wp.media.frames.file_frame = wp.media({
+				title: title,
+				button: {
+					text: title,
+				},
+				multiple: false
+			});
+			_this.file_frame.on( 'open', function() {
+				var selection = _this.file_frame.state().get('selection');
+				var attachment_id = $('input[name="qqworld-auto-save-images-watermark-image"]').val();
+				if (attachment_id) {
+					var attachment = wp.media.attachment(attachment_id);
+					attachment.fetch();
+					selection.add( attachment ? [ attachment ] : [] );
+				}
+			});
+			_this.file_frame.on('select', function() {
+				var attachment = _this.file_frame.state().get('selection').first().toJSON();
+				var id = attachment.id;
+				$('input[name="qqworld-auto-save-images-watermark-image"]').val(id);
+				var url = attachment.url;
+				$('#upload-watermark-image img').attr('src', url);
+				$('#watermark-test').attr({
+					src: url,
+					width: attachment.sizes.full.width,
+					height: attachment.sizes.full.height
+				});
+				$('#lt').click();
+				_this.action.get_watermark_size();
+				$('#default-watermark').fadeIn();
+			});
+			_this.file_frame.open();
+		});
+
+		$(document).on('click', '#default-watermark', function() {
+			var src = QASI.default_watermark.src;
+			$('#upload-watermark-image img').attr('src', src);
+			$('#watermark-test').attr({
+				src: src,
+				width: QASI.default_watermark.width,
+				height: QASI.default_watermark.height
+			});
+			$('input[name="qqworld-auto-save-images-watermark-image"]').val('');
+			$('#lt').click();
+			_this.action.get_watermark_size();
+		});
+
+		$(document).on('click', '#Preview Watermark', function() {
+			tb_show($(this).attr('title'), $(this).attr('href'));
+		});
+	};
+
+	this.create.watermark_init = function() {
+		_this.action.get_watermark_size();
+		$('#watermark-test').draggable({
+			containment: "parent",
+			drag: function() {
+				var id = $('input[name="qqworld-auto-save-images-watermark-align-to"]:checked').val(),
+				position = $('#watermark-test').position(),
+				left = position.left,
+				top = position.top,
+				x,y;
+				switch (id) {
+					case 'lt': x = left; y = top; break;
+					case 'ct': x = left-_this.offset.left.half; y = top; break;
+					case 'rt': x = left-_this.offset.left.full; y = top; break;
+					case 'lc': x = left; y = top-_this.offset.top.half; break;
+					case 'cc': x = left-_this.offset.left.half; y = top-_this.offset.top.half; break;
+					case 'rc': x = left-_this.offset.left.full; y = top-_this.offset.top.half; break;
+					case 'lb': x = left; y = top-_this.offset.top.full; break;
+					case 'cb': x = left-_this.offset.left.half; y = top-_this.offset.top.full; break;
+					case 'rb': x = left-_this.offset.left.full; y = top-_this.offset.top.full; break;
+				};
+				//console.log('x:' + x + ', left: ' + left + ' - fullleft: ' + _this.offset.left.full);
+				$('#offset-x').val(x);
+				$('#offset-y').val(y);
+			}
+		});
+		// set $('#watermark-test') position
+		var id = $('input[name="qqworld-auto-save-images-watermark-align-to"]:checked').val(),
+		left = parseInt(QASI.watermark_offset.x),
+		top = parseInt(QASI.watermark_offset.y);
+		switch (id) {
+			case 'lt': x = left; y = top; break;
+			case 'ct': x = left+_this.offset.left.half; y = top; break;
+			case 'rt': x = left+_this.offset.left.full; y = top; break;
+			case 'lc': x = left; y = top+_this.offset.top.half; break;
+			case 'cc': x = left+_this.offset.left.half; y = top+_this.offset.top.half; break;
+			case 'rc': x = left+_this.offset.left.full; y = top+_this.offset.top.half; break;
+			case 'lb': x = left; y = top+_this.offset.top.full; break;
+			case 'cb': x = left+_this.offset.left.half; y = top+_this.offset.top.full; break;
+			case 'rb': x = left+_this.offset.left.full; y = top+_this.offset.top.full; break;
+		};
+		$('#watermark-test').css({ left: x, top: y });
+		_this.action.set_watermark_opacity();
 	};
 
 	this.create.init = function() {
 		_this.create.events();
+		_this.create.watermark_init();
 	};
 	this.create.init();
 };

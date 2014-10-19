@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.3
+Version: 1.7.4
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -19,6 +19,12 @@ class QQWorld_auto_save_images {
 	var $has_remote_image;
 	var $has_missing_image;
 	var $exclude_domain;
+
+	var $watermark_enabled;
+	var $filter_size;
+	var $align_to;
+	var $offset;
+	var $watermark_opacity;
 	function __construct() {
 		__('Michael Wang', 'qqworld_auto_save_images');
 		$this->mode = get_option('qqworld_auto_save_images_mode', 'publish');
@@ -27,6 +33,14 @@ class QQWorld_auto_save_images {
 		$this->featured_image = get_option('qqworld_auto_save_images_set_featured_image', 'yes');
 		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'yes');
 		$this->exclude_domain = get_option('qqworld-auto-save-images-exclude-domain');
+
+		$this->watermark_enabled = get_option('qqworld-auto-save-images-watermark-enabled', 'no');
+		$this->filter_size = get_option('qqworld-auto-save-images-watermark-filter-size', array('width'=>300, 'height'=>300));
+		$this->align_to = get_option('qqworld-auto-save-images-watermark-align-to', 'lt');
+		$this->offset = get_option('qqworld-auto-save-images-watermark-offset', array('x'=>0, 'y'=>0));
+		$this->watermark_opacity = get_option('qqworld-auto-save-images-watermark-opacity', 100);
+		$this->watermark_image = get_option('qqworld-auto-save-images-watermark-image');
+
 		switch ($this->type) {
 			case 'auto':
 				$this->add_actions();
@@ -107,7 +121,7 @@ class QQWorld_auto_save_images {
 		if ($GLOBALS['hook_suffix'] == 'post.php') {
 			wp_register_script('noty', QQWORLD_AUTO_SAVE_IMAGES_URL . 'js/jquery.noty.packaged.min.js', array('jquery') );
 			wp_enqueue_script('noty');
-			wp_register_script('qqworld-auto-save-images-script-post', QQWORLD_AUTO_SAVE_IMAGES_URL . 'js/script-post.js', array('jquery') );
+			wp_register_script('qqworld-auto-save-images-script-post', QQWORLD_AUTO_SAVE_IMAGES_URL . 'js/manual.js', array('jquery') );
 			wp_enqueue_script('qqworld-auto-save-images-script-post');
 			$translation_array = array(
 				'post_id' => $post->ID,
@@ -118,7 +132,7 @@ class QQWorld_auto_save_images {
 	}
 
 	public function add_to_page_qqworld_auto_save_images() {
-		if ($GLOBALS['hook_suffix'] == 'settings_page_qqworld-auto-save-images') {
+		if ( preg_match('/qqworld-auto-save-images$/i', $GLOBALS['hook_suffix'], $matche) ) {
 			wp_register_script('noty-4-save', QQWORLD_AUTO_SAVE_IMAGES_URL . 'js/jquery.noty.packaged.min.js', array('jquery') );
 			wp_enqueue_script('noty-4-save');
 			wp_register_style('qqworld-auto-save-images-style', QQWORLD_AUTO_SAVE_IMAGES_URL . 'css/style.css' );
@@ -126,10 +140,12 @@ class QQWorld_auto_save_images {
 			wp_register_style('jquery-ui-style', QQWORLD_AUTO_SAVE_IMAGES_URL . 'css/jquery-ui/jquery-ui.min.css' );
 			wp_enqueue_style('jquery-ui-style');
 			wp_enqueue_script('jquery-ui-tooltip');
+			wp_enqueue_script('jquery-ui-draggable');
 			wp_enqueue_script('jquery-effects-core');
 			wp_enqueue_script('jquery-effects-shake');
-			wp_register_script('qqworld-auto-save-images-script', QQWORLD_AUTO_SAVE_IMAGES_URL . 'js/script.js', array('jquery') );
+			wp_register_script('qqworld-auto-save-images-script', QQWORLD_AUTO_SAVE_IMAGES_URL . 'js/admin.js', array('jquery') );
 			wp_enqueue_script('qqworld-auto-save-images-script');
+			wp_enqueue_media();
 			$translation_array = array(
 				'are_your_sure' => __('Are you sure?<br />Before you click the yes button, I recommend backup site database.', 'qqworld_auto_save_images'),
 				'pls_select_post_types' => __('Please select post types.', 'qqworld_auto_save_images'),
@@ -159,7 +175,13 @@ class QQWorld_auto_save_images {
 				'control' => __('Control', 'qqworld_auto_save_images'),
 				'done' => __('Done'),
 				'delete' => __('Delete'),
-				'scheme' => is_ssl() ? 'https://' : 'http://'
+				'scheme' => is_ssl() ? 'https://' : 'http://',
+				'watermark_offset' => $this->offset,
+				'default_watermark' => array(
+					'src' => QQWORLD_AUTO_SAVE_IMAGES_URL . 'images/watermark.png',
+					'width' => 205,
+					'height' => 61
+				)
 			);
 			wp_localize_script('qqworld-auto-save-images-script', 'QASI', $translation_array, '3.0.0');
 		}
@@ -170,7 +192,7 @@ class QQWorld_auto_save_images {
 		$args = array();
 
 		//post types
-		$post_types = isset($_REQUEST['qqworld_auto_save_imagess_post_types']) ? $_REQUEST['qqworld_auto_save_imagess_post_types'] : 'post';
+		$post_types = isset($_REQUEST['qqworld_auto_save_images_post_types']) ? $_REQUEST['qqworld_auto_save_images_post_types'] : 'post';
 		$args['post_type'] = $post_types;
 
 		//cagegory
@@ -278,7 +300,7 @@ class QQWorld_auto_save_images {
 			$content = $post->post_content;
 			$title = $post->post_title;
 
-			$content = $this->content_save_pre($content, $post_id);
+			$content = $this->content_save_pre($content, $post_id, 'scan');
 
 			if ($this->has_remote_image) :
 				$post_type_object = get_post_type_object($post_type);
@@ -348,7 +370,11 @@ class QQWorld_auto_save_images {
 	}
 
 	function admin_menu() {
-		add_submenu_page('options-general.php', __('QQWorld Auto Save Images', 'qqworld_auto_save_images'), __('QQWorld Auto Save Images', 'qqworld_auto_save_images'), 'manage_options', 'qqworld-auto-save-images', array($this, 'fn'));
+		if ( is_plugin_active( 'qqworld-collector/qqworld-collector.php' ) ) {
+			add_submenu_page('qqworld-collector', __('Auto Save Images', 'qqworld_auto_save_images'), __('Auto Save Images', 'qqworld_auto_save_images'), 'manage_options', 'qqworld-auto-save-images', array($this, 'fn'));
+		} else {
+			add_submenu_page('options-general.php', __('QQWorld Auto Save Images', 'qqworld_auto_save_images'), __('QQWorld Auto Save Images', 'qqworld_auto_save_images'), 'manage_options', 'qqworld-auto-save-images', array($this, 'fn'));
+		}
 	}
 
 	function fn() {
@@ -361,6 +387,7 @@ class QQWorld_auto_save_images {
 		<img src="https://ps.w.org/qqworld-auto-save-images/assets/banner-772x250.png" width="772" height="250" id="banner" />
 		<ul id="qqworld-auto-save-images-tabs">
 			<li class="current"><?php _e('Settings'); ?></li>
+			<li><?php _e('Watermark', 'qqworld_auto_save_images'); ?> (<?php _e('Trial', 'qqworld_auto_save_images')?>)</li>
 			<li><?php _e('Scan Posts', 'qqworld_auto_save_images'); ?></li>
 		</ul>
 		<div class="tab-content">
@@ -447,6 +474,125 @@ class QQWorld_auto_save_images {
 			<?php submit_button(); ?>
 		</div>
 	</form>
+	<form action="options.php" method="post" id="form">
+		<?php settings_fields('qqworld_auto_save_images_watermark'); ?>
+		<div class="tab-content hidden">
+			<div class="readme"><p><strong><?php _e("Just for preview, The complete feature will on the Pro version. Don't worry, other features will be free forever.", 'qqworld_auto_save_images') ?></strong></p></div>
+			<table class="form-table">
+				<tbody>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Enabled Watermark', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Use for both of remote images and the local upload.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Enabled Watermark', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld-auto-save-images-watermark-enable">
+									<input name="qqworld-auto-save-images-watermark-enabled" type="checkbox" id="qqworld-auto-save-images-watermark-enabled" value="yes" <?php checked('yes', $this->watermark_enabled); ?> />
+								</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Filter', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Skip images that smaller than this size.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Filter', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="filter-size-width">
+									<?php _e('Width:', 'qqworld_auto_save_images'); ?> <input name="qqworld-auto-save-images-watermark-filter-size[width]" type="number" id="filter-size-width" value="<?php echo $this->filter_size['width']; ?>" class="small-text" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+								</label><br />
+								<label for="filter-size-height">
+									<?php _e('Height:', 'qqworld_auto_save_images'); ?> <input name="qqworld-auto-save-images-watermark-filter-size[height]" type="number" id="filter-size-height" value="<?php echo $this->filter_size['height']; ?>" class="small-text" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+								</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Align To', 'qqworld_auto_save_images'); ?></label></th>
+						<td>
+							<table id="watermark-align-to">
+								<tr>
+									<td><input type="radio" value="lt" id="lt" name="qqworld-auto-save-images-watermark-align-to" <?php checked('lt', $this->align_to)?> /></td>
+									<td><input type="radio" value="ct" id="ct" name="qqworld-auto-save-images-watermark-align-to" <?php checked('ct', $this->align_to)?> /></td>
+									<td><input type="radio" value="rt" id="rt" name="qqworld-auto-save-images-watermark-align-to" <?php checked('rt', $this->align_to)?> /></td>
+								</tr>
+								<tr>
+									<td><input type="radio" value="lc" id="lc" name="qqworld-auto-save-images-watermark-align-to" <?php checked('lc', $this->align_to)?> /></td>
+									<td><input type="radio" value="cc" id="cc" name="qqworld-auto-save-images-watermark-align-to" <?php checked('cc', $this->align_to)?> /></td>
+									<td><input type="radio" value="rc" id="rc" name="qqworld-auto-save-images-watermark-align-to" <?php checked('rc', $this->align_to)?> /></td>
+								</tr>
+								<tr>
+									<td><input type="radio" value="lb" id="lb" name="qqworld-auto-save-images-watermark-align-to" <?php checked('lb', $this->align_to)?> /></td>
+									<td><input type="radio" value="cb" id="cb" name="qqworld-auto-save-images-watermark-align-to" <?php checked('cb', $this->align_to)?> /></td>
+									<td><input type="radio" value="rb" id="rb" name="qqworld-auto-save-images-watermark-align-to" <?php checked('rb', $this->align_to)?> /></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Position', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("You can try to drag the watermark image.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td>
+							<div id="watermark-position">
+								<?php
+								if ($this->watermark_image) :
+									$attr = array(
+										'id' => 'watermark-test'
+									);
+									echo wp_get_attachment_image($this->watermark_image, 'full', null, $attr);
+								else : ?>
+									<img id="watermark-test" src="<?php echo QQWORLD_AUTO_SAVE_IMAGES_URL; ?>images/watermark.png" width="205" height="61" />
+								<?php endif; ?>
+								<img id="photo-test" src="<?php echo QQWORLD_AUTO_SAVE_IMAGES_URL; ?>images/photo.jpg" width="800" height="450" />
+							</div>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Offset', 'qqworld_auto_save_images'); ?></label></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Offset', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="offset-x">
+									X: <input name="qqworld-auto-save-images-watermark-offset[x]" type="text" id="offset-x" value="<?php echo $this->offset['x']; ?>" class="small-text" readonly />
+								</label>
+								<label for="offset-y">
+									Y: <input name="qqworld-auto-save-images-watermark-offset[y]" type="text" id="offset-y" value="<?php echo $this->offset['y']; ?>" class="small-text" readonly />
+								</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Opacity', 'qqworld_auto_save_images'); ?></label></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Opacity', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld-auto-save-images-watermark-opacity">
+									<input name="qqworld-auto-save-images-watermark-opacity" type="number" id="watermark-opacity" value="<?php echo $this->watermark_opacity; ?>" class="small-text" /> (0-100)
+								</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Upload Watermark Image', 'qqworld_auto_save_images'); ?></label></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Upload Watermark Image', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld-auto-save-images-watermark-image">
+									<a href="javascript:" id="upload-watermark-image" title="<?php _e('Insert a Watermark Image', 'qqworld_auto_save_images'); ?>">
+										<?php
+										if ($this->watermark_image) :
+											echo wp_get_attachment_image($this->watermark_image, 'full');
+										else : ?>
+										<img src="<?php echo QQWORLD_AUTO_SAVE_IMAGES_URL; ?>images/watermark.png" width="205" height="61" />
+										<?php endif; ?>
+									</a>
+									<input name="qqworld-auto-save-images-watermark-image" type="hidden" title="" value="<?php echo $this->watermark_image; ?>" />
+								</label>
+							</fieldset>
+							<input type="button" class="button<?php if (!$this->watermark_image) echo ' hidden'; ?>" id="default-watermark" value="<?php _e('Default Watermark', 'qqworld_auto_save_images'); ?>">
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Buy', 'qqworld_auto_save_images'); ?></label></th>
+						<td><?php _e("Coming.. I don't know when, Who cares..", 'qqworld_auto_save_images'); ?></td>
+					</tr>
+				</tbody>
+			</table>
+			<?php submit_button(); ?>
+		</div>
+	</form>
 	<form action="" method="post" id="scan">
 		<div class="tab-content hidden">
 			<div id="scan-result"></div>
@@ -460,7 +606,7 @@ class QQWorld_auto_save_images {
 								<ul id="post_types_list">
 								<?php foreach ($post_types as $name => $post_type) :
 									if ( !in_array($name, array('attachment', 'revision', 'nav_menu_item') )) : ?>
-									<li><label><input name="qqworld_auto_save_imagess_post_types[]" type="checkbox" value="<?php echo $name; ?>" /> <?php echo $post_type->labels->name; ?> (<?php $count = wp_count_posts($name); echo $count->publish; ?>)</label></li>
+									<li><label><input name="qqworld_auto_save_images_post_types[]" type="checkbox" value="<?php echo $name; ?>" /> <?php echo $post_type->labels->name; ?> (<?php $count = wp_count_posts($name); echo $count->publish; ?>)</label></li>
 								<?php endif;
 								endforeach;
 								?></ul>
@@ -565,6 +711,13 @@ class QQWorld_auto_save_images {
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_set_featured_image');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_auto_change_name');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-exclude-domain');
+
+		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-enabled');
+		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-filter-size');
+		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-align-to');
+		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-offset');
+		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-opacity');
+		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-image');
 	}
 
 	/**
@@ -675,7 +828,7 @@ class QQWorld_auto_save_images {
 		if ($this->remote_publishing) add_action('xmlrpc_publish_post', array($this, 'fetch_images') );
 	}
 
-	public function content_save_pre($content, $post_id=null) {
+	public function content_save_pre($content, $post_id=null, $action='save') {
 		$preg = preg_match_all('/<img.*?src=[\"\']((?![\"\']).*?)[\"\']/i', stripslashes($content), $matches);
 		if($preg){
 			foreach($matches[1] as $image_url) {
@@ -690,7 +843,7 @@ class QQWorld_auto_save_images {
 					$pos=strpos($image_url,get_bloginfo('url'));
 					if($pos===false){
 						$this->has_remote_image = 1;
-						if ($res=$this->save_images($image_url,$post_id)) {
+						if ($action=="save" && $res=$this->save_images($image_url,$post_id)) {
 							$replace=$res['url'];
 							$content=str_replace($image_url,$replace,$content);
 						}
@@ -749,43 +902,15 @@ class QQWorld_auto_save_images {
 		$strInfo = @unpack("C2chars", $bin);
 		$typeCode = intval($strInfo['chars1'].$strInfo['chars2']);
 		switch ($typeCode) {
-			case 7790:
-				$fileType = 'exe';
-				return false;
-				break;
-			case 7784:
-				$fileType = 'midi';
-				return false;
-				break;
-			case 8297:
-				$fileType = 'rar';
-				return false;
-				break;
-			case 255216:
-				$fileType = 'jpg';
-				$mime = 'image/jpeg';
-				return $fileType;
-				break;
-			case 7173:
-				$fileType = 'gif';
-				$mime = 'image/gif';
-				return $fileType;
-				break;
-			case 6677:
-				$fileType = 'bmp';
-				$mime = 'image/bmp';
-				return $fileType;
-				break;
-			case 13780:
-				$fileType = 'png';
-				$mime = 'image/png';
-				return $fileType;
-				break;
-			default:
-				return false;
-				break;
+			case 7790: $fileType = 'exe'; return false;
+			case 7784: $fileType = 'midi'; return false;
+			case 8297: $fileType = 'rar'; return false;
+			case 255216: $fileType = 'jpg'; $mime = 'image/jpeg'; return $fileType;
+			case 7173: $fileType = 'gif'; $mime = 'image/gif'; return $fileType;
+			case 6677: $fileType = 'bmp'; $mime = 'image/bmp'; return $fileType;
+			case 13780: $fileType = 'png'; $mime = 'image/png'; return $fileType;
+			default: return false;
 		}
-		return false;
 	}
 	
 	//insert attachment

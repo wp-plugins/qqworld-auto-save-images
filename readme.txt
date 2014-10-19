@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 1.7.3
+Stable tag: 1.7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,7 +17,7 @@ And more powerful functional is waiting for you. What exactly is it? Hehe...
 
 <h4>Notice:</h4>
 <ul>
-	<li>This plugin has a little problem that is all the image url must be full url, it means must include "http(s)://", for example:
+	<li>This plugin has a little problem that is all the image url must be full url, it means must included "http(s)://", for example:
 		<ul>
 			<li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
 			<li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li>
@@ -25,7 +25,7 @@ And more powerful functional is waiting for you. What exactly is it? Hehe...
 			<li>&lt;img src=&quot;https://example.com/image?id=127457&quot; /&gt;</li>
 		</ul>
 	</li>
-	<li>The examples that not working:
+	<li>The examples that not works:
 		<ul>
 			<li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li>
 			<li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li>
@@ -79,14 +79,42 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 1. User interface - Settings
 2. 用户界面 - 设置
-3. User interface - Scan posts
-4. 用户界面 - 扫描文章
+3. User interface - Preview watermark feature
+4. 用户界面 - 水印功能预览
+5. User interface - Scan posts
+6. 用户界面 - 扫描文章
 
 == Changelog ==
 
+= 1.7.4 =
+<ul>
+	<li>Bugs fixed:
+		<ol>
+			<li>Manual mode of Scan-Post did saved remote images in process.</li>
+			<li>Javascript parse error on select checkbox of pages of scan-posts in English website language.</li>
+		</ol>
+	</li>
+	<li>New features:
+		<ul>
+			<li>Preview watermark.</li>
+		</ul>
+	</li>
+	<li>修复Bugs：
+		<ol>
+			<li>扫描文章的手动模式会在扫描过程中偷偷保存远程图片。</li>
+			<li>站点语言为英文时，选择扫描文章的页面文章类型会报Javascript语法错误。</li>
+		</ol>
+	</li>
+	<li>新特性:
+		<ul>
+			<li>水印功能预览</li>
+		</ul>
+	</li>
+</ul>
+
 = 1.7.3 =
 Bug fixed:<br />
-The bug that Added a backslash "\" in front of apostrophes (') in text mode of editor and in manual mode of plugin.
+The bug that Added a backslash "\" in front of apostrophes (') in text mode of editor and in manual mode of plugin.<br />
 修复Bug：<br />
 在插件的手动模式和编辑器的文本模式下，在(')之前加上"\"
 
