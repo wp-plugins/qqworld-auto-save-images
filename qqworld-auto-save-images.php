@@ -384,7 +384,7 @@ class QQWorld_auto_save_images {
 	<p><?php _e('Automatically keep the all remote picture to the local, and automatically set featured image.', 'qqworld_auto_save_images'); ?>
 	<form action="options.php" method="post" id="form">
 		<?php settings_fields('qqworld_auto_save_images_settings'); ?>
-		<img src="https://ps.w.org/qqworld-auto-save-images/assets/banner-772x250.png" width="772" height="250" id="banner" />
+		<img src="https://ps.w.org/qqworld-auto-save-images/assets/banner-772x250.png?rev=1009762" width="772" height="250" id="banner" />
 		<ul id="qqworld-auto-save-images-tabs">
 			<li class="current"><?php _e('Settings'); ?></li>
 			<li><?php _e('Watermark', 'qqworld_auto_save_images'); ?> (<?php _e('Trial', 'qqworld_auto_save_images')?>)</li>
