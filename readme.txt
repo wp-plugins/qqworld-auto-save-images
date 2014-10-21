@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 1.7.5
+Stable tag: 1.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,10 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.6 =
+Fixed a bug of regular expression that cleaned many contents in Visual-mode of Editor and in Manual-mode of plugin.<br />
+修复正则表达式的bug，在可视化编辑情况下手动保存图片有时候会清空大量的内容。
 
 = 1.7.5 =
 New features:<br />

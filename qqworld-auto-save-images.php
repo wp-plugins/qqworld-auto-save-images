@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.5
+Version: 1.7.6
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -127,7 +127,8 @@ class QQWorld_auto_save_images {
 			wp_enqueue_script('qqworld-auto-save-images-script-post');
 			$translation_array = array(
 				'post_id' => $post->ID,
-				'in_process' => __('In Process...', 'qqworld_auto_save_images')
+				'in_process' => __('In Process...', 'qqworld_auto_save_images'),
+				'error' => __('Something error, please check.', 'qqworld_auto_save_images')
 			);
 			wp_localize_script('qqworld-auto-save-images-script-post', 'QASI', $translation_array, '3.0.0');
 		}
@@ -875,7 +876,7 @@ class QQWorld_auto_save_images {
 	}
 
 	public function content_save_pre($content, $post_id=null, $action='save') {
-		$preg = preg_match_all('/<img.*?src=[\"\']((?![\"\']).*?)[\"\']/i', stripslashes($content), $matches);
+		$preg = preg_match_all('/<img\s[^>]*src=[\"|\']((?![\"|\'])[\s\S]*?)[\"|\'][\s\S]*?>/i', stripslashes($content), $matches);
 		if($preg){
 			foreach($matches[1] as $image_url) {
 				if(empty($image_url)) continue;
@@ -927,11 +928,11 @@ class QQWorld_auto_save_images {
 			$height = $res['sizes'][$size]['height'];
 		}
 		$pattern_image_url = $this->encode_pattern($image_url);
-		$pattern = '/<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>?<img.*?src=[\"|\\\']'.$pattern_image_url.'[\"|\\\'].*?>?<\/a>/i';
+		$pattern = '/<a[^<]+><img\s[^>]*'.$pattern_image_url.'.*?>?<[^>]+a>/i';
 		if ( preg_match($pattern, $content, $matches) ) {
 			$args = $this->set_img_metadata($matches[0], $attachment_id);
 		} else {
-			$pattern = '/<img.*?src=[\"|\\\']'.$pattern_image_url.'[\"|\\\'].*?>/i';
+			$pattern = '/<img\s[^>]*'.$pattern_image_url.'.*?>/i';
 			if ( preg_match($pattern, $content, $matches) ) {
 				$args = $this->set_img_metadata($matches[0], $attachment_id);
 			} else {
@@ -957,10 +958,10 @@ class QQWorld_auto_save_images {
 	}
 
 	public function set_img_metadata($img, $attachment_id) {
-		$pattern = '/<img.*?alt=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
+		$pattern = '/<img\s[^>]*alt=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
 		$alt = preg_match($pattern, $img, $matches) ? $matches[1] : null;
 		if ($alt) update_post_meta($attachment_id, '_wp_attachment_image_alt', $alt);
-		$pattern = '/<img.*?title=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
+		$pattern = '/<img\s[^>]*title=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
 		$title = preg_match($pattern, $img, $matches)? $matches[1] : null;
 		if ($title) {
 			$attachment = array(

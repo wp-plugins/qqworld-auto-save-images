@@ -15,6 +15,14 @@ jQuery(function($) {
 				console.log(XMLHttpRequest);
 				console.log('textStatus: ' + textStatus);
 				console.log('errorThrown: ' + errorThrown);
+				$('#save-remote-images-button').data('noty').close();
+				noty({
+					text: QASI.error,	
+					type: 'error',
+					layout: 'center',
+					modal: true,
+					theme: noty_theme
+				});
 			};
 			switch (mode) {
 				case 'text':
@@ -81,6 +89,7 @@ jQuery(function($) {
 							content: encodeURI(encodeURI(tinyMCE.activeEditor.getContent()))
 						},
 						success: function(respond) {
+							console.log(respond)
 							switch (respond.type) {
 								case 1: var type = 'warning'; break;
 								case 2: var type = 'success'; break;
