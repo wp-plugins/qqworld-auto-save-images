@@ -10,6 +10,12 @@ jQuery(function($) {
 				var id = tinyMCE.activeEditor.id;
 				mode = $('#'+id).is(':visible') ? 'text' : 'virtual';
 			}
+			var catch_error = function(XMLHttpRequest, textStatus, errorThrown) {
+				console.log('XMLHttpRequest:');
+				console.log(XMLHttpRequest);
+				console.log('textStatus: ' + textStatus);
+				console.log('errorThrown: ' + errorThrown);
+			};
 			switch (mode) {
 				case 'text':
 					$('#save-remote-images-button').data('noty', noty({
@@ -53,9 +59,7 @@ jQuery(function($) {
 							var n = noty(options);
 							if (respond.content) $('#content').val(respond.content);
 						},
-						error: function() {
-							console.log(1);
-						}
+						error: catch_error
 					});
 					break;
 				case 'virtual':
@@ -92,9 +96,7 @@ jQuery(function($) {
 							});
 							if (respond.content) tinyMCE.activeEditor.setContent(respond.content);
 						},
-						error: function() {
-							console.log(1);
-						}
+						error: catch_error
 					});
 					break;						
 			}

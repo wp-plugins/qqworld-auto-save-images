@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.4
+Version: 1.7.5
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -19,6 +19,7 @@ class QQWorld_auto_save_images {
 	var $has_remote_image;
 	var $has_missing_image;
 	var $exclude_domain;
+	var $format;
 
 	var $watermark_enabled;
 	var $filter_size;
@@ -33,6 +34,7 @@ class QQWorld_auto_save_images {
 		$this->featured_image = get_option('qqworld_auto_save_images_set_featured_image', 'yes');
 		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'yes');
 		$this->exclude_domain = get_option('qqworld-auto-save-images-exclude-domain');
+		$this->format = get_option('qqworld-auto-save-images-format', array('size'=>'full', 'link-to'=>'none'));
 
 		$this->watermark_enabled = get_option('qqworld-auto-save-images-watermark-enabled', 'no');
 		$this->filter_size = get_option('qqworld-auto-save-images-watermark-filter-size', array('width'=>300, 'height'=>300));
@@ -391,6 +393,7 @@ class QQWorld_auto_save_images {
 			<li><?php _e('Scan Posts', 'qqworld_auto_save_images'); ?></li>
 		</ul>
 		<div class="tab-content">
+			<h2><?php _e('General Options', 'qqworld_auto_save_images'); ?></h2>
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
@@ -467,6 +470,48 @@ class QQWorld_auto_save_images {
 								endforeach; ?>
 								</ul>
 								<input type="button" id="add_exclude_domain" class="button" value="<?php _e('Add a Domain/Keyword', 'qqworld_auto_save_images');?>" />
+						</fieldset></td>
+					</tr>
+				</tbody>
+			</table>
+			<h2><?php _e('Format Options', 'qqworld_auto_save_images'); ?></h2>
+			<table class="form-table">
+				<tbody>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Image Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Replace images you want size to display.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Image Size', 'qqworld_auto_save_images'); ?></span></legend>
+								<label>
+									<select name="qqworld-auto-save-images-format[size]">
+									<?php
+									$sizes = apply_filters( 'image_size_names_choose', array(
+										'thumbnail' => __('Thumbnail'),
+										'medium'    => __('Medium'),
+										'large'     => __('Large'),
+										'full'      => __('Full Size')
+									) );
+									foreach ($sizes as $value => $title) echo '<option value="'.$value.'"'.selected($value, $this->format['size'], false).'>'.$title.'</option>';
+									?>
+									</select>
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Link To', 'qqworld_auto_save_images'); ?></label></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Link To', 'qqworld_auto_save_images'); ?></span></legend>
+								<label>
+									<select name="qqworld-auto-save-images-format[link-to]">
+									<?php
+									$linkTo = array(
+										'file' => __('Media File'), 
+										'post' => __('Attachment Page'),
+										'none' => __('None')
+									);
+									foreach ($linkTo as $value => $title) echo '<option value="'.$value.'"'.selected($value, $this->format['link-to'], false).'>'.$title.'</option>';
+									?>
+									</select>
+								</label>
 						</fieldset></td>
 					</tr>
 				</tbody>
@@ -566,10 +611,10 @@ class QQWorld_auto_save_images {
 						</td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label><?php _e('Upload Watermark Image', 'qqworld_auto_save_images'); ?></label></th>
+						<th scope="row"><label id="for-watermark-image" for="watermark-image"><?php _e('Upload Watermark Image', 'qqworld_auto_save_images'); ?></label></th>
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Upload Watermark Image', 'qqworld_auto_save_images'); ?></span></legend>
-								<label for="qqworld-auto-save-images-watermark-image">
+								<label for="watermark-image">
 									<a href="javascript:" id="upload-watermark-image" title="<?php _e('Insert a Watermark Image', 'qqworld_auto_save_images'); ?>">
 										<?php
 										if ($this->watermark_image) :
@@ -578,7 +623,7 @@ class QQWorld_auto_save_images {
 										<img src="<?php echo QQWORLD_AUTO_SAVE_IMAGES_URL; ?>images/watermark.png" width="205" height="61" />
 										<?php endif; ?>
 									</a>
-									<input name="qqworld-auto-save-images-watermark-image" type="hidden" title="" value="<?php echo $this->watermark_image; ?>" />
+									<input name="qqworld-auto-save-images-watermark-image" id="watermark-image" type="hidden" title="" value="<?php echo $this->watermark_image; ?>" />
 								</label>
 							</fieldset>
 							<input type="button" class="button<?php if (!$this->watermark_image) echo ' hidden'; ?>" id="default-watermark" value="<?php _e('Default Watermark', 'qqworld_auto_save_images'); ?>">
@@ -711,6 +756,7 @@ class QQWorld_auto_save_images {
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_set_featured_image');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_auto_change_name');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-exclude-domain');
+		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-format');
 
 		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-enabled');
 		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-filter-size');
@@ -844,14 +890,89 @@ class QQWorld_auto_save_images {
 					if($pos===false){
 						$this->has_remote_image = 1;
 						if ($action=="save" && $res=$this->save_images($image_url,$post_id)) {
-							$replace=$res['url'];
-							$content=str_replace($image_url,$replace,$content);
+							$content = $this->format($image_url, $res, $content);
 						}
 					}
 				}
 			}
 		}
 		return $content;
+	}
+
+	public function encode_pattern($str) {
+		$str = str_replace('(', '\(', $str);
+		$str = str_replace(')', '\)', $str);
+		$str = str_replace('+', '\+', $str);
+		$str = str_replace('.', '\.', $str);
+		$str = str_replace('?', '\?', $str);
+		$str = str_replace('/', '\/', $str);
+		$str = str_replace('^', '\^', $str);
+		$str = str_replace('$', '\$', $str);
+		$str = str_replace('|', '\|', $str);
+		return $str;
+	}
+
+	public function format($image_url, $res, $content) {
+		$no_match = false;
+		$attachment_id = $res['id'];
+		$url_path = str_replace(basename($res['file']), '', $res['url']);
+		$size = isset($res['sizes'][$this->format['size']]) ? $this->format['size'] : 'full';
+		if ($size == 'full') {
+			$src = $res['url'];
+			$width = $res['width'];
+			$height = $res['height'];
+		} else {
+			$src = $url_path . $res['sizes'][$size]['file'];
+			$width = $res['sizes'][$size]['width'];
+			$height = $res['sizes'][$size]['height'];
+		}
+		$pattern_image_url = $this->encode_pattern($image_url);
+		$pattern = '/<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>?<img.*?src=[\"|\\\']'.$pattern_image_url.'[\"|\\\'].*?>?<\/a>/i';
+		if ( preg_match($pattern, $content, $matches) ) {
+			$args = $this->set_img_metadata($matches[0], $attachment_id);
+		} else {
+			$pattern = '/<img.*?src=[\"|\\\']'.$pattern_image_url.'[\"|\\\'].*?>/i';
+			if ( preg_match($pattern, $content, $matches) ) {
+				$args = $this->set_img_metadata($matches[0], $attachment_id);
+			} else {
+				$pattern = '/'.$pattern_image_url.'/i';
+				$no_match = true;
+			}
+		}
+		$alt = isset($args['alt']) ? ' alt="'.$args['alt'].'"' : '';
+		$img = '<img class="size-'.$size.' wp-image-'.$attachment_id.'" src="'.$src.'" width="'.$width.'" height="'.$height.'"'.$alt.' />';
+		switch ($this->format['link-to']) {
+			case 'none':
+				$replace = $img; break;
+			case 'file':
+				$replace = '<a href="'.$res['url'].'">'.$img.'</a>';
+				break;
+			case 'post':
+				$replace = '<a href="'.get_permalink($attachment_id).'">'.$img.'</a>';
+				break;
+		}
+		if ($no_match) $replace = $res['url'];
+		$content = preg_replace($pattern, $replace, $content);
+		return $content;
+	}
+
+	public function set_img_metadata($img, $attachment_id) {
+		$pattern = '/<img.*?alt=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
+		$alt = preg_match($pattern, $img, $matches) ? $matches[1] : null;
+		if ($alt) update_post_meta($attachment_id, '_wp_attachment_image_alt', $alt);
+		$pattern = '/<img.*?title=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
+		$title = preg_match($pattern, $img, $matches)? $matches[1] : null;
+		if ($title) {
+			$attachment = array(
+				'ID' => $attachment_id,
+				'post_title' => $title
+			);
+			wp_update_post($attachment);
+		}
+		return array(
+			'alt' => $alt,
+			'title' => $title
+		);
 	}
 
 	public function change_images_filename($name, $extension) {
@@ -888,8 +1009,11 @@ class QQWorld_auto_save_images {
 				$img_name = $this->change_images_filename($match[1], $match[2]);
 			}
 			$res=wp_upload_bits($img_name,'',$file);
-			$attach_id = $this->insert_attachment($res['file'],$post_id);
-			if( !has_post_thumbnail($post_id) && $this->featured_image=='yes' ) set_post_thumbnail( $post_id, $attach_id );
+			$attachment_id = $this->insert_attachment($res['file'], $post_id);
+			$res['id'] = $attachment_id;
+			$meta_data = wp_get_attachment_metadata($attachment_id);
+			$res = array_merge($res, $meta_data);
+			if( !has_post_thumbnail($post_id) && $this->featured_image=='yes' ) set_post_thumbnail( $post_id, $attachment_id );
 			return $res;
 		} else {
 			$this->has_missing_image = 1;

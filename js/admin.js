@@ -462,6 +462,10 @@ QQWorld_auto_save_images.scan_posts = function() {
 
 		$(document).on('change', '#watermark-opacity', _this.action.set_watermark_opacity).on('keyup', '#watermark-opacity', _this.action.set_watermark_opacity);
 
+		$(document).on('click', '#for-watermark-image', function() {
+			$('#upload-watermark-image').click();
+		});
+
 		// watermark postion
 		$(document).on('click', 'input[name="qqworld-auto-save-images-watermark-align-to"]', function() {
 			var id = $(this).attr('id'),
