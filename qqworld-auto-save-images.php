@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.6
+Version: 1.7.7
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -13,7 +13,7 @@ define('QQWORLD_AUTO_SAVE_IMAGES_URL', plugin_dir_url(__FILE__));
 
 class QQWorld_auto_save_images {
 	var $mode;
-	var $type;
+	var $when;
 	var $remote_publishing;
 	var $change_image_name;
 	var $has_remote_image;
@@ -28,13 +28,14 @@ class QQWorld_auto_save_images {
 	var $watermark_opacity;
 	function __construct() {
 		__('Michael Wang', 'qqworld_auto_save_images');
-		$this->mode = get_option('qqworld_auto_save_images_mode', 'publish');
-		$this->type = get_option('qqworld_auto_save_images_type', 'auto');
+		$this->mode = get_option('qqworld_auto_save_images_mode', 'auto');
+		$this->when = get_option('qqworld_auto_save_images_when', 'publish');
 		$this->remote_publishing = get_option('qqworld_auto_save_images_remote_publishing', 'yes');
 		$this->featured_image = get_option('qqworld_auto_save_images_set_featured_image', 'yes');
 		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'yes');
 		$this->exclude_domain = get_option('qqworld-auto-save-images-exclude-domain');
 		$this->format = get_option('qqworld-auto-save-images-format', array('size'=>'full', 'link-to'=>'none'));
+		$this->keep_outside_links = isset($this->format['keep-outside-links']) ? $this->format['keep-outside-links'] : 'no';
 
 		$this->watermark_enabled = get_option('qqworld-auto-save-images-watermark-enabled', 'no');
 		$this->filter_size = get_option('qqworld-auto-save-images-watermark-filter-size', array('width'=>300, 'height'=>300));
@@ -43,7 +44,7 @@ class QQWorld_auto_save_images {
 		$this->watermark_opacity = get_option('qqworld-auto-save-images-watermark-opacity', 100);
 		$this->watermark_image = get_option('qqworld-auto-save-images-watermark-image');
 
-		switch ($this->type) {
+		switch ($this->mode) {
 			case 'auto':
 				$this->add_actions();
 				break;
@@ -74,14 +75,14 @@ class QQWorld_auto_save_images {
 
 		add_filter( 'post_updated_messages', array($this, 'post_updated_messages') );
 
-		if(get_option('using_action') && !get_option('qqworld_auto_save_images_mode')) add_action( 'admin_notices', array($this, 'error_correction') );
+		if (get_option('qqworld_auto_save_images_mode') && ( get_option('qqworld_auto_save_images_type')=='publish' || get_option('qqworld_auto_save_images_mode')=='save' )) add_action( 'admin_notices', array($this, 'error_correction') );
 	}
 
 	public function error_correction() {
 ?>
 	<div class="error default-password-nag">
 		<p><strong><?php _e('Notice:'); ?></strong>
-		<?php printf(__("Ever since the QQWorld-Auto-Save-Image v1.7.2 released, the plugin core had a big modification, please reset the <a href=\"%s\">settings</a>.", 'qqworld_auto_save_images'), menu_page_url( 'qqworld-auto-save-images', 0 )); ?></p>
+		<?php printf(__("Ever since the QQWorld-Auto-Save-Image v1.7.7 released, the plugin core had a big modification, please reset the <a href=\"%s\">settings</a>.", 'qqworld_auto_save_images'), menu_page_url( 'qqworld-auto-save-images', 0 )); ?></p>
 	</div>
 <?php
 	}
@@ -373,11 +374,32 @@ class QQWorld_auto_save_images {
 	}
 
 	function admin_menu() {
+		$page_name = 'qqworld-auto-save-images';
 		if ( is_plugin_active( 'qqworld-collector/qqworld-collector.php' ) ) {
-			add_submenu_page('qqworld-collector', __('Auto Save Images', 'qqworld_auto_save_images'), __('Auto Save Images', 'qqworld_auto_save_images'), 'manage_options', 'qqworld-auto-save-images', array($this, 'fn'));
+			$settings_page = add_submenu_page('qqworld-collector', __('Auto Save Images', 'qqworld_auto_save_images'), __('Auto Save Images', 'qqworld_auto_save_images'), 'manage_options', $page_name, array($this, 'fn'));
 		} else {
-			add_submenu_page('options-general.php', __('QQWorld Auto Save Images', 'qqworld_auto_save_images'), __('QQWorld Auto Save Images', 'qqworld_auto_save_images'), 'manage_options', 'qqworld-auto-save-images', array($this, 'fn'));
+			$settings_page = add_submenu_page('options-general.php', __('QQWorld Auto Save Images', 'qqworld_auto_save_images'), __('QQWorld Auto Save Images', 'qqworld_auto_save_images'), 'manage_options', $page_name, array($this, 'fn'));
 		}
+		add_action( "load-{$settings_page}", array($this, 'help_tab') );
+	}
+
+	public function help_tab() {
+		$screen = get_current_screen();
+		$screen->add_help_tab( array( 
+			'id' => 'qqworld-auto-save-images-installation',
+			'title' => __('Installation', 'qqworld_auto_save_images'),
+			'content' => __('<ol><li>Make sure the server configuration <strong>allow_url_fopen=1</strong> in php.ini.</li><li>Warning: If your website domain has been changed, you must modify all image link to new domain from database, or else all images which not modified in post content will be save again.</li></ol>', 'qqworld_auto_save_images')
+		) );
+		$screen->add_help_tab( array( 
+			'id' => 'qqworld-auto-save-images-notice',
+			'title' => __('Notice', 'qqworld_auto_save_images'),
+			'content' => __("<ul><li>This plugin has a little problem that is all the image url must be full url, it means must included \"http(s)://\", for example:<ul><li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li><li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li>			<li>&lt;img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li><li>&lt;img src=&quot;https://example.com/image?id=127457&quot; /&gt;</li></ul></li><li>The examples that not works:<ul><li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li><li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li><li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li></ul></li></ul>I'v tried to figure this out, but i couldn't get the host name to make image src full, nor get remote image from dynamic link.<br />So if you encounter these codes, plaese manually fix the images src to full url.", 'qqworld_auto_save_images')
+		) );
+		$screen->add_help_tab( array( 
+			'id' => 'qqworld-auto-save-images-about',
+			'title' => __('About'),
+			'content' => __("<p>Hi everyone, My name is Michael Wang from china.</p><p>I made this plugin just for play in the first place, after 1 year, oneday someone sent an email to me for help , I was surprise and glad to realized my plugin has a fan. then more and more peoples asked me for helps, and my plugin was getting more and more powerful. Now this's my plugin. I hope you will like it, thanks.</p>", 'qqworld_auto_save_images')
+		) );
 	}
 
 	function fn() {
@@ -402,26 +424,26 @@ class QQWorld_auto_save_images {
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Mode', 'qqworld_auto_save_images'); ?></span></legend>
 								<label for="auto">
-									<input name="qqworld_auto_save_images_type" type="radio" id="auto" value="auto" <?php checked('auto', $this->type); ?> />
+									<input name="qqworld_auto_save_images_mode" type="radio" id="auto" value="auto" <?php checked('auto', $this->mode); ?> />
 									<?php _e('Automatic', 'qqworld_auto_save_images'); ?>
 								</label> <span class="icon help" title="<?php _e('Automatically save all remote images to local media libary when you save or publish post.', 'qqworld_auto_save_images'); ?>"></span><br />
 								<label for="manual">
-									<input name="qqworld_auto_save_images_type" type="radio" id="manual" value="manual" <?php checked('manual', $this->type); ?> />
+									<input name="qqworld_auto_save_images_mode" type="radio" id="manual" value="manual" <?php checked('manual', $this->mode); ?> />
 									<?php _e('Manual', 'qqworld_auto_save_images'); ?>
 								</label> <span class="icon help" title="<?php _e('Manually save all remote images to local media libary when you click the button on the top of editor.', 'qqworld_auto_save_images'); ?>"></span>
 						</fieldset></td>
 					</tr>
 					
-					<tr id="second_level" valign="top"<?php if ($this->type != 'auto') echo ' style="display: none;"'; ?>>
+					<tr id="second_level" valign="top"<?php if ($this->mode != 'auto') echo ' style="display: none;"'; ?>>
 						<th scope="row"><label><?php _e('When', 'qqworld_auto_save_images'); ?></label></th>
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('When', 'qqworld_auto_save_images'); ?></span></legend>
 								<label for="save">
-									<input name="qqworld_auto_save_images_mode" type="radio" id="save" value="save" <?php checked('save', $this->mode); ?> />
+									<input name="qqworld_auto_save_images_when" type="radio" id="save" value="save" <?php checked('save', $this->when); ?> />
 									<?php _e('Save post (Publish, save draft or pedding review).', 'qqworld_auto_save_images'); ?>
 								</label><br />
 								<label for="publish">
-									<input name="qqworld_auto_save_images_mode" type="radio" id="publish" value="publish" <?php checked('publish', $this->mode); ?> />
+									<input name="qqworld_auto_save_images_when" type="radio" id="publish" value="publish" <?php checked('publish', $this->when); ?> />
 									<?php _e('Publish post only.', 'qqworld_auto_save_images'); ?>
 								</label>
 						</fieldset></td>
@@ -479,6 +501,15 @@ class QQWorld_auto_save_images {
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
+						<th scope="row"><label><?php _e('Keep Outside Links', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Keep the outside links of remote images if exist.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Keep Outside Links', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld_auto_save_images_format_keep_outside_links">
+									<input name="qqworld-auto-save-images-format[keep-outside-links]" type="checkbox" id="qqworld_auto_save_images_format_keep_outside_links" value="yes" <?php checked('yes', $this->keep_outside_links); ?> />
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
 						<th scope="row"><label><?php _e('Image Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Replace images you want size to display.", 'qqworld_auto_save_images'); ?>"></span></th>
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Image Size', 'qqworld_auto_save_images'); ?></span></legend>
@@ -498,7 +529,7 @@ class QQWorld_auto_save_images {
 						</fieldset></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label><?php _e('Link To', 'qqworld_auto_save_images'); ?></label></th>
+						<th scope="row"><label><?php _e('Link To', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("If you checked Keep-Outside-Links, this option will not works.", 'qqworld_auto_save_images'); ?>"></span></th>
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Link To', 'qqworld_auto_save_images'); ?></span></legend>
 								<label>
@@ -751,8 +782,8 @@ class QQWorld_auto_save_images {
 	}
 
 	function register_settings() {
-		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_type');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_mode');
+		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_when');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_remote_publishing');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_set_featured_image');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_auto_change_name');
@@ -800,12 +831,12 @@ class QQWorld_auto_save_images {
 
 	function add_actions() {
 		$post_type = $this->get_current_post_type();
-		if ($post_type) add_action($this->mode.'_'.$post_type, array($this, 'fetch_images') );
+		if ($post_type) add_action($this->when.'_'.$post_type, array($this, 'fetch_images') );
 	}
 
 	function remove_actions() {
 		$post_type = $this->get_current_post_type();
-		if ($post_type) remove_action($this->mode.'_'.$post_type, array($this, 'fetch_images') );
+		if ($post_type) remove_action($this->when.'_'.$post_type, array($this, 'fetch_images') );
 	}
 
 	function utf8_urldecode($str) {
@@ -863,7 +894,7 @@ class QQWorld_auto_save_images {
 		
 		add_filter( 'redirect_post_location', array($this, 'redirect_post_location'), 10, 2);
 
-		if ($this->type=='auto') $this->remove_actions();
+		if ($this->mode=='auto') $this->remove_actions();
 		if ($this->remote_publishing) remove_action('xmlrpc_publish_post', array($this, 'fetch_images') );
 
 		$post = get_post($post_id);
@@ -871,7 +902,7 @@ class QQWorld_auto_save_images {
 	    //Replace the image in the post
 	    wp_update_post(array('ID' => $post_id, 'post_content' => $content));
 
-		if ($this->type=='auto') $this->add_actions();
+		if ($this->mode=='auto') $this->add_actions();
 		if ($this->remote_publishing) add_action('xmlrpc_publish_post', array($this, 'fetch_images') );
 	}
 
@@ -929,7 +960,7 @@ class QQWorld_auto_save_images {
 		}
 		$pattern_image_url = $this->encode_pattern($image_url);
 		$pattern = '/<a[^<]+><img\s[^>]*'.$pattern_image_url.'.*?>?<[^>]+a>/i';
-		if ( preg_match($pattern, $content, $matches) ) {
+		if ( $this->keep_outside_links == 'no' && preg_match($pattern, $content, $matches) ) {
 			$args = $this->set_img_metadata($matches[0], $attachment_id);
 		} else {
 			$pattern = '/<img\s[^>]*'.$pattern_image_url.'.*?>/i';
@@ -942,7 +973,8 @@ class QQWorld_auto_save_images {
 		}
 		$alt = isset($args['alt']) ? ' alt="'.$args['alt'].'"' : '';
 		$img = '<img class="size-'.$size.' wp-image-'.$attachment_id.'" src="'.$src.'" width="'.$width.'" height="'.$height.'"'.$alt.' />';
-		switch ($this->format['link-to']) {
+		$link_to = $this->keep_outside_links=='no' ? $this->format['link-to'] : 'none';
+		switch ($link_to) {
 			case 'none':
 				$replace = $img; break;
 			case 'file':
