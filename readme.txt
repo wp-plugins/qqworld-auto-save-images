@@ -33,7 +33,7 @@ And more powerful functional is waiting for you. What exactly is it? Hehe...
 		</ul>
 	</li>
 </ul>
-I'v tried to figure this out, but i couldn't get the host name to make image src full, nor get remote image from dynamic link.
+I'v tried to figure this out, but i couldn't get the host name to make image src full.
 
 So if you encounter these codes, plaese manually fix the images src to full url.
 
@@ -61,7 +61,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 		</ul>
 	</li>
 </ul>
-我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整或是从动态链接获取图像。
+我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整。
 
 所以，如果你碰到这样的代码，请手动将图片地址改成完整的，或者使用采集工具自动补完图片的URL然后从外部提交给Wordpress。
 
@@ -88,7 +88,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 = 1.7.7 =
 New features:<br />
-Allowed to keep outside links of remote images.<br />
+Allowed to keeps outside links of remote images.<br />
 新特性<br />
 允许保留远程图片的外部链接。
 
