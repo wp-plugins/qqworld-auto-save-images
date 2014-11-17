@@ -413,6 +413,27 @@ QQWorld_auto_save_images.scan_posts = function() {
 			else $('#exclude_domain_list').append(code);
 			code.hide().slideDown('fast');
 		});
+		$(document).on('blur', '[name="qqworld-auto-save-images-exclude-domain[]"]', function() {
+			var str = $(this).val();
+			var re = new RegExp("^http(s)?:\/\/", 'i');
+			if (re.test(str)) {
+				var result =  str.match(re);
+				noty({
+					text: _this.lib.sprintf(QASI.no_need_enter_, result[0]),	
+					type: 'error',
+					layout: 'bottom',
+					dismissQueue: true,
+					theme: noty_theme,
+					timeout: 5000
+				});
+				$(this).css({
+					backgroundColor: '#f00',
+					color: '#fff'
+				});
+			} else {
+				$(this).removeAttr('style');
+			}
+		});
 		$(document).on('click', '.delete-exclude-domain', function() {
 			var parent = $(this).parent();
 			parent.slideUp('fast', function() {

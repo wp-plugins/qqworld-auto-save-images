@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QQworld Auto Save Images\n"
 "Report-Msgid-Bugs-To: http://www.qqworld.org\n"
-"POT-Creation-Date: 2014-10-31 10:41+0800\n"
-"PO-Revision-Date: 2014-10-31 10:41+0800\n"
+"POT-Creation-Date: 2014-11-17 10:24+0800\n"
+"PO-Revision-Date: 2014-11-17 10:24+0800\n"
 "Last-Translator: Michael Wang <admin@qqworld.org>\n"
 "Language-Team: QQWorld <admin@qqworld.org>\n"
 "Language: zh_CN\n"
@@ -24,20 +24,6 @@ msgstr ""
 #: qqworld-auto-save-images.php:31
 msgid "Michael Wang"
 msgstr "王晓骞"
-
-#: qqworld-auto-save-images.php:86
-#, fuzzy
-msgid "Notice:"
-msgstr "提示："
-
-#: qqworld-auto-save-images.php:87
-#, php-format
-msgid ""
-"Ever since the QQWorld-Auto-Save-Image v1.7.7 released, the plugin core had "
-"a big modification, please reset the <a href=\"%s\">settings</a>."
-msgstr ""
-"自动 QQWorld自动保存图片 v1.7.7发布，插件核心有较大更新，请重新<a href=\"%s"
-"\">设置</a>。"
 
 #: qqworld-auto-save-images.php:103
 msgid "No taxonomies found."
@@ -81,116 +67,121 @@ msgstr "也许一些文章有问题："
 
 #: qqworld-auto-save-images.php:159
 #, php-format
-msgid "%d post has been scanned."
-msgstr "已扫描%d篇文章。"
+msgid "No need enter \"%s\"."
+msgstr "不需要输入“%s”。"
 
 #: qqworld-auto-save-images.php:160
 #, php-format
-msgid "%d posts have been scanned."
+msgid "%d post has been scanned."
 msgstr "已扫描%d篇文章。"
 
 #: qqworld-auto-save-images.php:161
 #, php-format
-msgid "%d post included remote images processed."
-msgstr "已处理%d篇包含远程图像的文章。"
+msgid "%d posts have been scanned."
+msgstr "已扫描%d篇文章。"
 
 #: qqworld-auto-save-images.php:162
 #, php-format
-msgid "%d posts included remote images processed."
+msgid "%d post included remote images processed."
 msgstr "已处理%d篇包含远程图像的文章。"
 
 #: qqworld-auto-save-images.php:163
 #, php-format
-msgid "%d post has missing images couldn't be processed."
-msgstr "%d篇包含不存在的远程图像的文章无法处理。"
+msgid "%d posts included remote images processed."
+msgstr "已处理%d篇包含远程图像的文章。"
 
 #: qqworld-auto-save-images.php:164
 #, php-format
-msgid "%d posts have missing images couldn't be processed."
+msgid "%d post has missing images couldn't be processed."
 msgstr "%d篇包含不存在的远程图像的文章无法处理。"
 
 #: qqworld-auto-save-images.php:165
 #, php-format
-msgid "found %d post including remote images."
-msgstr "找到%d篇包含远程图像的文章。"
+msgid "%d posts have missing images couldn't be processed."
+msgstr "%d篇包含不存在的远程图像的文章无法处理。"
 
 #: qqworld-auto-save-images.php:166
 #, php-format
-msgid "found %d posts including remote images."
+msgid "found %d post including remote images."
 msgstr "找到%d篇包含远程图像的文章。"
 
 #: qqworld-auto-save-images.php:167
 #, php-format
+msgid "found %d posts including remote images."
+msgstr "找到%d篇包含远程图像的文章。"
+
+#: qqworld-auto-save-images.php:168
+#, php-format
 msgid "And with %d post has missing images."
 msgstr "其中有%d篇文章包含不存在的远程图像。"
 
-#: qqworld-auto-save-images.php:168
+#: qqworld-auto-save-images.php:169
 #, php-format
 msgid "And with %d posts have missing images."
 msgstr "其中有%d篇文章包含不存在的远程图像。"
 
-#: qqworld-auto-save-images.php:169
+#: qqworld-auto-save-images.php:170
 msgid "No posts processed."
 msgstr "未处理任何文章。"
 
-#: qqworld-auto-save-images.php:170
+#: qqworld-auto-save-images.php:171
 msgid "No post has remote images found."
 msgstr "没有文章包含远程图像。"
 
-#: qqworld-auto-save-images.php:171
+#: qqworld-auto-save-images.php:172
 msgid "No posts found."
 msgstr "未找到任何文章。"
 
-#: qqworld-auto-save-images.php:172
+#: qqworld-auto-save-images.php:173
 msgid "All done."
 msgstr "全部完成。"
 
-#: qqworld-auto-save-images.php:173
+#: qqworld-auto-save-images.php:174
 #, fuzzy
 msgid "Yes"
 msgstr "是"
 
-#: qqworld-auto-save-images.php:174
+#: qqworld-auto-save-images.php:175
 msgid "No"
 msgstr ""
 
-#: qqworld-auto-save-images.php:175
+#: qqworld-auto-save-images.php:176
 msgid "Scanning..."
 msgstr "扫描中……"
 
-#: qqworld-auto-save-images.php:176
+#: qqworld-auto-save-images.php:177
 msgid "Listing..."
 msgstr "显示列表中……"
 
-#: qqworld-auto-save-images.php:177 qqworld-auto-save-images.php:749
+#: qqworld-auto-save-images.php:178 qqworld-auto-save-images.php:749
 #, fuzzy
 msgid "ID"
 msgstr "博客ID"
 
-#: qqworld-auto-save-images.php:178
+#: qqworld-auto-save-images.php:179
 msgid "Post Type"
 msgstr "文章类型"
 
-#: qqworld-auto-save-images.php:179 qqworld-auto-save-images.php:751
+#: qqworld-auto-save-images.php:180 qqworld-auto-save-images.php:751
 #, fuzzy
 msgid "Title"
 msgstr "标题"
 
-#: qqworld-auto-save-images.php:180 qqworld-auto-save-images.php:729
+#: qqworld-auto-save-images.php:181 qqworld-auto-save-images.php:729
 #, fuzzy
 msgid "Status"
 msgstr "状态"
 
-#: qqworld-auto-save-images.php:181
+#: qqworld-auto-save-images.php:182
 msgid "Control"
 msgstr "控制"
 
-#: qqworld-auto-save-images.php:182
+#: qqworld-auto-save-images.php:183
 #, fuzzy
 msgid "Done"
 msgstr "全部完成。"
 
-#: qqworld-auto-save-images.php:183 qqworld-auto-save-images.php:493
+#: qqworld-auto-save-images.php:184 qqworld-auto-save-images.php:493
 #, fuzzy
 msgid "Delete"
 msgstr "删除"
@@ -660,6 +651,17 @@ msgstr "有 不存在/不可下载 的远程图像。"
 #: qqworld-auto-save-images.php:889
 msgid "No remote images found."
 msgstr "没有远程图像。"
+
+#, fuzzy
+#~ msgid "Notice:"
+#~ msgstr "提示："
+
+#~ msgid ""
+#~ "Ever since the QQWorld-Auto-Save-Image v1.7.7 released, the plugin core "
+#~ "had a big modification, please reset the <a href=\"%s\">settings</a>."
+#~ msgstr ""
+#~ "自动 QQWorld自动保存图片 v1.7.7发布，插件核心有较大更新，请重新<a href="
+#~ "\"%s\">设置</a>。"
 
 #~ msgid ""
 #~ "<p>Hi everyone, My name is Michael Wang, I hope you will like my plugin. "

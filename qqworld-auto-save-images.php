@@ -156,6 +156,7 @@ class QQWorld_auto_save_images {
 				'are_your_sure' => __('Are you sure?<br />Before you click the yes button, I recommend backup site database.', 'qqworld_auto_save_images'),
 				'pls_select_post_types' => __('Please select post types.', 'qqworld_auto_save_images'),
 				'maybe_problem' => __('May be a problem with some posts: ', 'qqworld_auto_save_images'),
+				'no_need_enter_' => __("No need enter \"%s\".", 'qqworld_auto_save_images'),
 				'n_post_has_been_scanned' => __( '%d post has been scanned.', 'qqworld_auto_save_images'),
 				'n_posts_have_been_scanned' => __( '%d posts have been scanned.', 'qqworld_auto_save_images'),
 				'n_post_included_remote_images_processed' => __( '%d post included remote images processed.', 'qqworld_auto_save_images'),
