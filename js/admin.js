@@ -408,7 +408,7 @@ QQWorld_auto_save_images.scan_posts = function() {
 			});
 		});
 		$(document).on('click', '#add_exclude_domain', function() {
-			var code = $('<li>'+QASI.scheme+' <input type="text" name="qqworld-auto-save-images-exclude-domain[]" class="regular-text" value="" /><input type="button" class="button delete-exclude-domain" value="'+QASI.delete+'"></li>');
+			var code = $('<li>http(s):// <input type="text" name="qqworld-auto-save-images-exclude-domain[]" class="regular-text" value="" /><input type="button" class="button delete-exclude-domain" value="'+QASI.delete+'"></li>');
 			if (!$('#exclude_domain_list li').length || $('#exclude_domain_list li.empty').length) $('#exclude_domain_list').html(code);
 			else $('#exclude_domain_list').append(code);
 			code.hide().slideDown('fast');

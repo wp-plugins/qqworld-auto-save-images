@@ -3,7 +3,7 @@ Contributors: Michael Wang
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.0
-Stable tag: 1.7.7
+Stable tag: 1.7.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,22 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.8 =
+<ul>
+	<li>New features:
+		<ul>
+			<li>Ignore animated GIF when doing watermark as preview option.</li>
+			<li>Modified 'http://' to 'http(s)://' in Exclude-Domain/Keyword of General Options.</li>
+		</ul>
+	</li>
+	<li>新特性:
+		<ul>
+			<li>添加水印时忽略GIF动画的预览选项</li>
+			<li>将常规选项中的排除域名/关键词中的'http://'改为'http(s)://'</li>
+		</ul>
+	</li>
+</ul>
 
 = 1.7.7 =
 New features:<br />

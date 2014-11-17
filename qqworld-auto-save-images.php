@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.7
+Version: 1.7.8
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -22,6 +22,7 @@ class QQWorld_auto_save_images {
 	var $format;
 
 	var $watermark_enabled;
+	var $ignore_animated_gif;
 	var $filter_size;
 	var $align_to;
 	var $offset;
@@ -38,6 +39,7 @@ class QQWorld_auto_save_images {
 		$this->keep_outside_links = isset($this->format['keep-outside-links']) ? $this->format['keep-outside-links'] : 'no';
 
 		$this->watermark_enabled = get_option('qqworld-auto-save-images-watermark-enabled', 'no');
+		$this->ignore_animated_gif = get_option('qqworld-auto-save-images-watermark-ignore-animated-gif', 'yes');
 		$this->filter_size = get_option('qqworld-auto-save-images-watermark-filter-size', array('width'=>300, 'height'=>300));
 		$this->align_to = get_option('qqworld-auto-save-images-watermark-align-to', 'lt');
 		$this->offset = get_option('qqworld-auto-save-images-watermark-offset', array('x'=>0, 'y'=>0));
@@ -75,17 +77,17 @@ class QQWorld_auto_save_images {
 
 		add_filter( 'post_updated_messages', array($this, 'post_updated_messages') );
 
-		if (get_option('qqworld_auto_save_images_mode') && ( get_option('qqworld_auto_save_images_type')=='publish' || get_option('qqworld_auto_save_images_mode')=='save' )) add_action( 'admin_notices', array($this, 'error_correction') );
+		//if (get_option('qqworld_auto_save_images_mode') && ( get_option('qqworld_auto_save_images_type')=='publish' || get_option('qqworld_auto_save_images_mode')=='save' )) add_action( 'admin_notices', array($this, 'error_correction') );
 	}
 
-	public function error_correction() {
+	/*public function error_correction() {
 ?>
 	<div class="error default-password-nag">
 		<p><strong><?php _e('Notice:'); ?></strong>
 		<?php printf(__("Ever since the QQWorld-Auto-Save-Image v1.7.7 released, the plugin core had a big modification, please reset the <a href=\"%s\">settings</a>.", 'qqworld_auto_save_images'), menu_page_url( 'qqworld-auto-save-images', 0 )); ?></p>
 	</div>
 <?php
-	}
+	}*/
 
 	public function save_remote_images_get_categories_list() {
 		if (isset($_REQUEST['posttype']) && !empty($_REQUEST['posttype'])) {
@@ -179,7 +181,6 @@ class QQWorld_auto_save_images {
 				'control' => __('Control', 'qqworld_auto_save_images'),
 				'done' => __('Done'),
 				'delete' => __('Delete'),
-				'scheme' => is_ssl() ? 'https://' : 'http://',
 				'watermark_offset' => $this->offset,
 				'default_watermark' => array(
 					'src' => QQWORLD_AUTO_SAVE_IMAGES_URL . 'images/watermark.png',
@@ -393,7 +394,7 @@ class QQWorld_auto_save_images {
 		$screen->add_help_tab( array( 
 			'id' => 'qqworld-auto-save-images-notice',
 			'title' => __('Notice', 'qqworld_auto_save_images'),
-			'content' => __("<ul><li>This plugin has a little problem that is all the image url must be full url, it means must included \"http(s)://\", for example:<ul><li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li><li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li>			<li>&lt;img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li><li>&lt;img src=&quot;https://example.com/image?id=127457&quot; /&gt;</li></ul></li><li>The examples that not works:<ul><li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li><li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li><li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li></ul></li></ul>I'v tried to figure this out, but i couldn't get the host name to make image src full, nor get remote image from dynamic link.<br />So if you encounter these codes, plaese manually fix the images src to full url.", 'qqworld_auto_save_images')
+			'content' => __("<ul><li>This plugin has a little problem that is all the image url must be full url, it means must included \"http(s)://\", for example:<ul><li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li><li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li>			<li>&lt;img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li><li>&lt;img src=&quot;https://example.com/image?id=127457&quot; /&gt;</li></ul></li><li>The examples that not works:<ul><li>&lt;img src=&quot;/images/great.png&quot; /&gt;</li><li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</li><li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li></ul></li></ul>I'v tried to figure this out, but i couldn't get the host name to make image src full.<br />So if you encounter these codes, plaese manually fix the images src to full url.", 'qqworld_auto_save_images')
 		) );
 		$screen->add_help_tab( array( 
 			'id' => 'qqworld-auto-save-images-about',
@@ -488,7 +489,7 @@ class QQWorld_auto_save_images {
 								if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) :
 									if (!empty($domain)) :
 								?>
-								<li><?php echo is_ssl() ? 'https://' : 'http://' ?> <input type="text" name="qqworld-auto-save-images-exclude-domain[]" class="regular-text" value="<?php echo $domain; ?>" /><input type="button" class="button delete-exclude-domain" value="<?php _e('Delete'); ?>"></li>
+								<li>http(s):// <input type="text" name="qqworld-auto-save-images-exclude-domain[]" class="regular-text" value="<?php echo $domain; ?>" /><input type="button" class="button delete-exclude-domain" value="<?php _e('Delete'); ?>"></li>
 									<?php endif;
 								endforeach; ?>
 								</ul>
@@ -563,6 +564,16 @@ class QQWorld_auto_save_images {
 							<legend class="screen-reader-text"><span><?php _e('Enabled Watermark', 'qqworld_auto_save_images'); ?></span></legend>
 								<label for="qqworld-auto-save-images-watermark-enable">
 									<input name="qqworld-auto-save-images-watermark-enabled" type="checkbox" id="qqworld-auto-save-images-watermark-enabled" value="yes" <?php checked('yes', $this->watermark_enabled); ?> />
+								</label>
+							</fieldset>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Ignore animated GIF', 'qqworld_auto_save_images'); ?></label></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Ignore animated GIF', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="ignore-animated-gif">
+									<input name="qqworld-auto-save-images-watermark-ignore-animated-gif" type="checkbox" id="ignore-animated-gif" value="yes" <?php checked('yes', $this->ignore_animated_gif); ?> />
 								</label>
 							</fieldset>
 						</td>
@@ -791,6 +802,7 @@ class QQWorld_auto_save_images {
 		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-format');
 
 		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-enabled');
+		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-ignore-animated-gif');
 		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-filter-size');
 		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-align-to');
 		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-offset');
