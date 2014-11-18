@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.8
+Version: 1.7.9
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -18,6 +18,7 @@ class QQWorld_auto_save_images {
 	var $change_image_name;
 	var $has_remote_image;
 	var $has_missing_image;
+	var $minimum_picture_size;
 	var $exclude_domain;
 	var $format;
 
@@ -34,6 +35,7 @@ class QQWorld_auto_save_images {
 		$this->remote_publishing = get_option('qqworld_auto_save_images_remote_publishing', 'yes');
 		$this->featured_image = get_option('qqworld_auto_save_images_set_featured_image', 'yes');
 		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'yes');
+		$this->minimum_picture_size = get_option('qqworld_auto_save_images_minimum_picture_size', array('width'=>32, 'height'=>32));
 		$this->exclude_domain = get_option('qqworld-auto-save-images-exclude-domain');
 		$this->format = get_option('qqworld-auto-save-images-format', array('size'=>'full', 'link-to'=>'none'));
 		$this->keep_outside_links = isset($this->format['keep-outside-links']) ? $this->format['keep-outside-links'] : 'no';
@@ -480,7 +482,23 @@ class QQWorld_auto_save_images {
 								</label>
 						</fieldset></td>
 					</tr>
-
+				</tbody>
+			</table>
+			<h2><?php _e('Filter Options', 'qqworld_auto_save_images'); ?></h2>
+			<table class="form-table">
+				<tr valign="top">
+					<th scope="row"><label><?php _e('Minimum Picture Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Ignore smaller than this size picture.", 'qqworld_auto_save_images'); ?>"></span></th>
+					<td><fieldset>
+						<legend class="screen-reader-text"><span><?php _e('Minimum Picture Size', 'qqworld_auto_save_images'); ?></span></legend>
+							<label for="qqworld_auto_save_images_minimum_picture_size_width">
+								<?php _e('Width:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_minimum_picture_size[width]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_width" value="<?php echo $this->minimum_picture_size['width']; ?>" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+							</label><br />
+							<label for="qqworld_auto_save_images_minimum_picture_size_height">
+								<?php _e('Height:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_minimum_picture_size[height]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_height" value="<?php echo $this->minimum_picture_size['height']; ?>" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+							</label>
+					</fieldset></td>
+				</tr>
+				<tbody>
 					<tr valign="top">
 						<th scope="row"><label><?php _e('Exclude Domain/Keyword', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Images will not be saved, if that url contains Exclude-Domain/Keyword.", 'qqworld_auto_save_images'); ?>"></span></th>
 						<td><fieldset>
@@ -799,6 +817,7 @@ class QQWorld_auto_save_images {
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_remote_publishing');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_set_featured_image');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_auto_change_name');
+		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_minimum_picture_size');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-exclude-domain');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-format');
 
@@ -930,6 +949,10 @@ class QQWorld_auto_save_images {
 					$pos=strpos($image_url, $domain);
 					if($pos) $allow=false;
 				}
+				// check pictrue size
+				list($width, $height, $type, $attr) = getimagesize($image_url);
+				if ($width<$this->minimum_picture_size['width'] || $height<$this->minimum_picture_size['height']) $allow = false;
+				// check if remote image
 				if ($allow) {
 					$pos=strpos($image_url,get_bloginfo('url'));
 					if($pos===false){
