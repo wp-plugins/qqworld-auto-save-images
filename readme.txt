@@ -87,7 +87,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 == Changelog ==
 
 = 1.7.9 =
-New features:<br />
+New feature:<br />
 Allowed to Ignore small size picture, such as some icons. default: 32x32(px)<br />
 新特性<br />
 允许忽略小尺寸图像，比如一些小图标。默认32x32(像素)
