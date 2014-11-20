@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.9
+Version: 1.7.10
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -19,6 +19,7 @@ class QQWorld_auto_save_images {
 	var $has_remote_image;
 	var $has_missing_image;
 	var $minimum_picture_size;
+	var $maximum_picture_size;
 	var $exclude_domain;
 	var $format;
 
@@ -36,6 +37,7 @@ class QQWorld_auto_save_images {
 		$this->featured_image = get_option('qqworld_auto_save_images_set_featured_image', 'yes');
 		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'yes');
 		$this->minimum_picture_size = get_option('qqworld_auto_save_images_minimum_picture_size', array('width'=>32, 'height'=>32));
+		$this->maximum_picture_size = get_option('qqworld_auto_save_images_maximum_picture_size', array('width'=>1280, 'height'=>1280));
 		$this->exclude_domain = get_option('qqworld-auto-save-images-exclude-domain');
 		$this->format = get_option('qqworld-auto-save-images-format', array('size'=>'full', 'link-to'=>'none'));
 		$this->keep_outside_links = isset($this->format['keep-outside-links']) ? $this->format['keep-outside-links'] : 'no';
@@ -78,18 +80,7 @@ class QQWorld_auto_save_images {
 		add_action( 'admin_enqueue_scripts', array($this, 'add_to_page_qqworld_auto_save_images') );
 
 		add_filter( 'post_updated_messages', array($this, 'post_updated_messages') );
-
-		//if (get_option('qqworld_auto_save_images_mode') && ( get_option('qqworld_auto_save_images_type')=='publish' || get_option('qqworld_auto_save_images_mode')=='save' )) add_action( 'admin_notices', array($this, 'error_correction') );
 	}
-
-	/*public function error_correction() {
-?>
-	<div class="error default-password-nag">
-		<p><strong><?php _e('Notice:'); ?></strong>
-		<?php printf(__("Ever since the QQWorld-Auto-Save-Image v1.7.7 released, the plugin core had a big modification, please reset the <a href=\"%s\">settings</a>.", 'qqworld_auto_save_images'), menu_page_url( 'qqworld-auto-save-images', 0 )); ?></p>
-	</div>
-<?php
-	}*/
 
 	public function save_remote_images_get_categories_list() {
 		if (isset($_REQUEST['posttype']) && !empty($_REQUEST['posttype'])) {
@@ -454,11 +445,11 @@ class QQWorld_auto_save_images {
 					</tr>
 
 					<tr valign="top">
-						<th scope="row"><label><?php _e('Remote Publishing', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Save remote images via remote publishing from IFTTT or other way using XMLRPC.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<th scope="row"><label><?php _e('Remote Publishing', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Save remote images via remote publishing from IFTTT or other way using XMLRPC. Only supports publish post.", 'qqworld_auto_save_images'); ?>"></span></th>
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Remote Publishing', 'qqworld_auto_save_images'); ?></span></legend>
 								<label for="qqworld_auto_save_images_remote_publishing">
-									<input name="qqworld_auto_save_images_remote_publishing" type="checkbox" id="qqworld_auto_save_images_remote_publishing" value="yes" <?php checked('yes', $this->remote_publishing); ?> /> <?php _e('Automatic', 'qqworld_auto_save_images'); ?>
+									<input name="qqworld_auto_save_images_remote_publishing" type="checkbox" id="qqworld_auto_save_images_remote_publishing" value="yes" <?php checked('yes', $this->remote_publishing); ?> />
 								</label>
 						</fieldset></td>
 					</tr>
@@ -468,17 +459,7 @@ class QQWorld_auto_save_images {
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Set Featured Image', 'qqworld_auto_save_images'); ?></span></legend>
 								<label for="qqworld_auto_save_images_set_featured_image_yes">
-									<input name="qqworld_auto_save_images_set_featured_image" type="checkbox" id="qqworld_auto_save_images_set_featured_image_yes" value="yes" <?php checked('yes', $this->featured_image); ?> /> <?php _e('Automatic', 'qqworld_auto_save_images'); ?>
-								</label>
-						</fieldset></td>
-					</tr>
-
-					<tr valign="top">
-						<th scope="row"><label><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("If you checked this, when the remote image filename have Chinese or other East Asian characters. system will automatically change image filename. I suggest enable it.", 'qqworld_auto_save_images'); ?>"></span></th>
-						<td><fieldset>
-							<legend class="screen-reader-text"><span><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></span></legend>
-								<label for="qqworld_auto_save_images_auto_change_name">
-									<input name="qqworld_auto_save_images_auto_change_name" type="checkbox" id="qqworld_auto_save_images_auto_change_name" value="yes" <?php checked('yes', $this->change_image_name); ?> /> <?php _e('Automatic', 'qqworld_auto_save_images'); ?>
+									<input name="qqworld_auto_save_images_set_featured_image" type="checkbox" id="qqworld_auto_save_images_set_featured_image_yes" value="yes" <?php checked('yes', $this->featured_image); ?> />
 								</label>
 						</fieldset></td>
 					</tr>
@@ -486,19 +467,31 @@ class QQWorld_auto_save_images {
 			</table>
 			<h2><?php _e('Filter Options', 'qqworld_auto_save_images'); ?></h2>
 			<table class="form-table">
-				<tr valign="top">
-					<th scope="row"><label><?php _e('Minimum Picture Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Ignore smaller than this size picture.", 'qqworld_auto_save_images'); ?>"></span></th>
-					<td><fieldset>
-						<legend class="screen-reader-text"><span><?php _e('Minimum Picture Size', 'qqworld_auto_save_images'); ?></span></legend>
-							<label for="qqworld_auto_save_images_minimum_picture_size_width">
-								<?php _e('Width:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_minimum_picture_size[width]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_width" value="<?php echo $this->minimum_picture_size['width']; ?>" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
-							</label><br />
-							<label for="qqworld_auto_save_images_minimum_picture_size_height">
-								<?php _e('Height:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_minimum_picture_size[height]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_height" value="<?php echo $this->minimum_picture_size['height']; ?>" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
-							</label>
-					</fieldset></td>
-				</tr>
 				<tbody>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Minimum Picture Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Ignore smaller than this size picture.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Minimum Picture Size', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld_auto_save_images_minimum_picture_size_width">
+									<?php _e('Width:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_minimum_picture_size[width]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_width" value="<?php echo $this->minimum_picture_size['width']; ?>" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+								</label><br />
+								<label for="qqworld_auto_save_images_minimum_picture_size_height">
+									<?php _e('Height:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_minimum_picture_size[height]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_height" value="<?php echo $this->minimum_picture_size['height']; ?>" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Maximum Picture Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Automatic reduction is greater than the size of the picture.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Maximum Picture Size', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld_auto_save_images_maximum_picture_size_width">
+									<?php _e('Width:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_maximum_picture_size[width]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_width" value="<?php echo $this->maximum_picture_size['width']; ?>" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+								</label><br />
+								<label for="qqworld_auto_save_images_maximum_picture_size_height">
+									<?php _e('Height:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_maximum_picture_size[height]" class="small-text" type="text" id="qqworld_auto_save_images_maximum_picture_size_height" value="<?php echo $this->maximum_picture_size['height']; ?>" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+								</label>
+						</fieldset></td>
+					</tr>
 					<tr valign="top">
 						<th scope="row"><label><?php _e('Exclude Domain/Keyword', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Images will not be saved, if that url contains Exclude-Domain/Keyword.", 'qqworld_auto_save_images'); ?>"></span></th>
 						<td><fieldset>
@@ -520,6 +513,15 @@ class QQWorld_auto_save_images {
 			<h2><?php _e('Format Options', 'qqworld_auto_save_images'); ?></h2>
 			<table class="form-table">
 				<tbody>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("If you checked this, when the remote image filename have Chinese or other East Asian characters. system will automatically change image filename. I suggest enable it.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld_auto_save_images_auto_change_name">
+									<input name="qqworld_auto_save_images_auto_change_name" type="checkbox" id="qqworld_auto_save_images_auto_change_name" value="yes" <?php checked('yes', $this->change_image_name); ?> />
+								</label>
+						</fieldset></td>
+					</tr>
 					<tr valign="top">
 						<th scope="row"><label><?php _e('Keep Outside Links', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Keep the outside links of remote images if exist.", 'qqworld_auto_save_images'); ?>"></span></th>
 						<td><fieldset>
@@ -817,6 +819,7 @@ class QQWorld_auto_save_images {
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_remote_publishing');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_set_featured_image');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_auto_change_name');
+		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_maximum_picture_size');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_minimum_picture_size');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-exclude-domain');
 		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-format');
@@ -1061,6 +1064,43 @@ class QQWorld_auto_save_images {
 		return $filename[count($filename)-1];
 	}
 
+	public function automatic_reduction($file) {
+		$filetype = $this->getFileType($file);
+		list($width, $height, $type, $attr) = getimagesizefromstring($file);
+		if ($width > $this->maximum_picture_size['width'] || $height > $this->maximum_picture_size['height']) {
+			if ($width > $height) {
+				$new_width = $this->maximum_picture_size['width'];
+				$new_height = $height*$this->maximum_picture_size['width']/$width;
+			} else {
+				$new_width = $width*$this->maximum_picture_size['height']/$height;
+				$new_height = $this->maximum_picture_size['height'];
+			}
+			$image_p = imagecreatetruecolor($new_width, $new_height);
+			$image = imagecreatefromstring($file);
+			imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+			ob_start();
+			switch ($filetype) {
+				case 'jpg':
+				case 'jpeg':
+					imageJpeg($image_p, null, 100);
+					break;
+				case 'png':
+					imagePng($image_p, null);
+					break;
+				case 'gif':
+					imageGif($image_p, null);
+					break;
+			}
+			$file = ob_get_contents();
+			ob_end_clean();
+			imagedestroy($image_p);
+			imagedestroy($image);
+			$width = $new_width;
+			$height = $new_height;
+		}
+		return array($file, $width, $height);
+	}
+
 	//save exterior images
 	function save_images($image_url, $post_id){
 		set_time_limit(0);
@@ -1077,6 +1117,10 @@ class QQWorld_auto_save_images {
 			} else {
 				$img_name = $this->change_images_filename($match[1], $match[2]);
 			}
+
+			// Automatic reduction pictures size
+			list($file, $width, $height) = $this->automatic_reduction($file);
+
 			$res=wp_upload_bits($img_name,'',$file);
 			$attachment_id = $this->insert_attachment($res['file'], $post_id);
 			$res['id'] = $attachment_id;

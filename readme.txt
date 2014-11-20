@@ -86,11 +86,17 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 == Changelog ==
 
+= 1.7.10 =
+New feature:<br />
+Automatic reduction is greater than the size of the picture. default: 1280x1280(px)<br />
+新特性：<br />
+自动缩小大于所设置尺寸的图像。默认：1280x1280(像素)
+
 = 1.7.9 =
 New feature:<br />
 Allowed to Ignore small size picture, such as some icons. default: 32x32(px)<br />
-新特性<br />
-允许忽略小尺寸图像，比如一些小图标。默认32x32(像素)
+新特性：<br />
+允许忽略小尺寸图像，比如一些小图标。默认：32x32(像素)
 
 = 1.7.8 =
 <ul>
@@ -111,7 +117,7 @@ Allowed to Ignore small size picture, such as some icons. default: 32x32(px)<br 
 = 1.7.7 =
 New features:<br />
 Allowed to keeps outside links of remote images.<br />
-新特性<br />
+新特性：<br />
 允许保留远程图片的外部链接。
 
 = 1.7.6 =
@@ -121,7 +127,7 @@ Fixed a bug of regular expression that cleaned many contents in Visual-mode of E
 = 1.7.5 =
 New features:<br />
 Added format options. The <img> code formated just like insert to post.<br />
-新特性<br />
+新特性：<br />
 增加格式化选项。格式化的<img>代码就像插入到文章的。
 
 = 1.7.4 =
