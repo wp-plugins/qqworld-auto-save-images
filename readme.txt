@@ -253,8 +253,8 @@ The debug system can pass errors let process go to the end<br />
 增加调试系统可以跳过错误让进程运行到底
 
 = 1.5.7.1 =
-Debug system added<br />
-增加调试系统
+New feature: Debug system added<br />
+新特性：增加调试系统
 
 = 1.5.7 =
 <ul>
