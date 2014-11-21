@@ -392,7 +392,7 @@ Because PHP version is lower than 5.4. please upgrade your PHP.
 
 = Why the Watermark featrue does not works? =
 
-Because of it's only a preview. Full functionality is being developed in the Professional Edition. and i don't know what time Pro version released. who cares..
+Because of it's only a preview. Full functionality is being developed in the Professional Edition. and i don't know what time Professional Edition released. who cares..
 
 = 为什么“最大图像尺寸”设置输入框是灰色的？ =
 
