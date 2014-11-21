@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QQworld Auto Save Images\n"
 "Report-Msgid-Bugs-To: http://www.qqworld.org\n"
-"POT-Creation-Date: 2014-11-20 22:22+0800\n"
-"PO-Revision-Date: 2014-11-20 22:23+0800\n"
+"POT-Creation-Date: 2014-11-21 14:06+0800\n"
+"PO-Revision-Date: 2014-11-21 14:06+0800\n"
 "Last-Translator: Michael Wang <admin@qqworld.org>\n"
 "Language-Team: QQWorld <admin@qqworld.org>\n"
 "Language: zh_CN\n"
@@ -394,6 +394,10 @@ msgstr "最大图像尺寸"
 #: qqworld-auto-save-images.php:484
 msgid "Automatic reduction is greater than the size of the picture."
 msgstr "自动缩小大于改尺寸的图像。"
+
+#: qqworld-auto-save-images.php:484
+msgid "Your server PHP version lower than 5.4, so this feature not works."
+msgstr "服务器PHP的版本低于5.4，所以此功能无法使用。"
 
 #: qqworld-auto-save-images.php:496 qqworld-auto-save-images.php:498
 msgid "Exclude Domain/Keyword"

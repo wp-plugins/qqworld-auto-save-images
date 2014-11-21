@@ -1,8 +1,8 @@
 === QQWorld Auto Save Images ===
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
-Tested up to: 4.0
-Stable tag: 1.7.10
+Tested up to: 4.0.1
+Stable tag: 1.7.10.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,6 @@ And more powerful functional is waiting for you. What exactly is it? Hehe...
 
 <h4>Notice:</h4>
 <ul>
-	<li>Ever since 1.7.10 released, the PHP minimum version requirement of server is 5.4. so if your php version is lower, please use <a href="https://wordpress.org/plugins/qqworld-auto-save-images/developers/" target="_blank">1.7.9 or earlier</a>.</li>
 	<li>This plugin has a little problem that is all the image url must be full url, it means must included "http(s)://", for example:
 		<ul>
 			<li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
@@ -45,7 +44,6 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 <h4>注意：</h4>
 <ul>
-	<li>自从1.7.10发布以来，服务器的PHP版本最低要求是5.4，所以如果你的PHP版本较低，请使用<a href="https://wordpress.org/plugins/qqworld-auto-save-images/developers/" target="_blank">1.7.9或更早版本</a>。</li>
 	<li>该插件有个小问题，所有的远程图像的URL必须是完整的，就是说必须得包含"http(s)://"，比如：
 		<ul>
 			<li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
@@ -69,8 +67,6 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 == Installation ==
 
 <ol>
-<li>Minimum requirement: PHP 5.4.<br />
-最低要求：PHP 5.4。</li>
 <li>Make sure the server configuration <strong>allow_url_fopen=1</strong> and remove ";" before <strong>extension=php_gd2.dll</strong> in php.ini.<br />
 请确保php.ini的设置中 <strong>allow_url_fopen=1</strong>，并且去掉<strong>extension=php_gd2.dll</strong>之前的“;”</li>
 <li>Warning: If your website domain has been changed, you must modify all image link to new domain from database, or else all images which not modified in post content will be save again.<br />
@@ -87,6 +83,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.10.1 =
+New feature:<br />
+If PHP version lower than 5.4, automatic disabled the Maximum-Picture-Size feature.<br />
+新特性：<br />
+如果PHP版本低于5.4，自动禁用设置最大图像的功能。
 
 = 1.7.10 =
 New feature:<br />
