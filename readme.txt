@@ -16,6 +16,7 @@ And more powerful functional is waiting for you. What exactly is it? Hehe...
 
 <h4>Notice:</h4>
 <ul>
+	<li>Ever since 1.7.10 released, the PHP minimum version requirement of server is 5.4. so if your php version is lower, please use 1.7.9 or earlier.</li>
 	<li>This plugin has a little problem that is all the image url must be full url, it means must included "http(s)://", for example:
 		<ul>
 			<li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
@@ -44,6 +45,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 <h4>注意：</h4>
 <ul>
+	<li>自从1.7.10发布以来，服务器的PHP版本最低要求是5.4，所以如果你的PHP版本较低，请使用1.7.9或更早版本。</li>
 	<li>该插件有个小问题，所有的远程图像的URL必须是完整的，就是说必须得包含"http(s)://"，比如：
 		<ul>
 			<li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
