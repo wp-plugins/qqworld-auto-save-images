@@ -1,4 +1,6 @@
 === QQWorld Auto Save Images ===
+Contributors: kbzwxq
+Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.0.1
@@ -370,6 +372,10 @@ The feature is can automatically change image filename.<br />
 
 == Upgrade Notice ==
 
+= 1.7.10 =
+This version used a new GD2 function, you need at least PHP 5.4 to run it.
+该版本使用了一个新GD2函数，你至少需要PHP5.4来运行。
+
 = 1.1 =
 if you want to upload images with chinese file name and server does not support chinese filename, please using 1.0.<br />
 如果需要上传中文名图片，服务器又不支持中文文件名，请使用1.0
@@ -377,3 +383,21 @@ if you want to upload images with chinese file name and server does not support 
 = 1.0 =
 The feature is can automatically change image filename.<br />
 特色是可以自动更改图片的文件名
+
+== Frequently Asked Questions ==
+
+= Why the Maximum-Picture-Size fields are gray? =
+
+Because PHP version is lower than 5.4. please upgrade your PHP.
+
+= Why the Watermark featrue does not works? =
+
+Because of it's only a preview. Full functionality is being developed in the Professional Edition. and i don't know what time Pro version released. who cares..
+
+= 为什么“最大图像尺寸”设置输入框是灰色的？ =
+
+因为PHP版本低于5.4，请升级PHP。
+
+= 为什么水印功能不能用？ =
+
+因为只是预览，完整的功能将在开发中的专业版中。我也不知道专业什么时候发布，管它呢……
