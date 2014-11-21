@@ -67,7 +67,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 == Installation ==
 
 <ol>
-<li>Make sure the server configuration <strong>allow_url_fopen=1</strong> in php.ini.<br />
+<li>Make sure the server configuration <strong>allow_url_fopen=1</strong> and remove ";" before <strong>extension=php_gd2.dll</strong> in php.ini.<br />
 请确保php.ini的设置中 <strong>allow_url_fopen=1</strong></li>
 
 <li>Warning: If your website domain has been changed, you must modify all image link to new domain from database, or else all images which not modified in post content will be save again.<br />
