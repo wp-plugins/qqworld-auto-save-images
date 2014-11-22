@@ -1,5 +1,5 @@
 === QQWorld Auto Save Images ===
-Contributors: kbzwxq
+Contributors:
 Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
