@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.0.1
-Stable tag: 1.7.10.1
+Stable tag: 1.7.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.11 =
+New feature:<br />
+Display addistional content after the each remote images.<br />
+新特性：<br />
+显示额外的内容到每一个自动保存的远程图片后面。
 
 = 1.7.10.1 =
 New feature:<br />

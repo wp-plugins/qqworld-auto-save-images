@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.10.1
+Version: 1.7.11
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -22,6 +22,7 @@ class QQWorld_auto_save_images {
 	var $maximum_picture_size;
 	var $exclude_domain;
 	var $format;
+	var $additional_content;
 
 	var $watermark_enabled;
 	var $ignore_animated_gif;
@@ -41,6 +42,7 @@ class QQWorld_auto_save_images {
 		$this->exclude_domain = get_option('qqworld-auto-save-images-exclude-domain');
 		$this->format = get_option('qqworld-auto-save-images-format', array('size'=>'full', 'link-to'=>'none'));
 		$this->keep_outside_links = isset($this->format['keep-outside-links']) ? $this->format['keep-outside-links'] : 'no';
+		$this->additional_content = isset($this->format['additional-content']) ? $this->format['additional-content'] : array('before'=>'', 'after'=>'');
 
 		$this->watermark_enabled = get_option('qqworld-auto-save-images-watermark-enabled', 'no');
 		$this->ignore_animated_gif = get_option('qqworld-auto-save-images-watermark-ignore-animated-gif', 'yes');
@@ -481,14 +483,14 @@ class QQWorld_auto_save_images {
 						</fieldset></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label><?php _e('Maximum Picture Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Automatic reduction is greater than the size of the picture.", 'qqworld_auto_save_images'); ?>"></span><?php if ( phpversion() < 5.4 ) : ?> <span class="icon help" title="<?php _e("Your server PHP version lower than 5.4, so this feature not works.", 'qqworld_auto_save_images'); ?>"></span><?php endif; ?></th>
+						<th scope="row"><label><?php _e('Maximum Picture Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Automatic reduction is greater than the size of the picture.", 'qqworld_auto_save_images'); ?>"></span><?php if ( !function_exists('getimagesizefromstring') ) : ?> <span class="icon help" title="<?php _e("Your server PHP version lower than 5.4, so this feature not works.", 'qqworld_auto_save_images'); ?>"></span><?php endif; ?></th>
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Maximum Picture Size', 'qqworld_auto_save_images'); ?></span></legend>
 								<label for="qqworld_auto_save_images_maximum_picture_size_width">
-									<?php _e('Width:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_maximum_picture_size[width]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_width" value="<?php echo $this->maximum_picture_size['width']; ?>"<?php if ( phpversion() < 5.4 ) echo ' readonly'; ?> /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+									<?php _e('Width:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_maximum_picture_size[width]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_width" value="<?php echo $this->maximum_picture_size['width']; ?>"<?php if ( !function_exists('getimagesizefromstring') ) echo ' readonly'; ?> /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
 								</label><br />
 								<label for="qqworld_auto_save_images_maximum_picture_size_height">
-									<?php _e('Height:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_maximum_picture_size[height]" class="small-text" type="text" id="qqworld_auto_save_images_maximum_picture_size_height" value="<?php echo $this->maximum_picture_size['height']; ?>"<?php if ( phpversion() < 5.4 ) echo ' readonly'; ?> /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+									<?php _e('Height:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_maximum_picture_size[height]" class="small-text" type="text" id="qqworld_auto_save_images_maximum_picture_size_height" value="<?php echo $this->maximum_picture_size['height']; ?>"<?php if ( !function_exists('getimagesizefromstring') ) echo ' readonly'; ?> /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
 								</label>
 						</fieldset></td>
 					</tr>
@@ -565,6 +567,16 @@ class QQWorld_auto_save_images {
 									foreach ($linkTo as $value => $title) echo '<option value="'.$value.'"'.selected($value, $this->format['link-to'], false).'>'.$title.'</option>';
 									?>
 									</select>
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Additional Content', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("This content will be displayed after the each remote images code. you can use [Attachment ID] indicate current attachment ID.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Additional Content', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld_auto_save_images_additional_content_after">
+									<textarea name="qqworld-auto-save-images-format[additional-content][after]" rows="3" cols="80" id="qqworld_auto_save_images_additional_content_after"><?php echo $this->additional_content['after']; ?></textarea>
+									<p class="discription"><?php _e("For example: [Gbuy id='[Attachment ID]']", 'qqworld_auto_save_images'); ?></p>
 								</label>
 						</fieldset></td>
 					</tr>
@@ -814,23 +826,31 @@ class QQWorld_auto_save_images {
 	}
 
 	function register_settings() {
-		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_mode');
-		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_when');
-		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_remote_publishing');
-		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_set_featured_image');
-		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_auto_change_name');
-		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_maximum_picture_size');
-		register_setting('qqworld_auto_save_images_settings', 'qqworld_auto_save_images_minimum_picture_size');
-		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-exclude-domain');
-		register_setting('qqworld_auto_save_images_settings', 'qqworld-auto-save-images-format');
-
-		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-enabled');
-		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-ignore-animated-gif');
-		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-filter-size');
-		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-align-to');
-		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-offset');
-		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-opacity');
-		register_setting('qqworld_auto_save_images_watermark', 'qqworld-auto-save-images-watermark-image');
+		$settings_fields = array(
+			'settings' => array(
+				'qqworld_auto_save_images_mode',
+				'qqworld_auto_save_images_when',
+				'qqworld_auto_save_images_remote_publishing',
+				'qqworld_auto_save_images_set_featured_image',
+				'qqworld_auto_save_images_auto_change_name',
+				'qqworld_auto_save_images_maximum_picture_size',
+				'qqworld_auto_save_images_minimum_picture_size',
+				'qqworld-auto-save-images-exclude-domain',
+				'qqworld-auto-save-images-format'
+			),
+			'watermark' => array(
+				'qqworld-auto-save-images-watermark-enabled',
+				'qqworld-auto-save-images-watermark-ignore-animated-gif',
+				'qqworld-auto-save-images-watermark-filter-size',
+				'qqworld-auto-save-images-watermark-align-to',
+				'qqworld-auto-save-images-watermark-offset',
+				'qqworld-auto-save-images-watermark-opacity',
+				'qqworld-auto-save-images-watermark-image'
+			)
+		);
+		foreach ( $settings_fields as $field => $settings )
+			foreach ( $settings as $setting )
+			 register_setting("qqworld_auto_save_images_{$field}", $setting);
 	}
 
 	/**
@@ -1024,6 +1044,7 @@ class QQWorld_auto_save_images {
 				break;
 		}
 		if ($no_match) $replace = $res['url'];
+		$replace .= str_replace( '[Attachment ID]', $res['id'], $this->additional_content['after'] );
 		$content = preg_replace($pattern, $replace, $content);
 		return $content;
 	}
@@ -1119,7 +1140,7 @@ class QQWorld_auto_save_images {
 			}
 
 			// Automatic reduction pictures size
-			if ( phpversion() >= 5.4 ) list($file, $width, $height) = $this->automatic_reduction($file);
+			if ( function_exists('getimagesizefromstring') ) list($file, $width, $height) = $this->automatic_reduction($file);
 
 			$res=wp_upload_bits($img_name,'',$file);
 			$attachment_id = $this->insert_attachment($res['file'], $post_id);
