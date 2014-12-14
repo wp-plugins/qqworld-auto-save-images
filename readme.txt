@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.0.1
-Stable tag: 1.7.11
+Stable tag: 1.7.11.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.11.1 =
+Bug fixed:<br />
+Ignore PHP warning messages has missing images when scanning posts.<br />
+修复Bug：<br />
+扫描文章时忽略远程图片不存在的警告信息。
 
 = 1.7.11 =
 New feature:<br />
