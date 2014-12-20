@@ -468,10 +468,6 @@ QQWorld_auto_save_images.scan_posts = function() {
 							data = $(data);
 							$('#categories_block').html(data);
 							data.hide().fadeIn('normal');
-							$('#categories_block > div').each(function() {
-								var posttype = $(this).attr('post-type');
-								$(this).find('input').attr('name', 'terms['+posttype+'][]');
-							});
 						} else $('#categories_block').html(data);
 					},
 					error: _this.action.catch_errors

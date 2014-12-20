@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.11.2
+Version: 1.7.11.3
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -92,7 +92,8 @@ class QQWorld_auto_save_images {
 				$taxonomy = get_taxonomy($tax);
 				echo '<div id="'.$tax.'div" post-type="'.$tax.'" class="postbox"><div class="hndle">'.$taxonomy->labels->name.'</div><div class="inside"><div id="'.$tax.'-all" class="tabs-panel"><ul>';
 				wp_terms_checklist('', array(
-					'taxonomy' => $tax
+					'taxonomy' => $tax,
+					'walker' => new QQWorld_Save_Remote_Images_Walker_Category_Checklist
 				));
 				echo '</ul></div></div></div>';
 			} else _e('No taxonomies found.', 'qqworld_auto_save_images');
@@ -1190,3 +1191,44 @@ class QQWorld_auto_save_images {
 	}
 }
 new QQWorld_auto_save_images;
+
+class QQWorld_Save_Remote_Images_Walker_Category_Checklist extends Walker {
+	public $tree_type = 'category';
+	public $db_fields = array ('parent' => 'parent', 'id' => 'term_id'); //TODO: decouple this
+
+	public function start_lvl( &$output, $depth = 0, $args = array() ) {
+		$indent = str_repeat("\t", $depth);
+		$output .= "$indent<ul class='children'>\n";
+	}
+	public function end_lvl( &$output, $depth = 0, $args = array() ) {
+		$indent = str_repeat("\t", $depth);
+		$output .= "$indent</ul>\n";
+	}
+	public function start_el( &$output, $category, $depth = 0, $args = array(), $id = 0 ) {
+		if ( empty( $args['taxonomy'] ) ) {
+			$taxonomy = 'category';
+		} else {
+			$taxonomy = $args['taxonomy'];
+		}
+
+		if ( $taxonomy == 'category' ) {
+			$name = 'post_category';
+		} else {
+			$name = 'tax_input[' . $taxonomy . ']';
+		}
+		$args['popular_cats'] = empty( $args['popular_cats'] ) ? array() : $args['popular_cats'];
+		$class = in_array( $category->term_id, $args['popular_cats'] ) ? ' class="popular-category"' : '';
+
+		$args['selected_cats'] = empty( $args['selected_cats'] ) ? array() : $args['selected_cats'];
+
+		/** This filter is documented in wp-includes/category-template.php */
+		$output .= "\n<li id='{$taxonomy}-{$category->term_id}'$class>" .
+			'<label class="selectit"><input value="' . $category->term_id . '" type="checkbox" name="terms['.$taxonomy.'][]" id="in-'.$taxonomy.'-' . $category->term_id . '"' .
+			checked( in_array( $category->term_id, $args['selected_cats'] ), true, false ) .
+			disabled( empty( $args['disabled'] ), false, false ) . ' /> ' .
+			esc_html( apply_filters( 'the_category', $category->name ) ) . '</label>';
+	}
+	public function end_el( &$output, $category, $depth = 0, $args = array() ) {
+		$output .= "</li>\n";
+	}
+}
