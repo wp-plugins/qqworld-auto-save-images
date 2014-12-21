@@ -484,7 +484,7 @@ class QQWorld_auto_save_images {
 						</fieldset></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label><?php _e('Maximum Picture Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Automatic reduction is greater than the size of the picture. if you want image width less than 800px with any size height, please set width 800 and left height blank.", 'qqworld_auto_save_images'); ?>"></span><?php if ( !function_exists('getimagesizefromstring') ) : ?> <span class="icon help" title="<?php _e("Your server PHP version lower than 5.4, so this feature not works.", 'qqworld_auto_save_images'); ?>"></span><?php endif; ?></th>
+						<th scope="row"><label><?php _e('Maximum Picture Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Automatic reduction is greater than the size of the picture. if you want image width less than 800px with any size height, please set width 800 and leave height blank.", 'qqworld_auto_save_images'); ?>"></span><?php if ( !function_exists('getimagesizefromstring') ) : ?> <span class="icon help" title="<?php _e("Your server PHP version lower than 5.4, so this feature not works.", 'qqworld_auto_save_images'); ?>"></span><?php endif; ?></th>
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Maximum Picture Size', 'qqworld_auto_save_images'); ?></span></legend>
 								<label for="qqworld_auto_save_images_maximum_picture_size_width">
