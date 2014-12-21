@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.11.3
+Version: 1.7.11.4
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -479,16 +479,16 @@ class QQWorld_auto_save_images {
 									<?php _e('Width:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_minimum_picture_size[width]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_width" value="<?php echo $this->minimum_picture_size['width']; ?>" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
 								</label><br />
 								<label for="qqworld_auto_save_images_minimum_picture_size_height">
-									<?php _e('Height:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_minimum_picture_size[height]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_height" value="<?php echo $this->minimum_picture_size['height']; ?>" /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+									<?php _e('Height:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_minimum_picture_size[height]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_height" value="<?php echo $this->minimum_picture_size['height']; ?>" readonly /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
 								</label>
 						</fieldset></td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label><?php _e('Maximum Picture Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Automatic reduction is greater than the size of the picture.", 'qqworld_auto_save_images'); ?>"></span><?php if ( !function_exists('getimagesizefromstring') ) : ?> <span class="icon help" title="<?php _e("Your server PHP version lower than 5.4, so this feature not works.", 'qqworld_auto_save_images'); ?>"></span><?php endif; ?></th>
+						<th scope="row"><label><?php _e('Maximum Picture Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Automatic reduction is greater than the size of the picture. if you want image width less than 800px with any size height, please set width 800 and left height blank.", 'qqworld_auto_save_images'); ?>"></span><?php if ( !function_exists('getimagesizefromstring') ) : ?> <span class="icon help" title="<?php _e("Your server PHP version lower than 5.4, so this feature not works.", 'qqworld_auto_save_images'); ?>"></span><?php endif; ?></th>
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Maximum Picture Size', 'qqworld_auto_save_images'); ?></span></legend>
 								<label for="qqworld_auto_save_images_maximum_picture_size_width">
-									<?php _e('Width:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_maximum_picture_size[width]" class="small-text" type="text" id="qqworld_auto_save_images_minimum_picture_size_width" value="<?php echo $this->maximum_picture_size['width']; ?>"<?php if ( !function_exists('getimagesizefromstring') ) echo ' readonly'; ?> /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
+									<?php _e('Width:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_maximum_picture_size[width]" class="small-text" type="text" id="qqworld_auto_save_images_maximum_picture_size_width" value="<?php echo $this->maximum_picture_size['width']; ?>"<?php if ( !function_exists('getimagesizefromstring') ) echo ' readonly'; ?> /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
 								</label><br />
 								<label for="qqworld_auto_save_images_maximum_picture_size_height">
 									<?php _e('Height:', 'qqworld_auto_save_images'); ?> <input name="qqworld_auto_save_images_maximum_picture_size[height]" class="small-text" type="text" id="qqworld_auto_save_images_maximum_picture_size_height" value="<?php echo $this->maximum_picture_size['height']; ?>"<?php if ( !function_exists('getimagesizefromstring') ) echo ' readonly'; ?> /> <?php _e('(px)', 'qqworld_auto_save_images'); ?>
@@ -1092,11 +1092,13 @@ class QQWorld_auto_save_images {
 		list($width, $height, $type, $attr) = getimagesizefromstring($file);
 		if ($width > $this->maximum_picture_size['width'] || $height > $this->maximum_picture_size['height']) {
 			if ($width > $height) {
-				$new_width = $this->maximum_picture_size['width'];
-				$new_height = $height*$this->maximum_picture_size['width']/$width;
+				$maximum_picture_size_width = empty($this->maximum_picture_size['width']) ? $width*$this->maximum_picture_size['height']/$height : $this->maximum_picture_size['width'];
+				$new_width = $maximum_picture_size_width;
+				$new_height = $height*$maximum_picture_size_width/$width;
 			} else {
-				$new_width = $width*$this->maximum_picture_size['height']/$height;
-				$new_height = $this->maximum_picture_size['height'];
+				$maximum_picture_size_height = empty($this->maximum_picture_size['height']) ? $height*$this->maximum_picture_size['width']/$width : $this->maximum_picture_size['height'];
+				$new_width = $width*$maximum_picture_size_height/$height;
+				$new_height = $maximum_picture_size_height;
 			}
 			$image_p = imagecreatetruecolor($new_width, $new_height);
 			$image = imagecreatefromstring($file);

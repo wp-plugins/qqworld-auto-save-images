@@ -566,6 +566,9 @@ QQWorld_auto_save_images.scan_posts = function() {
 		$(document).on('click', '#Preview Watermark', function() {
 			tb_show($(this).attr('title'), $(this).attr('href'));
 		});
+		$(document).on('change', '#qqworld_auto_save_images_minimum_picture_size_width', function() {
+			$('#qqworld_auto_save_images_minimum_picture_size_height').val($(this).val());
+		});
 	};
 
 	this.create.watermark_init = function() {

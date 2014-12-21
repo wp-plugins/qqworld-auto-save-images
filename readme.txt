@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.7.11.3
+Stable tag: 1.7.11.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.11.4 =
+Bug fixed:<br />
+About image maximum size filter settings, support any size of one of width and height.<br />
+修复Bug：<br />
+在图片尺寸过滤设置中，支持高度和宽度其中之一为任意尺寸。
 
 = 1.7.11.3 =
 Bug fixed:<br />
