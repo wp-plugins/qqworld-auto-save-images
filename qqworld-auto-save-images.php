@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.11.4
+Version: 1.7.12
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -36,7 +36,10 @@ class QQWorld_auto_save_images {
 		$this->when = get_option('qqworld_auto_save_images_when', 'publish');
 		$this->remote_publishing = get_option('qqworld_auto_save_images_remote_publishing', 'yes');
 		$this->featured_image = get_option('qqworld_auto_save_images_set_featured_image', 'yes');
-		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'yes');
+		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'east-asian');
+		// temporary start
+		$this->change_image_name = $this->change_image_name == 'yes' ? 'east-asian' : $this->change_image_name;
+		// temporary end
 		$this->minimum_picture_size = get_option('qqworld_auto_save_images_minimum_picture_size', array('width'=>32, 'height'=>32));
 		$this->maximum_picture_size = get_option('qqworld_auto_save_images_maximum_picture_size', array('width'=>1280, 'height'=>1280));
 		$this->exclude_domain = get_option('qqworld-auto-save-images-exclude-domain');
@@ -119,7 +122,7 @@ class QQWorld_auto_save_images {
 
 	public function add_to_post_php() {
 		global $post;
-		if ($GLOBALS['hook_suffix'] == 'post.php') {
+		if ( $this->mode == 'manual' && ($GLOBALS['hook_suffix'] == 'post.php' || $GLOBALS['hook_suffix'] == 'post-new.php') ) {
 			wp_register_script('noty', QQWORLD_AUTO_SAVE_IMAGES_URL . 'js/jquery.noty.packaged.min.js', array('jquery') );
 			wp_enqueue_script('noty');
 			wp_register_script('qqworld-auto-save-images-script-post', QQWORLD_AUTO_SAVE_IMAGES_URL . 'js/manual.js', array('jquery') );
@@ -517,12 +520,15 @@ class QQWorld_auto_save_images {
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
-						<th scope="row"><label><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("If you checked this, when the remote image filename have Chinese or other East Asian characters. system will automatically change image filename. I suggest enable it.", 'qqworld_auto_save_images'); ?>"></span></th>
-						<td><fieldset>
+						<th scope="row"><label for="auto_change_name"><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Recommeded choose option 2, if you choose option 3, make sure post name | slug exclude Chinese or other East Asian characters.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td>
+							<fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></span></legend>
-								<label for="qqworld_auto_save_images_auto_change_name">
-									<input name="qqworld_auto_save_images_auto_change_name" type="checkbox" id="qqworld_auto_save_images_auto_change_name" value="yes" <?php checked('yes', $this->change_image_name); ?> />
-								</label>
+								<select id="auto_change_name" name="qqworld_auto_save_images_auto_change_name">
+									<option value="none" <?php selected('none', $this->change_image_name); ?>>1. <?php _e('No'); ?></option>
+									<option value="east-asian" <?php selected('east-asian', $this->change_image_name); ?>>2. <?php _e('Only change remote images filename that has Chinese or other East Asian characters', 'qqworld_auto_save_images'); ?></option>
+									<option value="all" <?php selected('all', $this->change_image_name); ?>>3. <?php _e('Change all remote images Filename and Alt as post name', 'qqworld_auto_save_images'); ?></option>
+								</select>
 						</fieldset></td>
 					</tr>
 					<tr valign="top">
@@ -630,19 +636,19 @@ class QQWorld_auto_save_images {
 						<td>
 							<table id="watermark-align-to">
 								<tr>
-									<td><input type="radio" value="lt" id="lt" name="qqworld-auto-save-images-watermark-align-to" <?php checked('lt', $this->align_to)?> /></td>
-									<td><input type="radio" value="ct" id="ct" name="qqworld-auto-save-images-watermark-align-to" <?php checked('ct', $this->align_to)?> /></td>
-									<td><input type="radio" value="rt" id="rt" name="qqworld-auto-save-images-watermark-align-to" <?php checked('rt', $this->align_to)?> /></td>
+									<td><label><input type="radio" value="lt" id="lt" name="qqworld-auto-save-images-watermark-align-to" <?php checked('lt', $this->align_to)?> /></label></td>
+									<td><label><input type="radio" value="ct" id="ct" name="qqworld-auto-save-images-watermark-align-to" <?php checked('ct', $this->align_to)?> /></label></td>
+									<td><label><input type="radio" value="rt" id="rt" name="qqworld-auto-save-images-watermark-align-to" <?php checked('rt', $this->align_to)?> /></label></td>
 								</tr>
 								<tr>
-									<td><input type="radio" value="lc" id="lc" name="qqworld-auto-save-images-watermark-align-to" <?php checked('lc', $this->align_to)?> /></td>
-									<td><input type="radio" value="cc" id="cc" name="qqworld-auto-save-images-watermark-align-to" <?php checked('cc', $this->align_to)?> /></td>
-									<td><input type="radio" value="rc" id="rc" name="qqworld-auto-save-images-watermark-align-to" <?php checked('rc', $this->align_to)?> /></td>
+									<td><label><input type="radio" value="lc" id="lc" name="qqworld-auto-save-images-watermark-align-to" <?php checked('lc', $this->align_to)?> /></label></td>
+									<td><label><input type="radio" value="cc" id="cc" name="qqworld-auto-save-images-watermark-align-to" <?php checked('cc', $this->align_to)?> /></label></td>
+									<td><label><input type="radio" value="rc" id="rc" name="qqworld-auto-save-images-watermark-align-to" <?php checked('rc', $this->align_to)?> /></label></td>
 								</tr>
 								<tr>
-									<td><input type="radio" value="lb" id="lb" name="qqworld-auto-save-images-watermark-align-to" <?php checked('lb', $this->align_to)?> /></td>
-									<td><input type="radio" value="cb" id="cb" name="qqworld-auto-save-images-watermark-align-to" <?php checked('cb', $this->align_to)?> /></td>
-									<td><input type="radio" value="rb" id="rb" name="qqworld-auto-save-images-watermark-align-to" <?php checked('rb', $this->align_to)?> /></td>
+									<td><label><input type="radio" value="lb" id="lb" name="qqworld-auto-save-images-watermark-align-to" <?php checked('lb', $this->align_to)?> /></label></td>
+									<td><label><input type="radio" value="cb" id="cb" name="qqworld-auto-save-images-watermark-align-to" <?php checked('cb', $this->align_to)?> /></label></td>
+									<td><label><input type="radio" value="rb" id="rb" name="qqworld-auto-save-images-watermark-align-to" <?php checked('rb', $this->align_to)?> /></label></td>
 								</tr>
 							</table>
 						</td>
@@ -1033,7 +1039,8 @@ class QQWorld_auto_save_images {
 			}
 		}
 		$alt = isset($args['alt']) ? ' alt="'.$args['alt'].'"' : '';
-		$img = '<img class="size-'.$size.' wp-image-'.$attachment_id.'" src="'.$src.'" width="'.$width.'" height="'.$height.'"'.$alt.' />';
+		$title = isset($args['title']) ? ' title="'.$args['title'].'"' : '';
+		$img = '<img class="size-'.$size.' wp-image-'.$attachment_id.'" src="'.$src.'" width="'.$width.'" height="'.$height.'"'.$alt.$title.' />';
 		$link_to = $this->keep_outside_links=='no' ? $this->format['link-to'] : 'none';
 		switch ($link_to) {
 			case 'none':
@@ -1052,8 +1059,12 @@ class QQWorld_auto_save_images {
 	}
 
 	public function set_img_metadata($img, $attachment_id) {
-		$pattern = '/<img\s[^>]*alt=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
-		$alt = preg_match($pattern, $img, $matches) ? $matches[1] : null;
+		if ($this->change_image_name != 'all') {
+			$pattern = '/<img\s[^>]*alt=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
+			$alt = preg_match($pattern, $img, $matches) ? $matches[1] : null;
+		} else {
+			$alt = $this->get_post_title() ? $this->get_post_title() : null;
+		}
 		if ($alt) update_post_meta($attachment_id, '_wp_attachment_image_alt', $alt);
 		$pattern = '/<img\s[^>]*title=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
 		$title = preg_match($pattern, $img, $matches)? $matches[1] : null;
@@ -1070,12 +1081,28 @@ class QQWorld_auto_save_images {
 		);
 	}
 
+	public function get_post_title() {
+		if ( isset($_POST['post_id'])) {
+			$post = get_post($_POST['post_id']);
+		} else {
+			global $post;
+		}
+		return isset($_POST['post_title']) ? $_POST['post_title'] : $post->post_title;
+	}
+
+	public function get_post_name() {
+		return sanitize_title_with_dashes( $this->get_post_title() );
+	}
+
 	public function change_images_filename($name, $extension) {
-		if ($this->change_image_name) {
+		if ($this->change_image_name == 'east-asian') {
 			preg_match( '/^[\x7f-\xff]+$/', $name, $match );
 			if ( !empty($match) ) {
-				return md5($name) . $extension;
+				$name = md5($name);
 			}
+		} elseif ($this->change_image_name == 'all') {
+			global $post;
+			$name = $this->get_post_name();
 		}
 		return $name . $extension;
 	}

@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.7.11.4
+Stable tag: 1.7.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.12 =
+Mew format feature:<br />
+Automatic change remote images filename and alt as post name. if you choose this, please make sure post name | slug exclude Chinese or other East Asian characters.<br />
+格式化新功能：<br />
+自动更改文件名为文章名(Post Name | Slug)，如果选择此项，请确保文章名(Post Name | Slug)不包含中文以及其他东亚字符。
 
 = 1.7.11.4 =
 Bug fixed:<br />

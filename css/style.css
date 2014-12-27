@@ -52,6 +52,10 @@
 #watermark-align-to td {
 	border: 1px solid #ddd;
 	background: #fff;
+	padding: 0;
+}
+#watermark-align-to td label{
+	display: block;
 	padding: 5px;
 }
 #watermark-align-to td:hover {
