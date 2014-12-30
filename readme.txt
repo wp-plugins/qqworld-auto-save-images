@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.7.12
+Stable tag: 1.7.12.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.12.1 =
+Bug fixed:<br />
+Now the feature automatic-change-remote-images-filename-and-alt-as-post-name supporte IFTTT.<br />
+修复Bug：<br />
+现在自动更改文件名为文章名(Post Name | Slug)已支持IFTTT.
 
 = 1.7.12 =
 Mew format feature:<br />
