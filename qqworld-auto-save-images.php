@@ -918,6 +918,8 @@ class QQWorld_auto_save_images {
 		if ( !current_user_can('edit_post', $post_id) ) 
 		return;
 
+		$this->current_post_id = $post_id;
+
 		$this->has_remote_image = 0;
 		$this->has_missing_image = 0;
 
