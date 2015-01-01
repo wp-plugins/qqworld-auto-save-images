@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.12.1
+Version: 1.7.12.2
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -521,7 +521,7 @@ class QQWorld_auto_save_images {
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
-						<th scope="row"><label for="auto_change_name"><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Recommeded choose option 2, if you choose option 3, make sure post name | slug exclude Chinese or other East Asian characters.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<th scope="row"><label for="auto_change_name"><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Recommeded choose option 2, if you choose option 3, make sure post name | slug exclude Chinese or other East Asian characters. Notices: If your host OS is linux, you can choose option 1 and would not cause coding mess up, because of linux is using UTF8 encoding, as same as Wordpress.", 'qqworld_auto_save_images'); ?>"></span></th>
 						<td>
 							<fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></span></legend>
@@ -1103,7 +1103,7 @@ class QQWorld_auto_save_images {
 			}
 		} elseif ($this->change_image_name == 'all') {
 			global $post;
-			$name = $this->get_post_name();
+			$name = urldecode($this->get_post_name());
 		}
 		return $name . $extension;
 	}
@@ -1175,6 +1175,7 @@ class QQWorld_auto_save_images {
 			if ( function_exists('getimagesizefromstring') ) list($file, $width, $height) = $this->automatic_reduction($file);
 
 			$res=wp_upload_bits($img_name,'',$file);
+			if (isset( $res['error'] ) && !empty($res['error'])) return false;
 			$attachment_id = $this->insert_attachment($res['file'], $post_id);
 			$res['id'] = $attachment_id;
 			$meta_data = wp_get_attachment_metadata($attachment_id);

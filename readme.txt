@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.7.12.1
+Stable tag: 1.7.12.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.12.2 =
+Bug fixed:<br />
+Now the option 3 of change name feature would not generate URL encoded file name.<br />
+修复Bug：<br />
+现在更改文件名功能的第3项不会产生URL编码的的文件名了。
 
 = 1.7.12.1 =
 Bug fixed:<br />
