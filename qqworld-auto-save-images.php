@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.12.3
+Version: 1.7.12.4
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -593,7 +593,7 @@ class QQWorld_auto_save_images {
 			<?php submit_button(); ?>
 		</div>
 	</form>
-	<form action="options.php" method="post" id="form">
+	<form action="options.php" method="post" id="watermark-form">
 		<?php settings_fields('qqworld_auto_save_images_watermark'); ?>
 		<div class="tab-content hidden">
 			<div class="readme"><p><strong><?php _e("Just for preview, The complete feature will on the Pro version. Don't worry, other features will be free forever.", 'qqworld_auto_save_images') ?></strong></p></div>
@@ -989,7 +989,7 @@ class QQWorld_auto_save_images {
 				if ($width<$this->minimum_picture_size['width'] || $height<$this->minimum_picture_size['height']) $allow = false;
 				// check if remote image
 				if ($allow) {
-					$pos=strpos($image_url,get_bloginfo('url'));
+					$pos = strpos($image_url, get_bloginfo('url'));
 					if($pos===false){
 						$this->has_remote_image = 1;
 						if ($action=="save" && $res=$this->save_images($image_url,$post_id)) {
@@ -1154,7 +1154,29 @@ class QQWorld_auto_save_images {
 		return array($file, $width, $height);
 	}
 
+	function fsockopen_image_header($image_url, $mode='Content-Type') { // 'Content-Length' | 'Content-Type' | 'Date' | 'Last-Modified'
+		$url = parse_url($image_url);
+		$fp = fsockopen($url['host'], 80, $errno, $errstr, 30);
+		if ($fp) {
+			//这里请求设置为HEAD
+			$out = "HEAD {$url['path']} HTTP/1.1\r\n";
+			$out .= "Host: {$url['host']}\r\n";
+			$out .= "Connection: Close\r\n\r\n";
+			fwrite($fp, $out);
+			while (!feof($fp)) {
+				$header = fgets($fp);
+				if (stripos($header, $mode) !== false) {
+					$value = trim(substr($header, strpos($header, ':') + 1));
+					return $value;
+				}
+			}
+			fclose($fp);
+		}
+		return null;
+	}
+
 	public function download_image($image_url) {
+		// curl
 		if (function_exists('curl_init')) {
 			$ch = curl_init();
 			$timeout = 5;
@@ -1162,7 +1184,22 @@ class QQWorld_auto_save_images {
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			$file = curl_exec($ch);
 			curl_close($ch);
-		} else {
+		}
+		// GD
+		if (!$file && function_exists('fsockopen')) {
+			$type = $this->fsockopen_image_header($image_url);
+			if ($type && in_array($type, array('image/jpeg', 'image/gif', 'image/png'))) {
+				$type = substr($type, 6);
+				$img = call_user_func("imagecreatefrom{$type}", $image_url);
+				ob_start();
+				call_user_func("image{$type}", $img);
+				$file = ob_get_contents();
+				ob_end_clean();
+				imagedestroy($img);
+			} else $file = '';
+		}
+		// file_get_contents
+		if (!$file && function_exists('file_get_contents')) {
 			$file = @file_get_contents($image_url);
 		}
 		return $file;
