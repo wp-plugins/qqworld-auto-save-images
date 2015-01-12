@@ -86,6 +86,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 == Changelog ==
 
+= 1.7.12.5 =
+New feature:<br />
+Automatically change image title & alt as post title.<br />
+新特性：<br />
+自动参照文章标题添加图片标题和替代文本
+
 = 1.7.12.4 =
 New feature:<br />
 Using 3 ways to download remote images.<br />

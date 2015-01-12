@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.12.4
+Version: 1.7.12.5
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -23,6 +23,7 @@ class QQWorld_auto_save_images {
 	var $maximum_picture_size;
 	var $exclude_domain;
 	var $format;
+	var $change_title_alt;
 	var $additional_content;
 
 	var $watermark_enabled;
@@ -45,6 +46,7 @@ class QQWorld_auto_save_images {
 		$this->maximum_picture_size = get_option('qqworld_auto_save_images_maximum_picture_size', array('width'=>1280, 'height'=>1280));
 		$this->exclude_domain = get_option('qqworld-auto-save-images-exclude-domain');
 		$this->format = get_option('qqworld-auto-save-images-format', array('size'=>'full', 'link-to'=>'none'));
+		$this->change_title_alt = isset($this->format['title-alt']) ? $this->format['title-alt'] : 'no';
 		$this->keep_outside_links = isset($this->format['keep-outside-links']) ? $this->format['keep-outside-links'] : 'no';
 		$this->additional_content = isset($this->format['additional-content']) ? $this->format['additional-content'] : array('before'=>'', 'after'=>'');
 
@@ -530,6 +532,15 @@ class QQWorld_auto_save_images {
 									<option value="east-asian" <?php selected('east-asian', $this->change_image_name); ?>>2. <?php _e('Only change remote images filename that has Chinese or other East Asian characters', 'qqworld_auto_save_images'); ?></option>
 									<option value="all" <?php selected('all', $this->change_image_name); ?>>3. <?php _e('Change all remote images Filename and Alt as post name', 'qqworld_auto_save_images'); ?></option>
 								</select>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Change Title & Alt', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e('Automatically add title & alt of image as post title.', 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Change Title & Alt', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld_auto_save_images_format_title_alt">
+									<input name="qqworld-auto-save-images-format[title-alt]" type="checkbox" id="qqworld_auto_save_images_format_title_alt" value="yes" <?php checked('yes', $this->change_title_alt); ?> />
+								</label>
 						</fieldset></td>
 					</tr>
 					<tr valign="top">
@@ -1064,15 +1075,16 @@ class QQWorld_auto_save_images {
 	}
 
 	public function set_img_metadata($img, $attachment_id) {
-		if ($this->change_image_name != 'all') {
+		if ($this->change_title_alt == 'no') {
 			$pattern = '/<img\s[^>]*alt=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
 			$alt = preg_match($pattern, $img, $matches) ? $matches[1] : null;
+			$pattern = '/<img\s[^>]*title=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
+			$title = preg_match($pattern, $img, $matches)? $matches[1] : null;
 		} else {
 			$alt = $this->get_post_title() ? $this->get_post_title() : null;
+			$title = $this->get_post_title() ? $this->get_post_title() : null;
 		}
 		if ($alt) update_post_meta($attachment_id, '_wp_attachment_image_alt', $alt);
-		$pattern = '/<img\s[^>]*title=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
-		$title = preg_match($pattern, $img, $matches)? $matches[1] : null;
 		if ($title) {
 			$attachment = array(
 				'ID' => $attachment_id,
