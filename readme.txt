@@ -88,7 +88,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 = 1.7.12.5 =
 New feature:<br />
-Automatically change image title & alt as post title.<br />
+Automatically change image title & alt as post title. <br />
 新特性：<br />
 自动参照文章标题添加图片标题和替代文本
 
