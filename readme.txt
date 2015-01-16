@@ -86,6 +86,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 == Changelog ==
 
+= 1.7.12.6 =
+Bug Fixed:<br />
+Download remote image failed on some servers.<br />
+修复Bug：<br />
+在某些服务器上下载远程图片失败。
+
 = 1.7.12.5 =
 New feature:<br />
 Automatically change image title & alt as post title.<br />
