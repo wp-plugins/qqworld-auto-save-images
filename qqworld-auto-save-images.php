@@ -1189,8 +1189,12 @@ class QQWorld_auto_save_images {
 
 	public function download_image($image_url) {
 		$file = '';
+		// file_get_contents
+		if (function_exists('file_get_contents')) {
+			$file = @file_get_contents($image_url);
+		}
 		// curl
-		if (function_exists('curl_init')) {
+		if (empty($file) && function_exists('curl_init')) {
 			$ch = curl_init();
 			$timeout = 5;
 			curl_setopt($ch, CURLOPT_URL, $image_url);
@@ -1210,10 +1214,6 @@ class QQWorld_auto_save_images {
 				ob_end_clean();
 				imagedestroy($img);
 			} else $file = '';
-		}
-		// file_get_contents
-		if (empty($file) && function_exists('file_get_contents')) {
-			$file = @file_get_contents($image_url);
 		}
 		return $file;
 	}
