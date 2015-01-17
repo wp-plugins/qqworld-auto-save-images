@@ -88,7 +88,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 
 = 1.7.12.6 =
 Bug Fixed:<br />
-Download remote image failed on some servers.<br />
+Download remote image failed on some servers. <br />
 修复Bug：<br />
 在某些服务器上下载远程图片失败。
 
