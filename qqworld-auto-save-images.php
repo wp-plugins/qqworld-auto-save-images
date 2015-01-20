@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.12.6
+Version: 1.7.12.7
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -985,9 +985,13 @@ class QQWorld_auto_save_images {
 	}
 
 	public function content_save_pre($content, $post_id=null, $action='save') {
-		$preg = preg_match_all('/<img\s[^>]*src=[\"|\']((?![\"|\'])[\s\S]*?)[\"|\'][\s\S]*?>/i', stripslashes($content), $matches);
-		if($preg){
-			foreach($matches[1] as $image_url) {
+		$remote_images = array();
+		$preg = preg_match_all('/<img.*?src=\"((?!\").*?)\"/i', stripslashes($content), $matches);
+		if ($preg) $remote_images = $matches[1];
+		$preg = preg_match_all('/<img.*?src=\'((?!\').*?)\'/i', stripslashes($content), $matches);
+		if ($preg) $remote_images = array_merge($remote_images, $matches[1]);
+		if(!empty($remote_images)){
+			foreach($remote_images as $image_url) {
 				if(empty($image_url)) continue;
 				// exclude domain
 				$allow=true;
@@ -1076,10 +1080,18 @@ class QQWorld_auto_save_images {
 
 	public function set_img_metadata($img, $attachment_id) {
 		if ($this->change_title_alt == 'no') {
-			$pattern = '/<img\s[^>]*alt=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
-			$alt = preg_match($pattern, $img, $matches) ? $matches[1] : null;
-			$pattern = '/<img\s[^>]*title=[\"|\\\'](.*?)[\"|\\\'].*?>/i';
-			$title = preg_match($pattern, $img, $matches)? $matches[1] : null;
+			$pattern = '/<img\s[^>]*alt=\"(.*?)\".*?>/i';
+			if ( preg_match($pattern, $img, $matches) ) $alt = $matches[1];
+			else {
+				$pattern = '/<img\s[^>]*alt=\'(.*?)\'.*?>/i';
+				$alt = preg_match($pattern, $img, $matches) ? $matches[1] : null;
+			}
+			$pattern = '/<img\s[^>]*title=\"(.*?)\".*?>/i';
+			if ( preg_match($pattern, $img, $matches) ) $title = $matches[1];
+			else {
+				$pattern = '/<img\s[^>]*alt=\'(.*?)\'.*?>/i';
+				$title = preg_match($pattern, $img, $matches) ? $matches[1] : null;
+			}
 		} else {
 			$alt = $this->get_post_title() ? $this->get_post_title() : null;
 			$title = $this->get_post_title() ? $this->get_post_title() : null;
