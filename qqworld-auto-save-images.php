@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.12.8
+Version: 1.7.12.9
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -24,6 +24,7 @@ class QQWorld_auto_save_images {
 	var $exclude_domain;
 	var $format;
 	var $change_title_alt;
+	var $save_outside_links;
 	var $additional_content;
 
 	var $watermark_enabled;
@@ -48,6 +49,7 @@ class QQWorld_auto_save_images {
 		$this->format = get_option('qqworld-auto-save-images-format', array('size'=>'full', 'link-to'=>'none'));
 		$this->change_title_alt = isset($this->format['title-alt']) ? $this->format['title-alt'] : 'no';
 		$this->keep_outside_links = isset($this->format['keep-outside-links']) ? $this->format['keep-outside-links'] : 'no';
+		$this->save_outside_links = isset($this->format['save-outside-links']) ? $this->format['save-outside-links'] : 'no';
 		$this->additional_content = isset($this->format['additional-content']) ? $this->format['additional-content'] : array('before'=>'', 'after'=>'');
 
 		$this->watermark_enabled = get_option('qqworld-auto-save-images-watermark-enabled', 'no');
@@ -549,6 +551,15 @@ class QQWorld_auto_save_images {
 							<legend class="screen-reader-text"><span><?php _e('Keep Outside Links', 'qqworld_auto_save_images'); ?></span></legend>
 								<label for="qqworld_auto_save_images_format_keep_outside_links">
 									<input name="qqworld-auto-save-images-format[keep-outside-links]" type="checkbox" id="qqworld_auto_save_images_format_keep_outside_links" value="yes" <?php checked('yes', $this->keep_outside_links); ?> />
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Save Outside Links', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Save the outside links to description of attachments.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Save Outside Links', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld_auto_save_images_format_save_outside_links">
+									<input name="qqworld-auto-save-images-format[save-outside-links]" type="checkbox" id="qqworld_auto_save_images_format_save_outside_links" value="yes" <?php checked('yes', $this->save_outside_links); ?> />
 								</label>
 						</fieldset></td>
 					</tr>
@@ -1062,8 +1073,20 @@ class QQWorld_auto_save_images {
 		}
 		$pattern_image_url = $this->encode_pattern($image_url);
 		$pattern = '/<a[^<]+><img\s[^>]*'.$pattern_image_url.'.*?>?<[^>]+a>/i';
-		if ( $this->keep_outside_links == 'no' && preg_match($pattern, $content, $matches) ) {
-			$args = $this->set_img_metadata($matches[0], $attachment_id);
+		$preg = preg_match($pattern, $content, $matches);
+		if ($preg) {
+			if ( $this->save_outside_links == 'yes' ) {
+				if ( preg_match('/<a[^>]*href=\"(.*?)\".*?>/i', $matches[0], $match) ) {
+					$args = array(
+						'ID' => $attachment_id,
+						'post_content' => '<a href="'.$match[1].'" target="_blank">'.__('Original Link', 'qqworld_auto_save_images').'</a>'
+					);
+					wp_update_post($args);
+				}
+			}
+			if ( $this->keep_outside_links == 'no' ) {
+				$args = $this->set_img_metadata($matches[0], $attachment_id);
+			}
 		} else {
 			$pattern = '/<img\s[^>]*'.$pattern_image_url.'.*?>/i';
 			if ( preg_match($pattern, $content, $matches) ) {

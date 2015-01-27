@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.7.12.8
+Stable tag: 1.7.12.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.12.9 =
+New feature:<br />
+Automatic save outside link of remote image to description of attachments.<br />
+新特性：<br />
+自动将远程图片的链接保存到附件的描述中。
 
 = 1.7.12.8 =
 New feature:<br />
