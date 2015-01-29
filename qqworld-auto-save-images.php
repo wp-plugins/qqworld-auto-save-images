@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.12.9
+Version: 1.7.12.10
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -1013,7 +1013,8 @@ class QQWorld_auto_save_images {
 				}
 				// check pictrue size
 				list($width, $height, $type, $attr) = @getimagesize($image_url);
-				if ($width<$this->minimum_picture_size['width'] || $height<$this->minimum_picture_size['height']) $allow = false;
+				
+				if ($width != NULL && ($width<$this->minimum_picture_size['width'] || $height<$this->minimum_picture_size['height'])) $allow = false;
 				// check if remote image
 				if ($allow) {
 					$pos = strpos($image_url, get_bloginfo('url'));
@@ -1243,8 +1244,9 @@ class QQWorld_auto_save_images {
 		if (function_exists('file_get_contents')) {
 			$file = @file_get_contents($image_url);
 		}
+		
 		// curl
-		if (empty($file) && function_exists('curl_init')) {
+		if (!$file && function_exists('curl_init')) {
 			$ch = curl_init();
 			$timeout = 5;
 			curl_setopt($ch, CURLOPT_URL, $image_url);
@@ -1252,8 +1254,9 @@ class QQWorld_auto_save_images {
 			$file = curl_exec($ch);
 			curl_close($ch);
 		}
+		$img = @imagecreatefromstring($file);
 		// GD
-		if (empty($file) && function_exists('fsockopen')) {
+		if (!$img && function_exists('fsockopen')) {
 			$type = $this->fsockopen_image_header($image_url);
 			if ($type && in_array($type, array('image/jpeg', 'image/gif', 'image/png'))) {
 				$type = substr($type, 6);
