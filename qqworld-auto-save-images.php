@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.12.10
+Version: 1.7.12.11
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -612,6 +612,7 @@ class QQWorld_auto_save_images {
 					</tr>
 				</tbody>
 			</table>
+			<?php do_action('qqworld-auto-save-images-general-options-form'); ?>
 			<?php submit_button(); ?>
 		</div>
 	</form>
@@ -1027,7 +1028,7 @@ class QQWorld_auto_save_images {
 				}
 			}
 		}
-		return $content;
+		return apply_filters( 'qqworld-auto-save-images-content-save-pre', $content, $post_id );
 	}
 
 	public function change_attachment_url_to_permalink(&$content) {

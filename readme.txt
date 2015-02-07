@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.7.12.10
+Stable tag: 1.7.12.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,12 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.12.11 =
+New feature:<br />
+Supplied some interface for others additional functions.<br />
+新特性：<br />
+为其他附加功能提供了接口。
 
 = 1.7.12.10 =
 Bug Fixed:<br />
