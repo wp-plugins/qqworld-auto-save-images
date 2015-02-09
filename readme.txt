@@ -38,6 +38,9 @@ I'v tried to figure this out, but i couldn't get the host name to make image src
 
 So if you encounter these codes, plaese manually fix the images src to full url.
 
+<h4>Plugin's Plugins</h4>
+<a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/" target="_blank">Grabber for QQWorld Auto Save Images</a>: Grab PDF.
+
 ////////////////////////////////////////////////////
 
 在发布文章时自动保存远程图片到本地媒体库，自动设置特色图片，并且支持机器人采集软件从外部提交。
@@ -65,6 +68,9 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 我尝试解决这个问题，但是我无法让程序获取到主机名从而让图片的URL完整。
 
 所以，如果你碰到这样的代码，请手动将图片地址改成完整的，或者使用采集工具自动补完图片的URL然后从外部提交给Wordpress。
+
+<h4>插件的插件</h4>
+<a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/" target="_blank">QQWorld自动保存图片的捕手</a>：抓取 PDF。
 
 == Installation ==
 
