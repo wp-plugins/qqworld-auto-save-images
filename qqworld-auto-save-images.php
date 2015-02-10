@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.12.11
+Version: 1.7.12.12
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -23,6 +23,7 @@ class QQWorld_auto_save_images {
 	var $maximum_picture_size;
 	var $exclude_domain;
 	var $format;
+	var $filename_structure;
 	var $change_title_alt;
 	var $save_outside_links;
 	var $additional_content;
@@ -39,15 +40,16 @@ class QQWorld_auto_save_images {
 		$this->when = get_option('qqworld_auto_save_images_when', 'publish');
 		$this->remote_publishing = get_option('qqworld_auto_save_images_remote_publishing', 'yes');
 		$this->featured_image = get_option('qqworld_auto_save_images_set_featured_image', 'yes');
-		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'east-asian');
+		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'none');
 		// temporary start
-		$this->change_image_name = $this->change_image_name == 'yes' ? 'east-asian' : $this->change_image_name;
+		$this->change_image_name = $this->change_image_name == 'yes' ? 'ascii' : $this->change_image_name;
 		// temporary end
 		$this->minimum_picture_size = get_option('qqworld_auto_save_images_minimum_picture_size', array('width'=>32, 'height'=>32));
 		$this->maximum_picture_size = get_option('qqworld_auto_save_images_maximum_picture_size', array('width'=>1280, 'height'=>1280));
 		$this->exclude_domain = get_option('qqworld-auto-save-images-exclude-domain');
 		$this->format = get_option('qqworld-auto-save-images-format', array('size'=>'full', 'link-to'=>'none'));
 		$this->change_title_alt = isset($this->format['title-alt']) ? $this->format['title-alt'] : 'no';
+		$this->filename_structure = isset($this->format['filename-structure']) ? $this->format['filename-structure'] : '%filename%';
 		$this->keep_outside_links = isset($this->format['keep-outside-links']) ? $this->format['keep-outside-links'] : 'no';
 		$this->save_outside_links = isset($this->format['save-outside-links']) ? $this->format['save-outside-links'] : 'no';
 		$this->additional_content = isset($this->format['additional-content']) ? $this->format['additional-content'] : array('before'=>'', 'after'=>'');
@@ -90,6 +92,26 @@ class QQWorld_auto_save_images {
 		add_action( 'admin_enqueue_scripts', array($this, 'add_to_page_qqworld_auto_save_images') );
 
 		add_filter( 'post_updated_messages', array($this, 'post_updated_messages') );
+		add_filter( 'qqworld-auto-save-images-custom-filename-structure', array($this, 'custom_filename_structure') );
+	}
+
+	public function custom_filename_structure($filename) {
+		$blogtime = current_time( 'mysql' );
+		list( $today_year, $today_month, $today_day, $hour, $minute, $second ) = preg_split( '([^0-9])', $blogtime );
+		$date = $today_year . $today_month . $today_day;
+		$year = $today_year;
+		$month = $today_month;
+		$day = $today_day;
+		$time = $hour . $minute . $second;
+		$timestamp = current_time('timestamp');
+		$filename_structure = str_replace('%filename%', $filename, $this->filename_structure );
+		$filename_structure = str_replace('%date%', $date, $filename_structure );
+		$filename_structure = str_replace('%year%', $year, $filename_structure );
+		$filename_structure = str_replace('%month%', $month, $filename_structure );
+		$filename_structure = str_replace('%day%', $day, $filename_structure );
+		$filename_structure = str_replace('%time%', $time, $filename_structure );
+		$filename = str_replace('%timestamp%', $timestamp, $filename_structure );
+		return $filename;
 	}
 
 	public function save_remote_images_get_categories_list() {
@@ -531,9 +553,27 @@ class QQWorld_auto_save_images {
 							<legend class="screen-reader-text"><span><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></span></legend>
 								<select id="auto_change_name" name="qqworld_auto_save_images_auto_change_name">
 									<option value="none" <?php selected('none', $this->change_image_name); ?>>1. <?php _e('No'); ?></option>
-									<option value="east-asian" <?php selected('east-asian', $this->change_image_name); ?>>2. <?php _e('Only change remote images filename that has Chinese or other East Asian characters', 'qqworld_auto_save_images'); ?></option>
-									<option value="all" <?php selected('all', $this->change_image_name); ?>>3. <?php _e('Change all remote images Filename and Alt as post name', 'qqworld_auto_save_images'); ?></option>
+									<option value="ascii" <?php selected('ascii', $this->change_image_name); ?>>2. <?php _e('Only change remote images filename that have Non-ASCii characters (for Windows Server)', 'qqworld_auto_save_images'); ?></option>
+									<option value="all" <?php selected('all', $this->change_image_name); ?>>3. <?php _e('Change all remote images Filename and Alt as post name (for Linux Server)', 'qqworld_auto_save_images'); ?></option>
 								</select>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="filename-structure"><?php _e('Custom Filename Structure', 'qqworld_auto_save_images'); ?></label></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Custom Filename Structure', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="filename-structure">
+									<input name="qqworld-auto-save-images-format[filename-structure]" type="text" id="filename-structure" class="regular-text" value="<?php echo $this->filename_structure; ?>" />
+								</label>
+								<p class="description">
+									<strong>%filename%</strong> : <?php _e('Original filename or automatic changed filename.', 'qqworld_auto_save_images'); ?><br />
+									<strong>%date%</strong> : <?php _e('Full date, e.g. 20150209.', 'qqworld_auto_save_images'); ?><br />
+									<strong>%year%</strong> - <?php _e('YYYY, e.g. 2015.', 'qqworld_auto_save_images'); ?><br />
+									<strong>%month%</strong> - <?php _e('MM, e.g. 02.', 'qqworld_auto_save_images'); ?><br />
+									<strong>%day%</strong> -  <?php _e('DD, e.g. 15.', 'qqworld_auto_save_images'); ?><br />
+									<strong>%time%</strong> - <?php _e('HHMMSS, e.g. 182547.', 'qqworld_auto_save_images'); ?><br />
+									<strong>%timestamp%</strong> - <?php printf(__('Unix timestamp, e.g. %s.', 'qqworld_auto_save_images'), time()); ?>
+								</p>
 						</fieldset></td>
 					</tr>
 					<tr valign="top">
@@ -1160,16 +1200,18 @@ class QQWorld_auto_save_images {
 	}
 
 	public function change_images_filename($name, $extension) {
-		if ($this->change_image_name == 'east-asian') {
-			preg_match( '/^[\x7f-\xff]+$/', $name, $match );
-			if ( !empty($match) ) {
-				$name = md5($name);
-			}
-		} elseif ($this->change_image_name == 'all') {
-			global $post;
-			$name = urldecode($this->get_post_name());
+		switch ($this->change_image_name) {
+			case 'none':
+				break;
+			case 'ascii':
+				if ( !preg_match( '/^[\x20-\x7f]*$/', $name, $match ) ) $name = md5($name);
+				break;
+			case 'all':
+				global $post;
+				$name = urldecode($this->get_post_name());
+				break;
 		}
-		return $name . $extension;
+		return apply_filters('qqworld-auto-save-images-custom-filename-structure', $name) . $extension;
 	}
 
 	public function get_filename_from_url($url) {

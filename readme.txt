@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.7.12.11
+Stable tag: 1.7.12.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,7 +39,7 @@ I'v tried to figure this out, but i couldn't get the host name to make image src
 So if you encounter these codes, plaese manually fix the images src to full url.
 
 <h4>Plugin's Plugins</h4>
-<a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/" target="_blank">Grabber for QQWorld Auto Save Images</a>: Grab PDF.
+<a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">Grabber for QQWorld Auto Save Images</a>: Grab PDF.
 
 ////////////////////////////////////////////////////
 
@@ -70,7 +70,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 所以，如果你碰到这样的代码，请手动将图片地址改成完整的，或者使用采集工具自动补完图片的URL然后从外部提交给Wordpress。
 
 <h4>插件的插件</h4>
-<a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/" target="_blank">QQWorld自动保存图片的捕手</a>：抓取 PDF。
+<a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">QQWorld自动保存图片的捕手</a>：抓取 PDF。
 
 == Installation ==
 
@@ -91,6 +91,14 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.12.12 =
+New feature:<br />
+Automatic change remote filename that have Non-ASCii characters (for Windows Server).<br />
+Custom filename structure.<br />
+新特性：<br />
+自动修改包含非ASCii字符的远程图片文件名（用于Windows服务器）<br />
+自定义文件名结构。
 
 = 1.7.12.11 =
 New feature:<br />
