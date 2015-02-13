@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.12.12
+Version: 1.7.12.13
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -19,6 +19,8 @@ class QQWorld_auto_save_images {
 	var $change_image_name;
 	var $has_remote_image;
 	var $has_missing_image;
+	var $count;
+	var $only_save_first;
 	var $minimum_picture_size;
 	var $maximum_picture_size;
 	var $exclude_domain;
@@ -40,6 +42,7 @@ class QQWorld_auto_save_images {
 		$this->when = get_option('qqworld_auto_save_images_when', 'publish');
 		$this->remote_publishing = get_option('qqworld_auto_save_images_remote_publishing', 'yes');
 		$this->featured_image = get_option('qqworld_auto_save_images_set_featured_image', 'yes');
+		$this->only_save_first = get_option('qqworld_auto_save_images_only_save_first', 'all');
 		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'none');
 		// temporary start
 		$this->change_image_name = $this->change_image_name == 'yes' ? 'ascii' : $this->change_image_name;
@@ -502,6 +505,21 @@ class QQWorld_auto_save_images {
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
+						<th scope="row"><label for="only_save_first"><?php _e('Grabbing from Each Posts', 'qqworld_auto_save_images'); ?></label></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Grabbing from Each Posts', 'qqworld_auto_save_images'); ?></span></legend>
+								<select id="only_save_first" name="qqworld_auto_save_images_only_save_first">
+									<option value="all" <?php selected('all', $this->only_save_first); ?>><?php _e('All Images', 'qqworld_auto_save_images'); ?></option>
+									<?php
+									for ($i=1; $i<=30; $i++) {
+										$selected = selected($i, $this->only_save_first, false);
+										echo '<option value="' . $i . '" '.$selected.'>' . sprintf(_n('First %d image only', 'First %d images only', $i, 'qqworld_auto_save_images'), number_format_i18n($i)) . '</option>';
+									}
+									?>
+								</select>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
 						<th scope="row"><label><?php _e('Minimum Picture Size', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Ignore smaller than this size picture.", 'qqworld_auto_save_images'); ?>"></span></th>
 						<td><fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Minimum Picture Size', 'qqworld_auto_save_images'); ?></span></legend>
@@ -904,6 +922,7 @@ class QQWorld_auto_save_images {
 				'qqworld_auto_save_images_remote_publishing',
 				'qqworld_auto_save_images_set_featured_image',
 				'qqworld_auto_save_images_auto_change_name',
+				'qqworld_auto_save_images_only_save_first',
 				'qqworld_auto_save_images_maximum_picture_size',
 				'qqworld_auto_save_images_minimum_picture_size',
 				'qqworld-auto-save-images-exclude-domain',
@@ -1037,6 +1056,7 @@ class QQWorld_auto_save_images {
 	}
 
 	public function content_save_pre($content, $post_id=null, $action='save') {
+		$this->count = 1;
 		$this->change_attachment_url_to_permalink($content);
 		$remote_images = array();
 		$preg = preg_match_all('/<img.*?src=\"((?!\").*?)\"/i', stripslashes($content), $matches);
@@ -1045,7 +1065,8 @@ class QQWorld_auto_save_images {
 		if ($preg) $remote_images = array_merge($remote_images, $matches[1]);
 		if(!empty($remote_images)){
 			foreach($remote_images as $image_url) {
-				if(empty($image_url)) continue;
+				if ($this->only_save_first != 'all' && $this->count++ > $this->only_save_first) continue;
+				if (empty($image_url)) continue;
 				// exclude domain
 				$allow=true;
 				if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) {
@@ -1114,22 +1135,24 @@ class QQWorld_auto_save_images {
 			$height = $res['sizes'][$size]['height'];
 		}
 		$pattern_image_url = $this->encode_pattern($image_url);
-		$pattern = '/<a[^<]+><img\s[^>]*'.$pattern_image_url.'.*?>?<[^>]+a>/i';
-		$preg = preg_match($pattern, $content, $matches);
-		if ($preg) {
-			if ( $this->save_outside_links == 'yes' ) {
-				if ( preg_match('/<a[^>]*href=\"(.*?)\".*?>/i', $matches[0], $match) ) {
-					$args = array(
-						'ID' => $attachment_id,
-						'post_content' => '<a href="'.$match[1].'" target="_blank">'.__('Original Link', 'qqworld_auto_save_images').'</a>'
-					);
-					wp_update_post($args);
+		$preg = false;
+		if ($this->keep_outside_links=='no') {
+			$pattern = '/<a[^<]+><img\s[^>]*'.$pattern_image_url.'.*?>?<[^>]+a>/i';
+			$preg = preg_match($pattern, $content, $matches);
+			if ($preg) {
+				if ( $this->save_outside_links == 'yes' ) {
+					if ( preg_match('/<a[^>]*href=\"(.*?)\".*?>/i', $matches[0], $match) ) {
+						$args = array(
+							'ID' => $attachment_id,
+							'post_content' => '<a href="'.$match[1].'" target="_blank">'.__('Original Link', 'qqworld_auto_save_images').'</a>'
+						);
+						wp_update_post($args);
+					}
 				}
-			}
-			if ( $this->keep_outside_links == 'no' ) {
 				$args = $this->set_img_metadata($matches[0], $attachment_id);
 			}
-		} else {
+		}
+		if (!$preg) {
 			$pattern = '/<img\s[^>]*'.$pattern_image_url.'.*?>/i';
 			if ( preg_match($pattern, $content, $matches) ) {
 				$args = $this->set_img_metadata($matches[0], $attachment_id);
@@ -1224,7 +1247,7 @@ class QQWorld_auto_save_images {
 	public function automatic_reduction($file) {
 		$filetype = $this->getFileType($file);
 		list($width, $height, $type, $attr) = getimagesizefromstring($file);
-		if ($width > $this->maximum_picture_size['width'] || $height > $this->maximum_picture_size['height']) {
+		if ((!empty($this->maximum_picture_size['width']) || !empty($this->maximum_picture_size['height'])) && ($width > $this->maximum_picture_size['width'] || $height > $this->maximum_picture_size['height'])) {
 			if ($width > $height) {
 				$maximum_picture_size_width = empty($this->maximum_picture_size['width']) ? $width*$this->maximum_picture_size['height']/$height : $this->maximum_picture_size['width'];
 				$new_width = $maximum_picture_size_width;
