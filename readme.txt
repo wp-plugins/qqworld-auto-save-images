@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.7.12.13
+Stable tag: 1.7.12.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,7 +75,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 == Installation ==
 
 <ol>
-<li>Make sure the server configuration <strong>allow_url_fopen=1</strong> and remove ";" before both of <strong>extension=php_gd2.dll</strong> and <strong>extension=php_curl.dll</strong> in php.ini.<br />
+<li>Make sure the server configuration <strong>allow_url_fopen=1</strong> and remove ";" from in front of <strong>extension=php_gd2.dll</strong> and <strong>extension=php_curl.dll</strong> in php.ini.<br />
 请确保php.ini的设置中 <strong>allow_url_fopen=1</strong>，并且去掉<strong>extension=php_gd2.dll</strong>和<strong>extension=php_curl.dll</strong>之前的“;”</li>
 <li>Warning: If your website domain has changed, you must modify all image link to new domain from database, or else all images which not modified in post content will be saved again.<br />
 警告：如果你的网站域名更改了，必须在数据库中将所有的图片链接更新到新域名，否则插件会把未更改的图片再保存一次。</li>
@@ -91,6 +91,13 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.12.14 =
+New feature:<br />
+For plugin working issue, adds server check to help user handle server configuation issues.
+<br />
+新特性<br />
+为了使插件工作正常，增加服务器检测帮助用户处理服务器配置问题
 
 = 1.7.12.13 =
 <ul>

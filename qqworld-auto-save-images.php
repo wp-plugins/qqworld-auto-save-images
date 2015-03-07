@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.12.13
+Version: 1.7.12.14
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -96,6 +96,19 @@ class QQWorld_auto_save_images {
 
 		add_filter( 'post_updated_messages', array($this, 'post_updated_messages') );
 		add_filter( 'qqworld-auto-save-images-custom-filename-structure', array($this, 'custom_filename_structure') );
+		add_action( 'admin_notices', array($this, 'admin_notices') );
+	}
+
+	public function admin_notices() {
+		$screen = get_current_screen();
+		if (strstr($screen->id, 'qqworld-auto-save-images')) {
+			settings_errors();
+			if (!function_exists('curl_init')) add_settings_error('qqworld-auto-save-images', esc_attr('needs_php_lib'), __("Your server PHP does not support cUrl, please remove ';' from in front of extension=php_curl.dll in the php.ini.", 'qqworld_auto_save_images'), 'error' );
+			//if (class_exists('ZipArchive')) add_settings_error('qqworld-auto-save-images', esc_attr('needs_php_lib'), __('Your server PHP does not support ZipArchive.', 'qqworld_auto_save_images'), 'error' );
+			if (!function_exists('imagecreate')) add_settings_error('qqworld-auto-save-images', esc_attr('needs_php_lib'), __("Your server PHP does not support GD2, please remove ';' from in front of extension=php_gd2.dll in the <strong>php.ini</strong>.", 'qqworld_auto_save_images'), 'error' );
+			if (!function_exists('file_get_contents')) add_settings_error('qqworld-auto-save-images', esc_attr('needs_php_lib'), __('Your server PHP does not support fopen, please set allow_url_fopen=1 in the php.ini.', 'qqworld_auto_save_images'), 'error' );
+			settings_errors('qqworld-auto-save-images');
+		}
 	}
 
 	public function custom_filename_structure($filename) {
