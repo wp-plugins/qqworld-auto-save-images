@@ -477,6 +477,56 @@ QQWorld_auto_save_images.scan_posts = function() {
 			}
 		});
 
+		$(document).on('change', '#optimize-mode', function() {
+			if ($(this).val() == 'remote') {
+				$('#ftp-settings').fadeIn('normal');
+				$('#protocol').fadeIn('normal');
+				$('#folder').fadeIn('normal');
+				$('#url_example').fadeIn('normal');
+				$('#host').prev().fadeOut('normal');
+				$('#host').next().fadeOut('normal');
+			} else {
+				$('#ftp-settings').fadeOut('normal');
+				$('#protocol').fadeOut('normal');
+				$('#folder').fadeOut('normal');
+				$('#url_example').fadeOut('normal');
+				$('#host').prev().fadeIn('normal');
+				$('#host').next().fadeIn('normal');
+			}
+		});
+
+		$(document).on('click', '#test-ftp', function() {
+			var button = $(this);
+			button.attr('disabled', true);
+			$('body').data('noty', noty({
+				text: wait_img,	
+				type: 'notification',
+				layout: 'center',
+				theme: noty_theme
+			}) );
+			$.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: {
+					action: 'auto_save_images_test_ftp'
+				},
+				dataType: 'json',
+				success: function(respond) {
+					$('body').data('noty').close();
+					var options = {
+						text: respond.msg,
+						layout: 'center',
+						timeout: 3000,
+						theme: noty_theme
+					};
+					options.type = respond.success ? 'success' : 'error';
+					var n = noty(options);
+					button.removeAttr('disabled');
+				},
+				error: _this.action.catch_errors
+			});
+		});
+
 		$(document).on('change', '#watermark-opacity', _this.action.set_watermark_opacity).on('keyup', '#watermark-opacity', _this.action.set_watermark_opacity);
 
 		$(document).on('click', '#for-watermark-image', function() {

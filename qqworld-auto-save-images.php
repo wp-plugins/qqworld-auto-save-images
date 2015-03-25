@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.12.14
+Version: 1.7.13
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -29,6 +29,16 @@ class QQWorld_auto_save_images {
 	var $change_title_alt;
 	var $save_outside_links;
 	var $additional_content;
+
+	var $optimize;
+	var $optimize_enabled;
+	var $optimize_mode;
+	var $optimize_url;
+	var $optimize_protocol;
+	var $optimize_host;
+	var $optimize_folder;
+	var $ftp;
+	var $ftp_connection;
 
 	var $watermark_enabled;
 	var $ignore_animated_gif;
@@ -57,6 +67,15 @@ class QQWorld_auto_save_images {
 		$this->save_outside_links = isset($this->format['save-outside-links']) ? $this->format['save-outside-links'] : 'no';
 		$this->additional_content = isset($this->format['additional-content']) ? $this->format['additional-content'] : array('before'=>'', 'after'=>'');
 
+		$this->optimize = get_option('qqworld-auto-save-images-optimize', array('mode' => 'local'));
+		$this->optimize_enabled = isset($this->optimize['enabled']) ? $this->optimize['enabled'] : '';
+		$this->optimize_mode = isset($this->optimize['mode']) ? $this->optimize['mode'] : 'local';
+		$this->optimize_url = get_option('qqworld-auto-save-images-optimize-url');
+		$this->optimize_protocol = isset($this->optimize_url['protocol']) ? $this->optimize_url['protocol'] : 'http';
+		$this->optimize_host = isset($this->optimize_url['host']) ? $this->optimize_url['host'] : '';
+		$this->optimize_folder = isset($this->optimize_url['folder']) ? $this->optimize_url['folder'] : '';
+		$this->ftp = get_option('qqworld-auto-save-images-ftp', array('ip' => '','port' => '21','username' => '','password' => '', 'directory' => '/'));
+
 		$this->watermark_enabled = get_option('qqworld-auto-save-images-watermark-enabled', 'no');
 		$this->ignore_animated_gif = get_option('qqworld-auto-save-images-watermark-ignore-animated-gif', 'yes');
 		$this->filter_size = get_option('qqworld-auto-save-images-watermark-filter-size', array('width'=>300, 'height'=>300));
@@ -77,6 +96,8 @@ class QQWorld_auto_save_images {
 		}
 		if ($this->remote_publishing) add_action('xmlrpc_publish_post', array($this, 'fetch_images') );
 
+		add_action( 'wp_ajax_auto_save_images_test_ftp', array($this, 'test_ftp') );
+		add_action( 'wp_ajax_nopriv_auto_save_images_test_ftp', array($this, 'test_ftp') );
 		add_action( 'wp_ajax_get_scan_list', array($this, 'get_scan_list') );
 		add_action( 'wp_ajax_nopriv_get_scan_list', array($this, 'get_scan_list') );
 		add_action( 'wp_ajax_save_remote_images_get_categories_list', array($this, 'save_remote_images_get_categories_list') );
@@ -104,7 +125,6 @@ class QQWorld_auto_save_images {
 		if (strstr($screen->id, 'qqworld-auto-save-images')) {
 			settings_errors();
 			if (!function_exists('curl_init')) add_settings_error('qqworld-auto-save-images', esc_attr('needs_php_lib'), __("Your server PHP does not support cUrl, please remove ';' from in front of extension=php_curl.dll in the php.ini.", 'qqworld_auto_save_images'), 'error' );
-			//if (class_exists('ZipArchive')) add_settings_error('qqworld-auto-save-images', esc_attr('needs_php_lib'), __('Your server PHP does not support ZipArchive.', 'qqworld_auto_save_images'), 'error' );
 			if (!function_exists('imagecreate')) add_settings_error('qqworld-auto-save-images', esc_attr('needs_php_lib'), __("Your server PHP does not support GD2, please remove ';' from in front of extension=php_gd2.dll in the <strong>php.ini</strong>.", 'qqworld_auto_save_images'), 'error' );
 			if (!function_exists('file_get_contents')) add_settings_error('qqworld-auto-save-images', esc_attr('needs_php_lib'), __('Your server PHP does not support fopen, please set allow_url_fopen=1 in the php.ini.', 'qqworld_auto_save_images'), 'error' );
 			settings_errors('qqworld-auto-save-images');
@@ -233,6 +253,31 @@ class QQWorld_auto_save_images {
 			);
 			wp_localize_script('qqworld-auto-save-images-script', 'QASI', $translation_array, '3.0.0');
 		}
+	}
+
+	public function test_ftp() {
+		$ip = $this->ftp['ip'];
+		$port = $this->ftp['port'];
+		$username = $this->ftp['username'];
+		$password = $this->ftp['password'];
+		$directory = $this->ftp['directory'];
+		$this->ftp_connection = ftp_connect($ip, $port);
+		if ($this->ftp_connection) {
+			if (ftp_login($this->ftp_connection, $username, $password)) {
+				$this->ftp_mksubdirs($this->ftp_connection, '/', $directory);
+				if (ftp_chdir($this->ftp_connection, $directory) ) {
+					$result = array( 'success' => 1, 'msg' => sprintf('<span class="green">%s</span>', __('Congratulation! FTP successfully connected.', 'qqworld_auto_save_images')) );
+				} else {
+					$result = array( 'success' => 0, 'msg' => __('Failed to change ftp directory, Did dirctory not exist?', 'qqworld_auto_save_images') );
+				}
+			} else {
+				$result = array( 'success' => 0, 'msg' => _e('Whoops, FTP logon has failed!', 'qqworld_auto_save_images') );
+			}
+		} else {
+			$result = array( 'success' => 0, 'msg' => __('Whoops, FTP connection has failed!', 'qqworld_auto_save_images') );
+		}
+		echo json_encode($result);
+		exit;
 	}
 
 	public function get_scan_list() {
@@ -456,7 +501,8 @@ class QQWorld_auto_save_images {
 		<img src="<?php echo QQWORLD_AUTO_SAVE_IMAGES_URL; ?>images/banner-772x250.png" width="772" height="250" id="banner" />
 		<ul id="qqworld-auto-save-images-tabs">
 			<li class="current"><?php _e('Settings'); ?></li>
-			<li><?php _e('Watermark', 'qqworld_auto_save_images'); ?> (<?php _e('Trial', 'qqworld_auto_save_images')?>)</li>
+			<li><?php _e('Optimization', 'qqworld_auto_save_images'); ?> (<?php _e('Preview', 'qqworld_auto_save_images')?>)</li>
+			<li><?php _e('Watermark', 'qqworld_auto_save_images'); ?> (<?php _e('Preview', 'qqworld_auto_save_images')?>)</li>
 			<li><?php _e('Scan Posts', 'qqworld_auto_save_images'); ?></li>
 		</ul>
 		<div class="tab-content">
@@ -578,7 +624,7 @@ class QQWorld_auto_save_images {
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
-						<th scope="row"><label for="auto_change_name"><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Recommeded choose option 2, if you choose option 3, make sure post name | slug exclude Chinese or other East Asian characters. Notices: If your host OS is linux, you can choose option 1 and would not cause coding mess up, because of linux is using UTF8 encoding, as same as Wordpress.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<th scope="row"><label for="auto_change_name"><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></label></th>
 						<td>
 							<fieldset>
 							<legend class="screen-reader-text"><span><?php _e('Change Image Filename', 'qqworld_auto_save_images'); ?></span></legend>
@@ -684,6 +730,88 @@ class QQWorld_auto_save_images {
 				</tbody>
 			</table>
 			<?php do_action('qqworld-auto-save-images-general-options-form'); ?>
+			<?php submit_button(); ?>
+		</div>
+		<div class="tab-content hidden">
+			<div class="readme"><p><strong><?php _e("Just for preview, The complete feature will on the Pro version. Don't worry, other features will be free forever.", 'qqworld_auto_save_images') ?></strong></p></div>
+			<table class="form-table">
+				<tbody>
+					<tr valign="top">
+						<th scope="row"><label for="enabled_cookie_free_domain"><?php _e('Enabled', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e('Use Cookie-Free Domains to display images.', 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Enabled', 'qqworld_auto_save_images'); ?></span></legend>
+								<label>
+									<input name="qqworld-auto-save-images-optimize[enabled]" type="checkbox" id="enabled_cookie_free_domain" value="yes" <?php checked('yes', $this->optimize_enabled); ?> />
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="optimize-mode"><?php _e('Mode', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("If you wanna use local media library, please choose the Use-local-server.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Mode', 'qqworld_auto_save_images'); ?></span></legend>
+								<select name="qqworld-auto-save-images-optimize[mode]" id="optimize-mode">
+								<?php
+								$linkTo = array(
+									'local' => __('Use local server', 'qqworld_auto_save_images'), 
+									'remote' => __('Use remote server', 'qqworld_auto_save_images'),
+								);
+								foreach ($linkTo as $value => $title) echo '<option value="'.$value.'"'.selected($value, $this->optimize_mode, false).'>'.$title.'</option>';
+								?>
+								</select>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="host"><?php _e('Domain & Folder', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Do not end with '/'.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Domain & Folder', 'qqworld_auto_save_images'); ?></span></legend>
+								<label>
+									<select id="protocol" name="qqworld-auto-save-images-optimize-url[protocol]"<?php if ($this->optimize_mode=='local') echo ' style="display: none;"'; ?>>
+										<option value="http"<?php selected('http', $this->optimize_protocol); ?>>http://</option>
+										<option value="https"<?php selected('https', $this->optimize_protocol); ?>>https://</option>
+									</select>
+									<span<?php if ($this->optimize_mode!='local') echo ' style="display: none;"'; ?>>http(s):// </span><input type="text" name="qqworld-auto-save-images-optimize-url[host]" placeholder="<?php _e('Host', 'qqworld_auto_save_images'); ?>" id="host" value="<?php echo $this->optimize_host; ?>" /><span<?php if ($this->optimize_mode!='local') echo ' style="display: none;"'; ?>> /wp-contents/uploads/2014/11/example.jpg</span>
+									<input type="text" id="folder" name="qqworld-auto-save-images-optimize-url[folder]" placeholder="<?php _e('Folder (Can be empty)', 'qqworld_auto_save_images'); ?>" value="<?php echo $this->optimize_folder; ?>"<?php if ($this->optimize_mode=='local') echo ' style="display: none;"'; ?> />
+									<span id="url_example"<?php if ($this->optimize_mode=='local') echo ' style="display: none;"'; ?>>/2014/11/example.jpg</span>
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top" id="ftp-settings"<?php if ($this->optimize_mode=='local') echo ' style="display: none;"'; ?>>
+						<th scope="row"><label for="ftp-ip"><?php _e('FTP Settings', 'qqworld_auto_save_images'); ?></label></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('FTP Settings', 'qqworld_auto_save_images'); ?></span></legend>
+							<table id="ftp-table">
+								<tr>
+									<td><label for="ftp-ip"><?php _e('IP Address', 'qqworld_auto_save_images'); ?></label></td>
+									<td><input type="text" name="qqworld-auto-save-images-ftp[ip]" id="ftp-ip" value="<?php echo $this->ftp['ip']; ?>" /></td>
+								</tr>
+								<tr>
+									<td><label for="ftp-port"><?php _e('Port', 'qqworld_auto_save_images'); ?></label></td>
+									<td><input type="text" name="qqworld-auto-save-images-ftp[port]" id="ftp-port" size="5" value="<?php echo $this->ftp['port']; ?>" /></td>
+								</tr>
+								<tr>
+									<td><label for="ftp-username"><?php _e('Username', 'qqworld_auto_save_images'); ?></label></td>
+									<td><input type="text" name="qqworld-auto-save-images-ftp[username]" id="ftp-username" value="<?php echo $this->ftp['username']; ?>" /></td>
+								</tr>
+								<tr>
+									<td><label for="ftp-password"><?php _e('Password', 'qqworld_auto_save_images'); ?></label></td>
+									<td><input type="password" name="qqworld-auto-save-images-ftp[password]" id="ftp-password" value="<?php echo $this->ftp['password']; ?>" /></td>
+								</tr>
+								<tr>
+									<td><label for="ftp-directory"><?php _e('Directory', 'qqworld_auto_save_images'); ?></label></td>
+									<td><input type="text" name="qqworld-auto-save-images-ftp[directory]" id="ftp-directory" value="<?php echo $this->ftp['directory']; ?>" /></td>
+								</tr>
+								<tr>
+									<td colspan="2"><input type="button" id="test-ftp" class="button" value="<?php _e('Test FTP', 'qqworld_auto_save_images'); ?>" /></td>
+								</tr>
+							</table>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Buy', 'qqworld_auto_save_images'); ?></label></th>
+						<td><a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" target="_blank"><?php _e('QQWorld Auto Save Images Pro', 'qqworld_auto_save_images'); ?></a></td>
+					</tr>
+				</tbody>
+			</table>
 			<?php submit_button(); ?>
 		</div>
 	</form>
@@ -809,7 +937,7 @@ class QQWorld_auto_save_images {
 					</tr>
 					<tr valign="top">
 						<th scope="row"><label><?php _e('Buy', 'qqworld_auto_save_images'); ?></label></th>
-						<td><?php _e("Coming.. I don't know when, Who cares..", 'qqworld_auto_save_images'); ?></td>
+						<td><a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" target="_blank"><?php _e('QQWorld Auto Save Images Pro', 'qqworld_auto_save_images'); ?></a></td>
 					</tr>
 				</tbody>
 			</table>
@@ -939,7 +1067,9 @@ class QQWorld_auto_save_images {
 				'qqworld_auto_save_images_maximum_picture_size',
 				'qqworld_auto_save_images_minimum_picture_size',
 				'qqworld-auto-save-images-exclude-domain',
-				'qqworld-auto-save-images-format'
+				'qqworld-auto-save-images-format',
+				'qqworld-auto-save-images-optimize',
+				'qqworld-auto-save-images-ftp'
 			),
 			'watermark' => array(
 				'qqworld-auto-save-images-watermark-enabled',
@@ -1319,22 +1449,24 @@ class QQWorld_auto_save_images {
 
 	public function download_image($image_url) {
 		$file = '';
+
 		// file_get_contents
 		if (function_exists('file_get_contents')) {
 			$file = @file_get_contents($image_url);
 		}
-		
+
 		// curl
 		if (!$file && function_exists('curl_init')) {
 			$ch = curl_init();
-			$timeout = 5;
 			curl_setopt($ch, CURLOPT_URL, $image_url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			//curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 			$file = curl_exec($ch);
 			curl_close($ch);
 		}
-		$img = @imagecreatefromstring($file);
+
 		// GD
+		$img = @imagecreatefromstring($file);
 		if (!$img && function_exists('fsockopen')) {
 			$type = $this->fsockopen_image_header($image_url);
 			if ($type && in_array($type, array('image/jpeg', 'image/gif', 'image/png'))) {

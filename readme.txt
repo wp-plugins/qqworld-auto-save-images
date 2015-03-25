@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.7.12.14
+Stable tag: 1.7.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,10 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.13 =
+News: QQWorld Auto Save Images Pro Edition is avaliable.
+新闻：QQWorld自动保存图片专业版已发售。
 
 = 1.7.12.14 =
 New feature:<br />
