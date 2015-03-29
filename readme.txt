@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.7.13
+Stable tag: 1.7.13.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,6 +41,9 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 <h4>Plugin's Plugins</h4>
 <a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">Grabber for QQWorld Auto Save Images</a>: Grab PDF.
 
+<h4>Professional Edition</h4>
+Buy: <a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" target="_blank">QQWorld Auto Save Images Pro (USD $7.41)</a>
+
 ////////////////////////////////////////////////////
 
 在发布文章时自动保存远程图片到本地媒体库，自动设置特色图片，并且支持机器人采集软件从外部提交。
@@ -72,6 +75,9 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 <h4>插件的插件</h4>
 <a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">QQWorld自动保存图片的捕手</a>：抓取 PDF。
 
+<h4>专业版</h4>
+购买：<a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" target="_blank">QQWorld Auto Save Images Pro (CNY &yen;39)</a>
+
 == Installation ==
 
 <ol>
@@ -91,6 +97,10 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.13.1 =
+News: The feature Maximum-Picture-Size Automatically reduction image size support PHP 5.3 now.
+新闻：最大图像尺寸的自动缩小图片功能支持PHP5.3。
 
 = 1.7.13 =
 News: QQWorld Auto Save Images Pro Edition is avaliable.
