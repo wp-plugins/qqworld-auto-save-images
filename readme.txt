@@ -52,7 +52,7 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" targ
 
 <h4>注意：</h4>
 <ul>
-	<li>该插件有个小问题，所有的远程图像的URL必须是完整的，就是说必须得包含"http(s)://"，比如：
+	<li>该插件有个小问题，所有的远程图像的URL必须是完整的，就是说必须得包含"http(s)://"，比如： 
 		<ul>
 			<li>&lt;img src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</li>
 			<li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li>
