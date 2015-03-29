@@ -99,11 +99,11 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" targ
 == Changelog ==
 
 = 1.7.13.1 =
-News: The feature Maximum-Picture-Size Automatically reduction image size support PHP 5.3 now.
+New feature: The feature Maximum-Picture-Size Automatically reduction image size support PHP 5.3 now.<br />
 新闻：最大图像尺寸的自动缩小图片功能支持PHP5.3。
 
 = 1.7.13 =
-News: QQWorld Auto Save Images Pro Edition is avaliable.
+News: QQWorld Auto Save Images Pro Edition is avaliable.<br />
 新闻：QQWorld自动保存图片专业版已发售。
 
 = 1.7.12.14 =
