@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1.1
-Stable tag: 1.7.13.1
+Stable tag: 1.7.13.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,9 +98,13 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" targ
 
 == Changelog ==
 
+= 1.7.13.2 =
+New feature: Add <strong>rel="nofollow"</strong> into outside link's tag when choose the Keep-Outside-Links.<br />
+新特性：当选择保留外部链接时，自动在外部链接的标签中加入<strong>rel="nofollow"。</strong>。
+
 = 1.7.13.1 =
 New feature: The feature Maximum-Picture-Size Automatically reduction image size support PHP 5.3 now.<br />
-新闻：最大图像尺寸的自动缩小图片功能支持PHP5.3。
+新特性：最大图像尺寸的自动缩小图片功能支持PHP5.3。
 
 = 1.7.13 =
 News: QQWorld Auto Save Images Pro Edition is avaliable.<br />

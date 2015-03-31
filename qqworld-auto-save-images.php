@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.13.1
+Version: 1.7.13.2
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -40,6 +40,11 @@ class QQWorld_auto_save_images {
 	var $ftp;
 	var $ftp_connection;
 
+	var $proxy;
+	var $proxy_enabled;
+	var $proxy_timeout;
+	var $proxy_address;
+
 	var $watermark_enabled;
 	var $ignore_animated_gif;
 	var $filter_size;
@@ -75,6 +80,11 @@ class QQWorld_auto_save_images {
 		$this->optimize_host = isset($this->optimize_url['host']) ? $this->optimize_url['host'] : '';
 		$this->optimize_folder = isset($this->optimize_url['folder']) ? $this->optimize_url['folder'] : '';
 		$this->ftp = get_option('qqworld-auto-save-images-ftp', array('ip' => '','port' => '21','username' => '','password' => '', 'directory' => '/'));
+
+		$this->proxy = get_option('qqworld-auto-save-images-proxy', array("timeout" => 5, "address" => "127.0.0.1:8087"));
+		$this->proxy_enabled = isset($this->proxy['enabled']) ? $this->proxy['enabled'] : '';
+		$this->proxy_timeout = isset($this->proxy['timeout']) ? $this->proxy['timeout'] : '5';
+		$this->proxy_address = isset($this->proxy['address']) ? $this->proxy['address'] : '127.0.0.1:8087';
 
 		$this->watermark_enabled = get_option('qqworld-auto-save-images-watermark-enabled', 'no');
 		$this->ignore_animated_gif = get_option('qqworld-auto-save-images-watermark-ignore-animated-gif', 'yes');
@@ -734,6 +744,7 @@ class QQWorld_auto_save_images {
 		</div>
 		<div class="tab-content hidden">
 			<div class="readme"><p><strong><?php _e("Just for preview, The complete feature will on the Pro version. Don't worry, other features will be free forever.", 'qqworld_auto_save_images') ?></strong></p></div>
+			<h2><?php _e('Optimization Options', 'qqworld_auto_save_images'); ?></h2>
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
@@ -804,6 +815,38 @@ class QQWorld_auto_save_images {
 									<td colspan="2"><input type="button" id="test-ftp" class="button" value="<?php _e('Test FTP', 'qqworld_auto_save_images'); ?>" /></td>
 								</tr>
 							</table>
+						</fieldset></td>
+					</tr>
+				</tbody>
+			</table>
+			<h2><?php _e('Proxy Settings', 'qqworld_auto_save_images'); ?></h2>
+			<table class="form-table">
+				<tbody>
+					<tr valign="top">
+						<th scope="row"><label for="enabled_proxy"><?php _e('Enabled', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e('Use proxy server to download images.', 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Enabled', 'qqworld_auto_save_images'); ?></span></legend>
+								<label>
+									<input name="qqworld-auto-save-images-proxy[enabled]" type="checkbox" id="enabled_proxy" value="yes" <?php checked('yes', $this->proxy_enabled); ?> />
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="proxy_timeout"><?php _e('Timeout', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Set timeout period on proxy.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Timeout', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="proxy_timeout">
+									<input name="qqworld-auto-save-images-proxy[timeout]" type="text" class="small-text" id="proxy_timeout" value="<?php echo $this->proxy_timeout; ?>" /> <?php _e("Second(s)", 'qqworld_auto_save_images'); ?>
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="proxy_address"><?php _e('Proxy Address', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("For example: 127.0.0.1:8087", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Proxy Address', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="proxy_address">
+									<input name="qqworld-auto-save-images-proxy[address]" type="text" id="proxy_address" value="<?php echo $this->proxy_address; ?>" />
+								</label>
 						</fieldset></td>
 					</tr>
 					<tr valign="top">
@@ -1069,7 +1112,8 @@ class QQWorld_auto_save_images {
 				'qqworld-auto-save-images-exclude-domain',
 				'qqworld-auto-save-images-format',
 				'qqworld-auto-save-images-optimize',
-				'qqworld-auto-save-images-ftp'
+				'qqworld-auto-save-images-ftp',
+				'qqworld-auto-save-images-proxy'
 			),
 			'watermark' => array(
 				'qqworld-auto-save-images-watermark-enabled',
@@ -1320,6 +1364,17 @@ class QQWorld_auto_save_images {
 		}
 		if ($no_match) $replace = $res['url'];
 		$replace .= str_replace( '[Attachment ID]', $res['id'], $this->additional_content['after'] );
+
+		if ( $this->keep_outside_links=='yes' ) {
+			$patt = '/<a[^<]+><img\s[^>]*'.$pattern_image_url.'.*?>?<[^>]+a>/i';
+			if ( preg_match($patt, $content, $match) ) {
+				$string = $match[0];
+				$pos = strpos($string, '>');
+				$string = substr_replace($string, ' rel="nofollow">', $pos, 1);
+				$content = preg_replace($patt, $string, $content);
+			}
+		}
+
 		$content = preg_replace($pattern, $replace, $content);
 		return $content;
 	}
