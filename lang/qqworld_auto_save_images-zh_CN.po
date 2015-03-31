@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QQworld Auto Save Images\n"
 "Report-Msgid-Bugs-To: http://www.qqworld.org\n"
-"POT-Creation-Date: 2015-03-25 17:50+0800\n"
-"PO-Revision-Date: 2015-03-25 17:50+0800\n"
+"POT-Creation-Date: 2015-03-29 19:26+0800\n"
+"PO-Revision-Date: 2015-03-29 19:26+0800\n"
 "Last-Translator: Michael Wang <admin@qqworld.org>\n"
 "Language-Team: QQWorld <admin@qqworld.org>\n"
 "Language: zh_CN\n"
@@ -453,10 +453,6 @@ msgstr ""
 "自动缩小大于该尺寸的图像。如果你想要宽度不超过800px和任意高度图片，请设置宽度"
 "800，并设置高度为空。"
 
-#: qqworld-auto-save-images.php:594
-msgid "Your server PHP version lower than 5.4, so this feature not works."
-msgstr "服务器PHP的版本低于5.4，所以此功能无法使用。"
-
 #: qqworld-auto-save-images.php:606 qqworld-auto-save-images.php:608
 msgid "Exclude Domain/Keyword"
 msgstr "排除域名/关键词"
@@ -870,6 +866,9 @@ msgstr "没有远程图像。"
 #: qqworld-auto-save-images.php:1290
 msgid "Original Link"
 msgstr "原始链接"
+
+#~ msgid "Your server PHP version lower than 5.4, so this feature not works."
+#~ msgstr "服务器PHP的版本低于5.4，所以此功能无法使用。"
 
 #~ msgid "Trial"
 #~ msgstr "试用"
