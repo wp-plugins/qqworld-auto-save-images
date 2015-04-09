@@ -402,7 +402,9 @@ QQWorld_auto_save_images.scan_posts = function() {
 				url: ajaxurl,
 				data: data,
 				success: function(data) {
-					$('#list-'+post_id).html('<span class="green">'+QASI.done+'</span>');
+					var item = $(data);
+					item.append('<td><span class="green">'+QASI.done+'</span></td>');
+					$('#list-'+post_id).closest('tr').replaceWith(item);
 				},
 				error: _this.action.catch_errors
 			});

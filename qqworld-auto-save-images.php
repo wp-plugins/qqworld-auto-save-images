@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.13.2
+Version: 1.7.13.3
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -39,6 +39,8 @@ class QQWorld_auto_save_images {
 	var $optimize_folder;
 	var $ftp;
 	var $ftp_connection;
+
+	var $compression;
 
 	var $proxy;
 	var $proxy_enabled;
@@ -85,6 +87,10 @@ class QQWorld_auto_save_images {
 		$this->proxy_enabled = isset($this->proxy['enabled']) ? $this->proxy['enabled'] : '';
 		$this->proxy_timeout = isset($this->proxy['timeout']) ? $this->proxy['timeout'] : '5';
 		$this->proxy_address = isset($this->proxy['address']) ? $this->proxy['address'] : '127.0.0.1:8087';
+
+		$this->compression = get_option('qqworld-auto-save-images-compression', array('quality' => 75));
+		$this->compression_enabled = isset($this->compression['enabled']) ? $this->compression['enabled'] : '';
+		$this->compression_level = isset($this->compression['quality']) ? $this->compression['quality'] : '';
 
 		$this->watermark_enabled = get_option('qqworld-auto-save-images-watermark-enabled', 'no');
 		$this->ignore_animated_gif = get_option('qqworld-auto-save-images-watermark-ignore-animated-gif', 'yes');
@@ -372,7 +378,7 @@ class QQWorld_auto_save_images {
 			$post_type_object = get_post_type_object($post_type);
 			if ($this->has_remote_image) :
 				$class = 'has_remote_images';
-				if ($this->has_missing_image) $class += ' has_not_exits_remote_images';
+				if ($this->has_missing_image) $class .= ' has_not_exits_remote_images';
 				$class = ' class="' . $class . '"';
 ?>
 			<tr<?php echo $class; ?>>
@@ -849,6 +855,35 @@ class QQWorld_auto_save_images {
 								</label>
 						</fieldset></td>
 					</tr>
+				</tbody>
+			</table>
+			<h2><?php _e('Images Compression Options', 'qqworld_auto_save_images'); ?></h2>
+			<table class="form-table">
+				<tbody>
+					<tr valign="top">
+						<th scope="row"><label for="enabled_compression"><?php _e('Enabled', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e('Enable compress images when uploading.', 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Enabled', 'qqworld_auto_save_images'); ?></span></legend>
+								<label>
+									<input name="qqworld-auto-save-images-compression[enabled]" type="checkbox" id="enabled_compression" value="yes" <?php checked('yes', $this->compression_enabled); ?> />
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="enabled_compression"><?php _e('Quality', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e('Compression level, ranges from 0 (worst quality, smaller file) to 100 (best quality, biggest file).', 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Quality', 'qqworld_auto_save_images'); ?></span></legend>
+								<select id="protocol" name="qqworld-auto-save-images-compression[quality]">
+								<?php for ($q=100; $q>=0; $q-=5) : ?>
+									<option value="<?php echo $q; ?>"<?php selected($q, $this->compression_level); ?>><?php echo $q; ?><?php if ($q==75) _e(' (Recommend)', 'qqworld_auto_save_images'); ?></option>
+								<?php endfor; ?>
+								</select>
+						</fieldset></td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="form-table">
+				<tbody>
 					<tr valign="top">
 						<th scope="row"><label><?php _e('Buy', 'qqworld_auto_save_images'); ?></label></th>
 						<td><a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" target="_blank"><?php _e('QQWorld Auto Save Images Pro', 'qqworld_auto_save_images'); ?></a></td>
@@ -1242,6 +1277,10 @@ class QQWorld_auto_save_images {
 		if ($this->remote_publishing) add_action('xmlrpc_publish_post', array($this, 'fetch_images') );
 	}
 
+	public function has_missing_images() {
+	
+	}
+
 	public function content_save_pre($content, $post_id=null, $action='save') {
 		$this->count = 1;
 		$this->change_attachment_url_to_permalink($content);
@@ -1331,7 +1370,7 @@ class QQWorld_auto_save_images {
 					if ( preg_match('/<a[^>]*href=\"(.*?)\".*?>/i', $matches[0], $match) ) {
 						$args = array(
 							'ID' => $attachment_id,
-							'post_content' => '<a href="'.$match[1].'" target="_blank">'.__('Original Link', 'qqworld_auto_save_images').'</a>'
+							'post_content' => '<a href="'.$match[1].'" target="_blank" rel="nofollow">'.__('Original Link', 'qqworld_auto_save_images').'</a>'
 						);
 						wp_update_post($args);
 					}
@@ -1483,7 +1522,7 @@ class QQWorld_auto_save_images {
 
 	function fsockopen_image_header($image_url, $mode='Content-Type') { // 'Content-Length' | 'Content-Type' | 'Date' | 'Last-Modified'
 		$url = parse_url($image_url);
-		$fp = fsockopen($url['host'], 80, $errno, $errstr, 30);
+		$fp = @fsockopen($url['host'], 80, $errno, $errstr, 30);
 		if ($fp) {
 			//这里请求设置为HEAD
 			$out = "HEAD {$url['path']} HTTP/1.1\r\n";
@@ -1523,7 +1562,7 @@ class QQWorld_auto_save_images {
 		// GD
 		$img = @imagecreatefromstring($file);
 		if (!$img && function_exists('fsockopen')) {
-			$type = $this->fsockopen_image_header($image_url);
+			$type = @$this->fsockopen_image_header($image_url);
 			if ($type && in_array($type, array('image/jpeg', 'image/gif', 'image/png'))) {
 				$type = substr($type, 6);
 				$img = call_user_func("imagecreatefrom{$type}", $image_url);

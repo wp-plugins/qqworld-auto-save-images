@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1.1
-Stable tag: 1.7.13.2
+Stable tag: 1.7.13.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,8 +98,14 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" targ
 
 == Changelog ==
 
+= 1.7.13.3 =
+New feature: Add <strong>rel="nofollow"</strong> into outside link's tag when checked the option Save-Outside-Links.<br />
+新特性：当选择保存外部链接时，自动在外部链接的标签中加入<strong>rel="nofollow"。</strong>。<br />
+Bug fixed: Manual scan posts can not check missing remote images.<br />
+修复Bug：手动扫描文章无法检测丢失的远程图片</strong>。
+
 = 1.7.13.2 =
-New feature: Add <strong>rel="nofollow"</strong> into outside link's tag when choose the Keep-Outside-Links.<br />
+New feature: Add <strong>rel="nofollow"</strong> into outside link's tag when checked the option Keep-Outside-Links.<br />
 新特性：当选择保留外部链接时，自动在外部链接的标签中加入<strong>rel="nofollow"。</strong>。
 
 = 1.7.13.1 =
