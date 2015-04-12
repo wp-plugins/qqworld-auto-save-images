@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: QQworld Auto Save Images\n"
 "Report-Msgid-Bugs-To: http://www.qqworld.org\n"
-"POT-Creation-Date: 2015-04-09 15:21+0800\n"
-"PO-Revision-Date: 2015-04-09 15:21+0800\n"
+"POT-Creation-Date: 2015-04-10 17:22+0800\n"
+"PO-Revision-Date: 2015-04-10 17:22+0800\n"
 "Last-Translator: Michael Wang <admin@qqworld.org>\n"
 "Language-Team: QQWorld <admin@qqworld.org>\n"
 "Language: zh_CN\n"
@@ -48,7 +48,7 @@ msgid "No taxonomies found."
 msgstr "没有相关分类方法。"
 
 #: qqworld-auto-save-images.php:189 qqworld-auto-save-images.php:388
-#: qqworld-auto-save-images.php:1241
+#: qqworld-auto-save-images.php:1247
 msgid "All remote images have been saved."
 msgstr "已保存所有远程图像。"
 
@@ -75,7 +75,7 @@ msgid ""
 "database."
 msgstr "你确定吗？<br />在点击确定按钮之前，我建议你备份网站的数据库。"
 
-#: qqworld-auto-save-images.php:235 qqworld-auto-save-images.php:1047
+#: qqworld-auto-save-images.php:235 qqworld-auto-save-images.php:1053
 msgid "Please select post types."
 msgstr "请选择文章类型。"
 
@@ -171,7 +171,7 @@ msgstr "扫描中……"
 msgid "Listing..."
 msgstr "显示列表中……"
 
-#: qqworld-auto-save-images.php:256 qqworld-auto-save-images.php:1089
+#: qqworld-auto-save-images.php:256 qqworld-auto-save-images.php:1095
 #, fuzzy
 msgid "ID"
 msgstr "博客ID"
@@ -180,12 +180,12 @@ msgstr "博客ID"
 msgid "Post Type"
 msgstr "文章类型"
 
-#: qqworld-auto-save-images.php:258 qqworld-auto-save-images.php:1091
+#: qqworld-auto-save-images.php:258 qqworld-auto-save-images.php:1097
 #, fuzzy
 msgid "Title"
 msgstr "标题"
 
-#: qqworld-auto-save-images.php:259 qqworld-auto-save-images.php:1069
+#: qqworld-auto-save-images.php:259 qqworld-auto-save-images.php:1075
 #, fuzzy
 msgid "Status"
 msgstr "状态"
@@ -344,11 +344,11 @@ msgid "General Options"
 msgstr "常规选项"
 
 #: qqworld-auto-save-images.php:529 qqworld-auto-save-images.php:531
-#: qqworld-auto-save-images.php:766 qqworld-auto-save-images.php:768
+#: qqworld-auto-save-images.php:772 qqworld-auto-save-images.php:774
 msgid "Mode"
 msgstr "模式"
 
-#: qqworld-auto-save-images.php:534 qqworld-auto-save-images.php:1127
+#: qqworld-auto-save-images.php:534 qqworld-auto-save-images.php:1133
 msgid "Automatic"
 msgstr "自动"
 
@@ -358,7 +358,7 @@ msgid ""
 "publish post."
 msgstr "在保存或发布文章时，自动将所有远程图像保存到本地媒体库。"
 
-#: qqworld-auto-save-images.php:538 qqworld-auto-save-images.php:1128
+#: qqworld-auto-save-images.php:538 qqworld-auto-save-images.php:1134
 msgid "Manual"
 msgstr "手动"
 
@@ -425,18 +425,18 @@ msgid "Ignore smaller than this size picture."
 msgstr "忽略比这个尺寸更小的图像。"
 
 #: qqworld-auto-save-images.php:602 qqworld-auto-save-images.php:614
-#: qqworld-auto-save-images.php:927
+#: qqworld-auto-save-images.php:933
 msgid "Width:"
 msgstr "宽度："
 
 #: qqworld-auto-save-images.php:602 qqworld-auto-save-images.php:605
 #: qqworld-auto-save-images.php:614 qqworld-auto-save-images.php:617
-#: qqworld-auto-save-images.php:927 qqworld-auto-save-images.php:930
+#: qqworld-auto-save-images.php:933 qqworld-auto-save-images.php:936
 msgid "(px)"
 msgstr "（像素）"
 
 #: qqworld-auto-save-images.php:605 qqworld-auto-save-images.php:617
-#: qqworld-auto-save-images.php:930
+#: qqworld-auto-save-images.php:936
 msgid "Height:"
 msgstr "高度："
 
@@ -541,263 +541,270 @@ msgstr "保存外链"
 msgid "Save the outside links to description of attachments."
 msgstr "保存外部链接到附件的描述。"
 
-#: qqworld-auto-save-images.php:700 qqworld-auto-save-images.php:702
+#: qqworld-auto-save-images.php:697
+msgid ""
+"To custom the content, add codes into <strong>functions.php</strong> like "
+"this below:"
+msgstr ""
+"如果想自定义该内容，加入类似以下代码到 <strong>functions.php</strong> 中："
+
+#: qqworld-auto-save-images.php:706 qqworld-auto-save-images.php:708
 msgid "Image Size"
 msgstr "图像尺寸"
 
-#: qqworld-auto-save-images.php:700
+#: qqworld-auto-save-images.php:706
 msgid "Replace images you want size to display."
 msgstr "替换成你想要显示的尺寸的图像。"
 
-#: qqworld-auto-save-images.php:707
+#: qqworld-auto-save-images.php:713
 #, fuzzy
 msgid "Thumbnail"
 msgstr ""
 "一个数组，可以包含数个函数，每个函数返回可能的缩略图图片对象相对于时间对象的"
 "jQuery路径。"
 
-#: qqworld-auto-save-images.php:708
+#: qqworld-auto-save-images.php:714
 msgid "Medium"
 msgstr ""
 
-#: qqworld-auto-save-images.php:709
+#: qqworld-auto-save-images.php:715
 msgid "Large"
 msgstr ""
 
-#: qqworld-auto-save-images.php:710
+#: qqworld-auto-save-images.php:716
 #, fuzzy
 msgid "Full Size"
 msgstr "链接到全尺寸图像"
 
-#: qqworld-auto-save-images.php:719 qqworld-auto-save-images.php:721
+#: qqworld-auto-save-images.php:725 qqworld-auto-save-images.php:727
 msgid "Link To"
 msgstr "链接到"
 
-#: qqworld-auto-save-images.php:719
+#: qqworld-auto-save-images.php:725
 msgid "If you checked Keep-Outside-Links, this option will not works."
 msgstr "如果你勾选了保留外链，本项将不起作用。"
 
-#: qqworld-auto-save-images.php:726
+#: qqworld-auto-save-images.php:732
 #, fuzzy
 msgid "Media File"
 msgstr "添加文件"
 
-#: qqworld-auto-save-images.php:727
+#: qqworld-auto-save-images.php:733
 #, fuzzy
 msgid "Attachment Page"
 msgstr "（附件）"
 
-#: qqworld-auto-save-images.php:728
+#: qqworld-auto-save-images.php:734
 msgid "None"
 msgstr ""
 
-#: qqworld-auto-save-images.php:737 qqworld-auto-save-images.php:739
+#: qqworld-auto-save-images.php:743 qqworld-auto-save-images.php:745
 msgid "Additional Content"
 msgstr "额外的内容"
 
-#: qqworld-auto-save-images.php:737
+#: qqworld-auto-save-images.php:743
 msgid ""
 "This content will be displayed after the each remote images code. you can "
 "use [Attachment ID] indicate current attachment ID."
 msgstr "此内容将在每个远程图像编码后显​​示。您可以使用[附件ID]指示当前连接ID。"
 
-#: qqworld-auto-save-images.php:742
+#: qqworld-auto-save-images.php:748
 msgid "For example: [Gbuy id='[Attachment ID]']"
 msgstr "例如：[Gbuy id='[Attachment ID]']"
 
-#: qqworld-auto-save-images.php:752 qqworld-auto-save-images.php:899
+#: qqworld-auto-save-images.php:758 qqworld-auto-save-images.php:905
 msgid ""
 "Just for preview, The complete feature will on the Pro version. Don't worry, "
 "other features will be free forever."
 msgstr "仅仅用于预览，专业版将提供完整的功能。别担心，其他功能将永久免费。"
 
-#: qqworld-auto-save-images.php:753
+#: qqworld-auto-save-images.php:759
 msgid "Optimization Options"
 msgstr "优化选项"
 
-#: qqworld-auto-save-images.php:757 qqworld-auto-save-images.php:759
-#: qqworld-auto-save-images.php:832 qqworld-auto-save-images.php:834
-#: qqworld-auto-save-images.php:864 qqworld-auto-save-images.php:866
+#: qqworld-auto-save-images.php:763 qqworld-auto-save-images.php:765
+#: qqworld-auto-save-images.php:838 qqworld-auto-save-images.php:840
+#: qqworld-auto-save-images.php:870 qqworld-auto-save-images.php:872
 msgid "Enabled"
 msgstr "开启"
 
-#: qqworld-auto-save-images.php:757
+#: qqworld-auto-save-images.php:763
 msgid "Use Cookie-Free Domains to display images."
 msgstr "使用免Cookie域名(Cookie-Free Domains)来显示图片。"
 
-#: qqworld-auto-save-images.php:766
+#: qqworld-auto-save-images.php:772
 msgid ""
 "If you wanna use local media library, please choose the Use-local-server."
 msgstr "如果你想使用本地媒体库，请选择使用本地服务器。"
 
-#: qqworld-auto-save-images.php:772
-msgid "Use local server"
-msgstr "使用本地服务器"
+#: qqworld-auto-save-images.php:778
+msgid "Use local server | QiNiu Cloud Storage"
+msgstr "使用 本地服务器 | 七牛云存储"
 
-#: qqworld-auto-save-images.php:773
+#: qqworld-auto-save-images.php:779
 msgid "Use remote server"
 msgstr "使用远程服务器"
 
-#: qqworld-auto-save-images.php:781 qqworld-auto-save-images.php:783
+#: qqworld-auto-save-images.php:787 qqworld-auto-save-images.php:789
 msgid "Domain & Folder"
 msgstr "域名 & 目录"
 
-#: qqworld-auto-save-images.php:781
+#: qqworld-auto-save-images.php:787
 msgid "Do not end with '/'."
 msgstr "结尾不要有 '/'。"
 
-#: qqworld-auto-save-images.php:789
+#: qqworld-auto-save-images.php:795
 msgid "Host"
 msgstr "主机"
 
-#: qqworld-auto-save-images.php:790
+#: qqworld-auto-save-images.php:796
 msgid "Folder (Can be empty)"
 msgstr "目录（可以为空）"
 
-#: qqworld-auto-save-images.php:796 qqworld-auto-save-images.php:798
+#: qqworld-auto-save-images.php:802 qqworld-auto-save-images.php:804
 msgid "FTP Settings"
 msgstr "FTP设置"
 
-#: qqworld-auto-save-images.php:801
+#: qqworld-auto-save-images.php:807
 msgid "IP Address"
 msgstr "IP地址"
 
-#: qqworld-auto-save-images.php:805
+#: qqworld-auto-save-images.php:811
 msgid "Port"
 msgstr "端口"
 
-#: qqworld-auto-save-images.php:809
+#: qqworld-auto-save-images.php:815
 msgid "Username"
 msgstr "用户名"
 
-#: qqworld-auto-save-images.php:813
+#: qqworld-auto-save-images.php:819
 msgid "Password"
 msgstr "密码"
 
-#: qqworld-auto-save-images.php:817
+#: qqworld-auto-save-images.php:823
 msgid "Directory"
 msgstr "目录"
 
-#: qqworld-auto-save-images.php:821
+#: qqworld-auto-save-images.php:827
 msgid "Test FTP"
 msgstr "测试FTP"
 
-#: qqworld-auto-save-images.php:828
+#: qqworld-auto-save-images.php:834
 msgid "Proxy Settings"
 msgstr "代理设置"
 
-#: qqworld-auto-save-images.php:832
+#: qqworld-auto-save-images.php:838
 msgid "Use proxy server to download images."
 msgstr "使用代理服务器下载图片。"
 
-#: qqworld-auto-save-images.php:841 qqworld-auto-save-images.php:843
+#: qqworld-auto-save-images.php:847 qqworld-auto-save-images.php:849
 msgid "Timeout"
 msgstr "超时"
 
-#: qqworld-auto-save-images.php:841
+#: qqworld-auto-save-images.php:847
 msgid "Set timeout period on proxy."
 msgstr "设置代理超时时间。"
 
-#: qqworld-auto-save-images.php:845
+#: qqworld-auto-save-images.php:851
 msgid "Second(s)"
 msgstr "秒"
 
-#: qqworld-auto-save-images.php:850 qqworld-auto-save-images.php:852
+#: qqworld-auto-save-images.php:856 qqworld-auto-save-images.php:858
 msgid "Proxy Address"
 msgstr "代理地址"
 
-#: qqworld-auto-save-images.php:850
+#: qqworld-auto-save-images.php:856
 msgid "For example: 127.0.0.1:8087"
 msgstr "示例：127.0.0.1:8087"
 
-#: qqworld-auto-save-images.php:860
+#: qqworld-auto-save-images.php:866
 msgid "Images Compression Options"
 msgstr "图片压缩选项"
 
-#: qqworld-auto-save-images.php:864
+#: qqworld-auto-save-images.php:870
 msgid "Enable compress images when uploading."
 msgstr "启用上传时压缩图像。"
 
-#: qqworld-auto-save-images.php:873 qqworld-auto-save-images.php:875
+#: qqworld-auto-save-images.php:879 qqworld-auto-save-images.php:881
 msgid "Quality"
 msgstr "品质"
 
-#: qqworld-auto-save-images.php:873
+#: qqworld-auto-save-images.php:879
 msgid ""
 "Compression level, ranges from 0 (worst quality, smaller file) to 100 (best "
 "quality, biggest file)."
 msgstr "压缩级别，范围从0（最低品质，文件较小）到100（最高品质，文件较大）。"
 
-#: qqworld-auto-save-images.php:878
+#: qqworld-auto-save-images.php:884
 msgid " (Recommend)"
 msgstr "（推荐）"
 
-#: qqworld-auto-save-images.php:888 qqworld-auto-save-images.php:1017
+#: qqworld-auto-save-images.php:894 qqworld-auto-save-images.php:1023
 msgid "Buy"
 msgstr "购买"
 
-#: qqworld-auto-save-images.php:889 qqworld-auto-save-images.php:1018
+#: qqworld-auto-save-images.php:895 qqworld-auto-save-images.php:1024
 msgid "QQWorld Auto Save Images Pro"
 msgstr "QQWorld自动保存图片专业版"
 
-#: qqworld-auto-save-images.php:903 qqworld-auto-save-images.php:905
+#: qqworld-auto-save-images.php:909 qqworld-auto-save-images.php:911
 msgid "Enabled Watermark"
 msgstr "启用水印"
 
-#: qqworld-auto-save-images.php:903
+#: qqworld-auto-save-images.php:909
 msgid "Use for both of remote images and the local upload."
 msgstr "同时用于远程图片和本地上传。"
 
-#: qqworld-auto-save-images.php:913 qqworld-auto-save-images.php:915
+#: qqworld-auto-save-images.php:919 qqworld-auto-save-images.php:921
 msgid "Ignore animated GIF"
 msgstr "忽略GIF动画"
 
-#: qqworld-auto-save-images.php:923 qqworld-auto-save-images.php:925
+#: qqworld-auto-save-images.php:929 qqworld-auto-save-images.php:931
 msgid "Filter"
 msgstr "过滤"
 
-#: qqworld-auto-save-images.php:923
+#: qqworld-auto-save-images.php:929
 msgid "Skip images that smaller than this size."
 msgstr "跳过比这个尺寸更小的图像。"
 
-#: qqworld-auto-save-images.php:936
+#: qqworld-auto-save-images.php:942
 msgid "Align To"
 msgstr "对齐方式"
 
-#: qqworld-auto-save-images.php:958
+#: qqworld-auto-save-images.php:964
 msgid "Position"
 msgstr "位置"
 
-#: qqworld-auto-save-images.php:958
+#: qqworld-auto-save-images.php:964
 msgid "You can try to drag the watermark image."
 msgstr "你可以试着拖动水印图片。"
 
-#: qqworld-auto-save-images.php:975 qqworld-auto-save-images.php:977
-#: qqworld-auto-save-images.php:1056
+#: qqworld-auto-save-images.php:981 qqworld-auto-save-images.php:983
+#: qqworld-auto-save-images.php:1062
 msgid "Offset"
 msgstr "偏移"
 
-#: qqworld-auto-save-images.php:988 qqworld-auto-save-images.php:990
+#: qqworld-auto-save-images.php:994 qqworld-auto-save-images.php:996
 msgid "Opacity"
 msgstr "不透明度"
 
-#: qqworld-auto-save-images.php:998 qqworld-auto-save-images.php:1000
+#: qqworld-auto-save-images.php:1004 qqworld-auto-save-images.php:1006
 msgid "Upload Watermark Image"
 msgstr "上传水印图片"
 
-#: qqworld-auto-save-images.php:1002
+#: qqworld-auto-save-images.php:1008
 msgid "Insert a Watermark Image"
 msgstr "插入水印图片"
 
-#: qqworld-auto-save-images.php:1013
+#: qqworld-auto-save-images.php:1019
 msgid "Default Watermark"
 msgstr "默认水印"
 
-#: qqworld-auto-save-images.php:1032
+#: qqworld-auto-save-images.php:1038
 msgid "Select post types"
 msgstr "选择文章类型"
 
-#: qqworld-auto-save-images.php:1032
+#: qqworld-auto-save-images.php:1038
 msgid ""
 "If you have too many posts to be scan, sometimes in process looks like "
 "stopping, but it may be fake. please be patient."
@@ -805,20 +812,20 @@ msgstr ""
 "如果有太多文章需要扫描，有时候在扫描过程中看起来像是停止了，但可能是假停止，"
 "请耐心等待。"
 
-#: qqworld-auto-save-images.php:1046
+#: qqworld-auto-save-images.php:1052
 #, fuzzy
 msgid "Categories"
 msgstr "%s分类"
 
-#: qqworld-auto-save-images.php:1046
+#: qqworld-auto-save-images.php:1052
 msgid "Default empty to scan all categories."
 msgstr "默认留空扫描所有分类。"
 
-#: qqworld-auto-save-images.php:1051
+#: qqworld-auto-save-images.php:1057
 msgid "Scope of Post ID"
 msgstr "文章ID范围"
 
-#: qqworld-auto-save-images.php:1051
+#: qqworld-auto-save-images.php:1057
 msgid ""
 "Default empty for scan all posts ID. If you want to scan posts ID from 50 to "
 "100. please type '50' and '100' or '100' and '50', The order in which two "
@@ -829,12 +836,12 @@ msgstr ""
 "者'100'和'50'，两个数字的顺序可以颠倒。如果你只输入了1个数字，则系统只会扫描"
 "该ID。"
 
-#: qqworld-auto-save-images.php:1052
+#: qqworld-auto-save-images.php:1058
 #, php-format
 msgid "From %1$s to %2$s"
 msgstr "从 %1$s 到 %2$s"
 
-#: qqworld-auto-save-images.php:1056
+#: qqworld-auto-save-images.php:1062
 msgid ""
 "Default scan all posts. If you want to scan 50-150 posts, please type '50' "
 "in the textfield and select '100'."
@@ -842,68 +849,68 @@ msgstr ""
 "默认扫秒全部文章，如果想扫描50-150篇文章，请在文本框中输入“50”并在下拉菜单中"
 "选择“100”。"
 
-#: qqworld-auto-save-images.php:1058
+#: qqworld-auto-save-images.php:1064
 #, php-format
 msgid "Start from %s to Scan"
 msgstr "从 %s 开始扫描"
 
-#: qqworld-auto-save-images.php:1060
+#: qqworld-auto-save-images.php:1066
 #, fuzzy
 msgid "All"
 msgstr "所有"
 
-#: qqworld-auto-save-images.php:1064
+#: qqworld-auto-save-images.php:1070
 #, fuzzy
 msgid "Posts"
 msgstr "热门文章"
 
-#: qqworld-auto-save-images.php:1074
+#: qqworld-auto-save-images.php:1080
 msgid "Any"
 msgstr "任意"
 
-#: qqworld-auto-save-images.php:1084
+#: qqworld-auto-save-images.php:1090
 msgid "Order By"
 msgstr "排序依据"
 
-#: qqworld-auto-save-images.php:1090
+#: qqworld-auto-save-images.php:1096
 #, fuzzy
 msgid "Author"
 msgstr "名称"
 
-#: qqworld-auto-save-images.php:1092
+#: qqworld-auto-save-images.php:1098
 #, fuzzy
 msgid "Date"
 msgstr "日期"
 
-#: qqworld-auto-save-images.php:1093
+#: qqworld-auto-save-images.php:1099
 #, fuzzy
 msgid "Last Modified"
 msgstr "最后回复"
 
-#: qqworld-auto-save-images.php:1094
+#: qqworld-auto-save-images.php:1100
 msgid "Comment Count"
 msgstr "评论数"
 
-#: qqworld-auto-save-images.php:1104
+#: qqworld-auto-save-images.php:1110
 #, fuzzy
 msgid "Order"
 msgstr "顺序"
 
-#: qqworld-auto-save-images.php:1114
+#: qqworld-auto-save-images.php:1120
 msgid "Speed"
 msgstr "速度"
 
-#: qqworld-auto-save-images.php:1114
+#: qqworld-auto-save-images.php:1120
 msgid "If the server is too much stress may be appropriately reduced speed."
 msgstr "如果服务器压力过大，可以适当调低速度。"
 
-#: qqworld-auto-save-images.php:1127
+#: qqworld-auto-save-images.php:1133
 msgid ""
 "Scan posts and keep remote images in all posts to local media library. Maybe "
 "take a long time."
 msgstr "扫描所有的文章，将所有远程图片保存到本地，可能需要很长时间。"
 
-#: qqworld-auto-save-images.php:1128
+#: qqworld-auto-save-images.php:1134
 msgid ""
 "The list displayed will show you which posts including remote images, then "
 "you can keep them to local manually via click \"Fetch\" button."
@@ -911,17 +918,20 @@ msgstr ""
 "显示的列表中将告诉你哪些文章包含远程图片，然后你可以通过点击“抓取”按钮手动保"
 "存。"
 
-#: qqworld-auto-save-images.php:1238
+#: qqworld-auto-save-images.php:1244
 msgid "Has Missing/Undownloadable images."
 msgstr "有 不存在/不可下载 的远程图像。"
 
-#: qqworld-auto-save-images.php:1245
+#: qqworld-auto-save-images.php:1251
 msgid "No remote images found."
 msgstr "没有远程图像。"
 
-#: qqworld-auto-save-images.php:1373
+#: qqworld-auto-save-images.php:1378
 msgid "Original Link"
 msgstr "原始链接"
+
+#~ msgid "Use local server"
+#~ msgstr "使用本地服务器"
 
 #~ msgid "Your server PHP version lower than 5.4, so this feature not works."
 #~ msgstr "服务器PHP的版本低于5.4，所以此功能无法使用。"

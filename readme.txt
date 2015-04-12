@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.1.1
-Stable tag: 1.7.13.3
+Stable tag: 1.7.13.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,6 +97,10 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" targ
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.13.4 =
+New feature: Supply a hook that can custom link text of the outside link or even more complicated.<br />
+新特性：提供1个Hook来自定义外部链接的链接文本或更加复杂的内容。</strong>。
 
 = 1.7.13.3 =
 New feature: Add <strong>rel="nofollow"</strong> into outside link's tag when checked the option Save-Outside-Links.<br />

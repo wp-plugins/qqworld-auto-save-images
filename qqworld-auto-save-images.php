@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.13.3
+Version: 1.7.13.4
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -694,6 +694,12 @@ class QQWorld_auto_save_images {
 								<label for="qqworld_auto_save_images_format_save_outside_links">
 									<input name="qqworld-auto-save-images-format[save-outside-links]" type="checkbox" id="qqworld_auto_save_images_format_save_outside_links" value="yes" <?php checked('yes', $this->save_outside_links); ?> />
 								</label>
+								<p><?php _e('To custom the content, add codes into <strong>functions.php</strong> like this below:', 'qqworld_auto_save_images'); ?></p>
+								<pre>add_filter('qqworld-auto-save-images-save-outsite-link', 'save_outside_link', 10, 2);
+function save_outside_link($content, $link) {
+	$content = '&lta href="'.$link.'" target="_blank" rel="nofollow"&gt;Original Link&lt;/a&gt;';
+	return $content;
+}</pre>
 						</fieldset></td>
 					</tr>
 					<tr valign="top">
@@ -769,7 +775,7 @@ class QQWorld_auto_save_images {
 								<select name="qqworld-auto-save-images-optimize[mode]" id="optimize-mode">
 								<?php
 								$linkTo = array(
-									'local' => __('Use local server', 'qqworld_auto_save_images'), 
+									'local' => __('Use local server | QiNiu Cloud Storage', 'qqworld_auto_save_images'), 
 									'remote' => __('Use remote server', 'qqworld_auto_save_images'),
 								);
 								foreach ($linkTo as $value => $title) echo '<option value="'.$value.'"'.selected($value, $this->optimize_mode, false).'>'.$title.'</option>';
@@ -1368,9 +1374,12 @@ class QQWorld_auto_save_images {
 			if ($preg) {
 				if ( $this->save_outside_links == 'yes' ) {
 					if ( preg_match('/<a[^>]*href=\"(.*?)\".*?>/i', $matches[0], $match) ) {
+						$link = $match[1];
+						$description = '<a href="'.$link.'" target="_blank" rel="nofollow">'.__('Original Link', 'qqworld_auto_save_images').'</a>';
+						$description = apply_filters('qqworld-auto-save-images-save-outsite-link', $description, $link);
 						$args = array(
 							'ID' => $attachment_id,
-							'post_content' => '<a href="'.$match[1].'" target="_blank" rel="nofollow">'.__('Original Link', 'qqworld_auto_save_images').'</a>'
+							'post_content' => $description
 						);
 						wp_update_post($args);
 					}
