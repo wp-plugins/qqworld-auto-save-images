@@ -480,21 +480,10 @@ QQWorld_auto_save_images.scan_posts = function() {
 		});
 
 		$(document).on('change', '#optimize-mode', function() {
-			if ($(this).val() == 'remote') {
-				$('#ftp-settings').fadeIn('normal');
-				$('#protocol').fadeIn('normal');
-				$('#folder').fadeIn('normal');
-				$('#url_example').fadeIn('normal');
-				$('#host').prev().fadeOut('normal');
-				$('#host').next().fadeOut('normal');
-			} else {
-				$('#ftp-settings').fadeOut('normal');
-				$('#protocol').fadeOut('normal');
-				$('#folder').fadeOut('normal');
-				$('#url_example').fadeOut('normal');
-				$('#host').prev().fadeIn('normal');
-				$('#host').next().fadeIn('normal');
-			}
+			var index = $(this).get(0).selectedIndex;
+			var optimize_table = $('.optimize-table');
+			optimize_table.not(optimize_table.eq(index)).slideUp('normal');
+			optimize_table.eq(index).slideDown('normal');
 		});
 
 		$(document).on('click', '#test-ftp', function() {

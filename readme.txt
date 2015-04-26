@@ -3,8 +3,8 @@ Contributors: qqworld
 Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
-Tested up to: 4.1.1
-Stable tag: 1.7.13.4
+Tested up to: 4.2
+Stable tag: 1.7.13.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,6 +97,10 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" targ
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.13.5 =
+New feature: Enhanced ability for grab remote image by GZIP compressed. (Needs PHP 5.4+)<br />
+新特性：加强对GZIP压缩的图片资源的抓取功能。(须PHP 5.4+)
 
 = 1.7.13.4 =
 New feature: Supply a hook that can custom link text of the outside link or even more complicated.<br />
