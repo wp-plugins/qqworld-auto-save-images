@@ -1453,7 +1453,6 @@ function save_outside_link($content, $link) {
 		$this->has_missing_image = 0;
 
 		$content = $this->content_save_pre($this->utf8_urldecode($this->utf8_urldecode($_POST['content'])), $post_id);
-
 		wp_update_post(array('ID' => $post_id, 'post_content' => $content));
 
 		$result = array();
@@ -1542,8 +1541,10 @@ function save_outside_link($content, $link) {
 				// exclude domain
 				$allow=true;
 				if (!empty($this->exclude_domain)) foreach ($this->exclude_domain as $domain) {
-					$pos=strpos($image_url, $domain);
-					if($pos) $allow=false;
+					if ($allow==true) {
+						$pos=strpos($image_url, $domain);
+						if($pos) $allow=false;
+					}
 				}
 				// check pictrue size
 				list($width, $height, $type) = $this->getimagesize($image_url);
@@ -1740,9 +1741,7 @@ function save_outside_link($content, $link) {
 				$maximum_picture_size_width = empty($this->maximum_picture_size['width']) ? $width*$this->maximum_picture_size['height']/$height : $this->maximum_picture_size['width'];
 				$new_width = $maximum_picture_size_width;
 				$new_height = $height*$maximum_picture_size_width/$width;
-				echo 1;
 			} else {
-				echo 2;
 				$maximum_picture_size_height = empty($this->maximum_picture_size['height']) ? $height*$this->maximum_picture_size['width']/$width : $this->maximum_picture_size['height'];
 				$new_width = $width*$maximum_picture_size_height/$height;
 				$new_height = $maximum_picture_size_height;
