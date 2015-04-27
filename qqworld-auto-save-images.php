@@ -53,6 +53,9 @@ class QQWorld_auto_save_images {
 
 	var $compression;
 
+	var $smart;
+	var $enabled_smart_grabbing;
+
 	var $proxy;
 	var $proxy_enabled;
 	var $proxy_timeout;
@@ -121,6 +124,9 @@ class QQWorld_auto_save_images {
 		$this->compression = get_option('qqworld-auto-save-images-compression', array('quality' => 75));
 		$this->compression_enabled = isset($this->compression['enabled']) ? $this->compression['enabled'] : '';
 		$this->compression_level = isset($this->compression['quality']) ? $this->compression['quality'] : '';
+
+		$this->smart = get_option('qqworld-auto-save-images-smart', array());
+		$this->enabled_smart_grabbing = isset($this->smart['enabled_smart_grabbing']) ? $this->smart['enabled_smart_grabbing'] : 'no';
 
 		$this->watermark_enabled = get_option('qqworld-auto-save-images-watermark-enabled', 'no');
 		$this->ignore_animated_gif = get_option('qqworld-auto-save-images-watermark-ignore-animated-gif', 'yes');
@@ -1017,6 +1023,20 @@ function save_outside_link($content, $link) {
 									<option value="<?php echo $q; ?>"<?php selected($q, $this->compression_level); ?>><?php echo $q; ?><?php if ($q==75) _e(' (Recommend)', 'qqworld_auto_save_images'); ?></option>
 								<?php endfor; ?>
 								</select>
+						</fieldset></td>
+					</tr>
+				</tbody>
+			</table>
+			<h2><?php _e('Smart Options', 'qqworld_auto_save_images'); ?></h2>
+			<table class="form-table">
+				<tbody>
+					<tr valign="top">
+						<th scope="row"><label for="enabled_smart_grabbing"><?php _e('Smart Grabbing', 'qqworld_auto_save_images'); ?></label> <span class="icon help" data-header="<?php _e('Smart Grabbing', 'qqworld_auto_save_images'); ?>" data-content="<?php _e('Automatically detect 2 images url from href/src of remote image with outside link, and grab the bigger one.', 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Smart Grabbing', 'qqworld_auto_save_images'); ?></span></legend>
+								<label>
+									<input name="qqworld-auto-save-images-smart[enabled_smart_grabbing]" type="checkbox" id="enabled_smart_grabbing" value="yes" <?php checked('yes', $this->enabled_smart_grabbing); ?> />
+								</label>
 						</fieldset></td>
 					</tr>
 				</tbody>
