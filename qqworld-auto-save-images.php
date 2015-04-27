@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.13.5
+Version: 1.7.13.6
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -39,6 +39,17 @@ class QQWorld_auto_save_images {
 	var $optimize_folder;
 	var $ftp;
 	var $ftp_connection;
+	var $ftp_protocol;
+	var $ftp_host;
+	var $ftp_folder;
+
+	var $aliyun_oss;
+	var $access_key_id;
+	var $access_key_secret;
+	var $bucket;
+	var $endpoint;
+	var $aliyun_oss_sync_delete;
+	var $aliyun_oss_auto_replace;
 
 	var $compression;
 
@@ -54,7 +65,6 @@ class QQWorld_auto_save_images {
 	var $offset;
 	var $watermark_opacity;
 	function __construct() {
-		__('Michael Wang', 'qqworld_auto_save_images');
 		$this->mode = get_option('qqworld_auto_save_images_mode', 'auto');
 		$this->when = get_option('qqworld_auto_save_images_when', 'publish');
 		$this->remote_publishing = get_option('qqworld_auto_save_images_remote_publishing', 'yes');
@@ -82,6 +92,20 @@ class QQWorld_auto_save_images {
 		$this->optimize_host = isset($this->optimize_url['host']) ? $this->optimize_url['host'] : '';
 		$this->optimize_folder = isset($this->optimize_url['folder']) ? $this->optimize_url['folder'] : '';
 		$this->ftp = get_option('qqworld-auto-save-images-ftp', array('ip' => '','port' => '21','username' => '','password' => '', 'directory' => '/'));
+		$this->ftp_protocol = isset($this->ftp['protocol']) ? $this->ftp['protocol'] : 'http';
+		$this->ftp_host = isset($this->ftp['host']) ? $this->ftp['host'] : '';
+		$this->ftp_folder = isset($this->ftp['folder']) ? $this->ftp['folder'] : '';
+
+		$this->aliyun_oss = get_option('qqworld-auto-save-images-aliyun-oss', array('endpoint' => 'oss.aliyuncs.com', 'sync-delete' => 'yes', 'auto-replace' => 'yes'));
+		$this->endpoint = isset($this->aliyun_oss['endpoint']) ? $this->aliyun_oss['endpoint'] : 'oss.aliyuncs.com';
+		$this->access_key_id = isset($this->aliyun_oss['access-key-id']) ? $this->aliyun_oss['access-key-id'] : '';
+		$this->access_key_secret = isset($this->aliyun_oss['access-key-secret']) ? $this->aliyun_oss['access-key-secret'] : '';
+		$this->aliyun_oss_sync_delete = isset($this->aliyun_oss['sync-delete']) ? $this->aliyun_oss['sync-delete'] : 'no';
+		$this->aliyun_oss_auto_replace = isset($this->aliyun_oss['auto-replace']) ? $this->aliyun_oss['auto-replace'] : 'no';
+
+		$this->aliyun_oss_protocol = isset($this->aliyun_oss['protocol']) ? $this->aliyun_oss['protocol'] : 'http';
+		$this->aliyun_oss_host = isset($this->aliyun_oss['host']) ? $this->aliyun_oss['host'] : '';
+		$this->aliyun_oss_folder = isset($this->aliyun_oss['folder']) ? $this->aliyun_oss['folder'] : '';
 
 		$this->aliyun_oss = get_option('qqworld-auto-save-images-aliyun-oss', array('sync-delete' => 'yes'));
 		$this->access_key_id = isset($this->aliyun_oss['access-key-id']) ? $this->aliyun_oss['access-key-id'] : '';
@@ -140,6 +164,11 @@ class QQWorld_auto_save_images {
 		add_filter( 'post_updated_messages', array($this, 'post_updated_messages') );
 		add_filter( 'qqworld-auto-save-images-custom-filename-structure', array($this, 'custom_filename_structure') );
 		add_action( 'admin_notices', array($this, 'admin_notices') );
+	}
+
+	public function languages() {
+		__('Michael Wang', 'qqworld_auto_save_images');
+		__(' (In Development)', 'qqworld_auto_save_images');
 	}
 
 	public function admin_notices() {
@@ -801,7 +830,7 @@ function save_outside_link($content, $link) {
 							<td><fieldset>
 								<legend class="screen-reader-text"><span><?php _e('Domain & Folder', 'qqworld_auto_save_images'); ?></span></legend>
 									<label>
-										<span>http(s)://</span> <input type="text" name="qqworld-auto-save-images-optimize-url[host]" class="regular-text" placeholder="<?php _e('Host', 'qqworld_auto_save_images'); ?>" id="host" value="" /> <span>/wp-contents/uploads/2014/11/example.jpg</span>
+										<span>http(s)://</span> <input type="text" name="qqworld-auto-save-images-optimize-url[host]" class="regular-text" placeholder="<?php _e('Host', 'qqworld_auto_save_images'); ?>" id="host" value="<?php echo $this->optimize_host; ?>" /> <span>/wp-contents/uploads/2014/11/example.jpg</span>
 									</label>
 							</fieldset></td>
 						</tr>
@@ -817,11 +846,11 @@ function save_outside_link($content, $link) {
 								<legend class="screen-reader-text"><span><?php _e('Domain & Folder', 'qqworld_auto_save_images'); ?></span></legend>
 									<label>
 										<select id="protocol" name="qqworld-auto-save-images-ftp[protocol]">
-											<option value="http">http://</option>
-											<option value="https">https://</option>
+											<option value="http"<?php selected($this->ftp_protocol, 'http'); ?>>http://</option>
+											<option value="https"<?php selected($this->ftp_protocol, 'https'); ?>>https://</option>
 										</select>
-										<input type="text" name="qqworld-auto-save-images-ftp[host]" class="regular-text" placeholder="<?php _e('Host', 'qqworld_auto_save_images'); ?>" id="ftp-host" value="" />
-										<input type="text" id="folder" name="qqworld-auto-save-images-ftp[folder]" placeholder="<?php _e('Folder (Can be empty)', 'qqworld_auto_save_images'); ?>" value="" />
+										<input type="text" name="qqworld-auto-save-images-ftp[host]" class="regular-text" placeholder="<?php _e('Host', 'qqworld_auto_save_images'); ?>" id="ftp-host" value="<?php echo $this->ftp_host; ?>" />
+										<input type="text" id="folder" name="qqworld-auto-save-images-ftp[folder]" placeholder="<?php _e('Folder (Can be empty)', 'qqworld_auto_save_images'); ?>" value="<?php echo $this->ftp_folder; ?>" />
 										<span>/2014/11/example.jpg</span>
 									</label>
 							</fieldset></td>
@@ -869,11 +898,11 @@ function save_outside_link($content, $link) {
 								<legend class="screen-reader-text"><span><?php _e('Domain & Folder', 'qqworld_auto_save_images'); ?></span></legend>
 									<label>
 										<select id="protocol" name="qqworld-auto-save-images-aliyun-oss[protocol]">
-											<option value="http">http://</option>
-											<option value="https">https://</option>
+											<option value="http"<?php selected($this->aliyun_oss_protocol, 'http'); ?>>http://</option>
+											<option value="https"<?php selected($this->aliyun_oss_protocol, 'https'); ?>>https://</option>
 										</select>
-										<input type="text" name="qqworld-auto-save-images-aliyun-oss[host]" class="regular-text" placeholder="<?php _e('Host', 'qqworld_auto_save_images'); ?>" id="aliyun-oss-host" value="" />
-										<input type="text" id="folder" name="qqworld-auto-save-images-aliyun-oss[folder]" placeholder="<?php _e('Folder (Can be empty)', 'qqworld_auto_save_images'); ?>" value="" />
+										<input type="text" name="qqworld-auto-save-images-aliyun-oss[host]" class="regular-text" placeholder="<?php _e('Host', 'qqworld_auto_save_images'); ?>" id="aliyun-oss-host" value="<?php echo $this->aliyun_oss_host; ?>" />
+										<input type="text" id="folder" name="qqworld-auto-save-images-aliyun-oss[folder]" placeholder="<?php _e('Folder (Can be empty)', 'qqworld_auto_save_images'); ?>" value="<?php echo $this->aliyun_oss_folder; ?>" />
 										<span>/2014/11/example.jpg</span>
 									</label>
 							</fieldset></td>
@@ -883,7 +912,7 @@ function save_outside_link($content, $link) {
 							<td><fieldset>
 								<legend class="screen-reader-text"><span><?php _e('Access Key ID', 'qqworld_auto_save_images'); ?></span></legend>
 									<label>
-										<input type="text" name="qqworld-auto-save-images-aliyun-oss[access-key-id]" class="regular-text" id="access-key-id" value="" />
+										<input type="text" name="qqworld-auto-save-images-aliyun-oss[access-key-id]" class="regular-text" id="access-key-id" value="<?php echo $this->access_key_id; ?>" />
 									</label>
 							</fieldset></td>
 						</tr>
@@ -892,7 +921,7 @@ function save_outside_link($content, $link) {
 							<td><fieldset>
 								<legend class="screen-reader-text"><span><?php _e('Access Key Secret', 'qqworld_auto_save_images'); ?></span></legend>
 									<label>
-										<input type="password" name="qqworld-auto-save-images-aliyun-oss[access-key-secret]" class="regular-text" id="access-key-secret" value="" />
+										<input type="password" name="qqworld-auto-save-images-aliyun-oss[access-key-secret]" class="regular-text" id="access-key-secret" value="<?php echo $this->access_key_secret; ?>" />
 										<input type="button" class="button" id="test-aliyun-oss" value="<?php _e('Test Access OSS', 'qqworld_auto_save_images'); ?>" />
 									</label>
 							</fieldset></td>
@@ -919,7 +948,7 @@ function save_outside_link($content, $link) {
 								<td><fieldset>
 									<legend class="screen-reader-text"><span><?php _e('Sync Delete', 'qqworld_auto_save_images'); ?></span></legend>
 										<label>
-											<input name="qqworld-auto-save-images-aliyun-oss[sync-delete]" type="checkbox" id="sync_delete_aliyun_oss" value="yes" />
+											<input name="qqworld-auto-save-images-aliyun-oss[sync-delete]" type="checkbox" id="sync_delete_aliyun_oss" value="yes" <?php checked($this->aliyun_oss_sync_delete, 'yes'); ?> />
 										</label>
 								</fieldset></td>
 							</tr>
@@ -928,7 +957,7 @@ function save_outside_link($content, $link) {
 							<td><fieldset>
 								<legend class="screen-reader-text"><span><?php _e('Auto Replace', 'qqworld_auto_save_images'); ?></span></legend>
 									<label>
-										<input name="qqworld-auto-save-images-aliyun-oss[auto-replace]" type="checkbox" id="auto_replace_aliyun_oss" value="yes" />
+										<input name="qqworld-auto-save-images-aliyun-oss[auto-replace]" type="checkbox" id="auto_replace_aliyun_oss" value="yes" <?php checked($this->aliyun_oss_auto_replace, 'yes'); ?> />
 									</label>
 							</fieldset></td>
 						</tr>
@@ -1136,7 +1165,7 @@ function save_outside_link($content, $link) {
 		<div class="tab-content hidden">
 			<?php global $wpdb; ?>
 			<div class="readme"><p><strong><?php _e("Just for preview, The complete feature will on the Pro version.", 'qqworld_auto_save_images') ?></strong></p></div>
-			<h2><?php _e('Content Replacement', 'qqworld_auto_save_images'); ?><?php _e(' (In Development)', 'qqworld_auto_save_images'); ?></h2>
+			<h2><?php _e('Content Replacement', 'qqworld_auto_save_images'); ?></h2>
 			<table class="form-table">
 				<tbody>
 					<tr valign="top">
@@ -1453,6 +1482,31 @@ function save_outside_link($content, $link) {
 		if ($this->remote_publishing) add_action('xmlrpc_publish_post', array($this, 'fetch_images') );
 	}
 
+	public function getimagesize($image_url) {
+		$params = @getimagesize($image_url);
+		$width = $params[0];
+		$height = $params[1];
+		$type = $params['mime'];
+		if ($width==null) {
+			$file = @file_get_contents( $image_url );
+			if ($file) {
+				$encoding = $this->fsockopen_image_header($image_url, 'Content-Encoding');
+				if ($encoding == 'gzip' && function_exists('gzdecode')) $file = gzdecode($file);
+				if (function_exists('getimagesizefromstring')) {
+				$params = getimagesizefromstring($file);
+					$width = $params[0];
+					$height = $params[1];
+					$type = $params['mime'];
+				}
+			}
+		} else {
+			$width = $params[0];
+			$height = $params[1];
+			$type = $params['mime'];
+		}
+		return array($width, $height, $type);
+	}
+
 	public function content_save_pre($content, $post_id=null, $action='save') {
 		$this->count = 1;
 		$this->change_attachment_url_to_permalink($content);
@@ -1472,27 +1526,7 @@ function save_outside_link($content, $link) {
 					if($pos) $allow=false;
 				}
 				// check pictrue size
-				$params = @getimagesize($image_url);
-				$width = $params[0];
-				$height = $params[1];
-				$type = $params['mime'];
-				if ($width==null) {
-					$file = @file_get_contents( $image_url );
-					if ($file) {
-						$encoding = $this->fsockopen_image_header($image_url, 'Content-Encoding');
-						if ($encoding == 'gzip' && function_exists('gzdecode')) $file = gzdecode($file);
-						if (function_exists('getimagesizefromstring')) {
-						$params = getimagesizefromstring($file);
-							$width = $params[0];
-							$height = $params[1];
-							$type = $params['mime'];
-						}
-					}
-				} else {
-					$width = $params[0];
-					$height = $params[1];
-					$type = $params['mime'];
-				}
+				list($width, $height, $type) = $this->getimagesize($image_url);
 				
 				if ($width != NULL && ($width<$this->minimum_picture_size['width'] || $height<$this->minimum_picture_size['height'])) $allow = false;
 				// check if remote image
@@ -1673,18 +1707,22 @@ function save_outside_link($content, $link) {
 		$url = parse_url($url);
 		$path = $url['path'];
 		$filename = explode('/', $path);
-		return $filename[count($filename)-1];
+		$filename = urldecode($filename[count($filename)-1]);
+		return $filename;
 	}
 
 	public function automatic_reduction($file, $image_url) {
 		$filetype = $this->getFileType($file);
-		list($width, $height, $type, $attr) = getimagesize($image_url);
+		list($width, $height, $type) = $this->getimagesize($image_url);
+
 		if ((!empty($this->maximum_picture_size['width']) || !empty($this->maximum_picture_size['height'])) && ($width > $this->maximum_picture_size['width'] || $height > $this->maximum_picture_size['height'])) {
 			if ($width > $height) {
 				$maximum_picture_size_width = empty($this->maximum_picture_size['width']) ? $width*$this->maximum_picture_size['height']/$height : $this->maximum_picture_size['width'];
 				$new_width = $maximum_picture_size_width;
 				$new_height = $height*$maximum_picture_size_width/$width;
+				echo 1;
 			} else {
+				echo 2;
 				$maximum_picture_size_height = empty($this->maximum_picture_size['height']) ? $height*$this->maximum_picture_size['width']/$width : $this->maximum_picture_size['height'];
 				$new_width = $width*$maximum_picture_size_height/$height;
 				$new_height = $maximum_picture_size_height;
@@ -1696,7 +1734,7 @@ function save_outside_link($content, $link) {
 			switch ($filetype) {
 				case 'jpg':
 				case 'jpeg':
-					imageJpeg($image_p, null, 100);
+					imageJpeg($image_p, null, 75);
 					break;
 				case 'png':
 					imagePng($image_p, null);
@@ -1794,7 +1832,6 @@ function save_outside_link($content, $link) {
 			} else {
 				$img_name = $this->change_images_filename($match[1], $match[2]);
 			}
-
 			// Automatic reduction pictures size
 			list($file, $width, $height) = $this->automatic_reduction($file, $image_url);
 

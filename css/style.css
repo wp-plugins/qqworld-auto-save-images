@@ -177,17 +177,38 @@ ul[id^="noty_"] li {
 	margin: 0;
 }
 
+@media screen and ( max-width: 1320px ) {
+	#qqworld-auto-save-images-tabs li {
+		font-size: 24px;
+		padding: 0 26px;
+	}
+}
+@media screen and ( max-width: 1132px ) {
+	#qqworld-auto-save-images-tabs li {
+		font-size: 20px;
+		padding: 0 22px;
+	}
+}
 @media screen and ( max-width: 1000px ) {
 	#banner {
 		height: auto;
 	}
-}
-@media screen and ( max-width: 640px ) {
-	#banner {
-		border-width: 5px;
-	}
 	#qqworld-auto-save-images-tabs li {
 		font-size: 18px;
-		padding: 0 20px;
+		padding: 0 18px;
+	}
+}
+@media screen and ( max-width: 728px ) {
+	#qqworld-auto-save-images-tabs li {
+		font-size: 14px;
+		padding: 0 10px;
+		margin: 0 3px;
+	}
+}
+@media screen and ( max-width: 640px ) {
+	#qqworld-auto-save-images-tabs li {
+		font-size: 12px;
+		padding: 0 8px;
+		margin: 0 2px;
 	}
 }

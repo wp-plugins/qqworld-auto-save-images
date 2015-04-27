@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.2
-Stable tag: 1.7.13.5
+Stable tag: 1.7.13.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,19 +98,23 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" targ
 
 == Changelog ==
 
+= 1.7.13.6 =
+Bug fixed: Couldn't handle the Maximum Image Size of remote image resource by GZIP compressed. (Needs PHP 5.4+)<br />
+修复Bug：无法控制被GZIP压缩的图片资源的最大尺寸。(须PHP 5.4+)
+
 = 1.7.13.5 =
 New feature: Enhanced ability for grab remote image by GZIP compressed. (Needs PHP 5.4+)<br />
 新特性：加强对GZIP压缩的图片资源的抓取功能。(须PHP 5.4+)
 
 = 1.7.13.4 =
 New feature: Supply a hook that can custom link text of the outside link or even more complicated.<br />
-新特性：提供1个Hook来自定义外部链接的链接文本或更加复杂的内容。</strong>。
+新特性：提供1个Hook来自定义外部链接的链接文本或更加复杂的内容。。
 
 = 1.7.13.3 =
 New feature: Add <strong>rel="nofollow"</strong> into outside link's tag when checked the option Save-Outside-Links.<br />
 新特性：当选择保存外部链接时，自动在外部链接的标签中加入<strong>rel="nofollow"。</strong>。<br />
 Bug fixed: Manual scan posts can not check missing remote images.<br />
-修复Bug：手动扫描文章无法检测丢失的远程图片</strong>。
+修复Bug：手动扫描文章无法检测丢失的远程图片。
 
 = 1.7.13.2 =
 New feature: Add <strong>rel="nofollow"</strong> into outside link's tag when checked the option Keep-Outside-Links.<br />
