@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.2
-Stable tag: 1.7.13.6
+Stable tag: 1.7.13.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,11 +38,13 @@ I'v tried to figure this out, but i couldn't get the host name to make image src
 
 So if you encounter these codes, plaese manually fix the images src to full url.
 
+Good News: Professional Edition has able to fix this.
+
 <h4>Plugin's Plugins</h4>
 <a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">Grabber for QQWorld Auto Save Images</a>: Grab PDF.
 
 <h4>Professional Edition</h4>
-Buy: <a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" target="_blank">QQWorld Auto Save Images Pro (USD $7.41)</a>
+Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank">QQWorld Collector (USD $7.6)</a>
 
 ////////////////////////////////////////////////////
 
@@ -72,11 +74,13 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" targ
 
 所以，如果你碰到这样的代码，请手动将图片地址改成完整的，或者使用采集工具自动补完图片的URL然后从外部提交给Wordpress。
 
+好消息：专业版可以解决这个问题。
+
 <h4>插件的插件</h4>
 <a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">QQWorld自动保存图片的捕手</a>：抓取 PDF。
 
 <h4>专业版</h4>
-购买：<a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" target="_blank">QQWorld Auto Save Images Pro (CNY &yen;39)</a>
+购买：<a href="http://www.qqworld.org/products/qqworld-collector" target="_blank">QQWorld收藏家 (CNY &yen;40)</a>
 
 == Installation ==
 
@@ -97,6 +101,10 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-auto-save-images-pro" targ
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.13.7 =
+New Interface: Update user interface of Pro Edition<br />
+新界面：更新专业版的用户界面
 
 = 1.7.13.6 =
 Bug fixed: Couldn't handle the Maximum Image Size of remote image resource by GZIP compressed. (Needs PHP 5.4+)<br />
