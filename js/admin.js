@@ -291,9 +291,11 @@ QQWorld_auto_save_images.scan_posts = function() {
 		});
 		$('#auto').on('click', function() {
 			$('#second_level').fadeIn('fast');
+			$('#manual-demo').fadeOut('fast');
 		});
 		$('#manual').on('click', function() {
 			$('#second_level').fadeOut('fast');
+			$('#manual-demo').fadeIn('fast');
 		});
 		$('#scan_old_posts').on('click', function() {
 			if (jQuery('input[name="qqworld_auto_save_images_post_types[]"]:checked').length) {
@@ -609,6 +611,10 @@ QQWorld_auto_save_images.scan_posts = function() {
 		});
 		$(document).on('change', '#qqworld_auto_save_images_minimum_picture_size_width', function() {
 			$('#qqworld_auto_save_images_minimum_picture_size_height').val($(this).val());
+		});
+
+		$(document).on('click', '#cron_scan_posts', function() {
+			$('#cron-tab').click();
 		});
 	};
 

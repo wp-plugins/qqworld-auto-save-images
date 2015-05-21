@@ -575,6 +575,7 @@ class QQWorld_auto_save_images {
 			<li><?php _e('Watermark', 'qqworld_auto_save_images'); ?> (<?php _e('Preview', 'qqworld_auto_save_images')?>)</li>
 			<li><?php _e('Database', 'qqworld_auto_save_images'); ?> (<?php _e('Preview', 'qqworld_auto_save_images')?>)</li>
 			<li><?php _e('Scan Posts', 'qqworld_auto_save_images'); ?></li>
+			<li id="cron-tab"><?php _e('Cron', 'qqworld_auto_save_images'); ?> (<?php _e('Preview', 'qqworld_auto_save_images')?>)</li>
 		</ul>
 		<div class="tab-content">
 			<h2><?php _e('General Options', 'qqworld_auto_save_images'); ?></h2>
@@ -627,6 +628,13 @@ class QQWorld_auto_save_images {
 								<label for="qqworld_auto_save_images_set_featured_image_yes">
 									<input name="qqworld_auto_save_images_set_featured_image" type="checkbox" id="qqworld_auto_save_images_set_featured_image_yes" value="yes" <?php checked('yes', $this->featured_image); ?> />
 								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top" id="manual-demo"<?php if ($this->mode != 'manual') echo ' style="display: none;"'; ?>>
+						<th scope="row"><label><?php _e('Demo of Pro Edition', 'qqworld_auto_save_images'); ?></label></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Set Featured Image', 'qqworld_auto_save_images'); ?></span></legend>
+								<?php _e("<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/-KImHNbPA-o\" frameborder=\"0\" allowfullscreen></iframe>", 'qqworld_auto_save_images'); ?>	
 						</fieldset></td>
 					</tr>
 				</tbody>
@@ -1460,10 +1468,56 @@ function save_outside_link($content, $link) {
 				<p class="submit">
 					<input name="scan_old_posts" type="button" class="button-primary" id="scan_old_posts" value="<?php _e('Automatic', 'qqworld_auto_save_images'); ?> &#8667;" /> <span class="icon help" title="<?php _e('Scan posts and keep remote images in all posts to local media library. Maybe take a long time.', 'qqworld_auto_save_images'); ?>"></span>
 					<input name="list_all_posts" type="button" class="button-primary" id="list_all_posts" value="<?php _e('Manual', 'qqworld_auto_save_images'); ?> &#9776;" /> <span class="icon help" title="<?php _e("The list displayed will show you which posts including remote images, then you can keep them to local manually via click \"Fetch\" button.", 'qqworld_auto_save_images'); ?>"></span>
+					&nbsp;&nbsp;
+					<select name="schedule" id="scan-schedules">
+					<?php
+					foreach (wp_get_schedules() as $recurrence => $detail) {
+						echo '<option value="'.$recurrence.'">'.$detail['display'].'</option>';
+					} ?>
+					</select>
+					<input name="cron_scan_posts" type="button" class="button-primary" id="cron_scan_posts" value="<?php _e('Cron', 'qqworld_auto_save_images'); ?> &#8667;" /> <span class="icon help" title="<?php _e("Set cron for automatically scan posts.<br />I recommend set the option Offset from 0 to scan 100 posts.", 'qqworld_auto_save_images'); ?>"></span>
 				</p>
 			</div>
 		</div>
-	</div>
+	</form>
+	<form action="" method="post" id="scan-cron">
+		<div class="tab-content hidden">
+			<div id="cron-list-container">
+				<h3><?php _e('Cron of Scan Posts', 'qqworld_auto_save_images'); ?></h3>
+				<div class="readme"><p><strong><?php _e("Just for preview, The complete feature will on the Pro version.", 'qqworld_auto_save_images') ?></strong></p></div>
+				<table id="cron-list-table" class="common-list-table">
+					<thead>
+						<th><?php _e('Post Types', 'qqworld_auto_save_images'); ?></th>
+						<th><?php _e('Categories'); ?></th>
+						<th><?php _e('Scope of Post ID', 'qqworld_auto_save_images'); ?></th>
+						<th><?php _e('Offset', 'qqworld_auto_save_images'); ?></th>
+						<th><?php _e('Status'); ?></th>
+						<th><?php _e('Order By', 'qqworld_auto_save_images'); ?></th>
+						<th><?php _e('Order'); ?></th>
+						<th><?php _e('Recurrence', 'qqworld_auto_save_images'); ?></th>
+						<th><?php _e('Will Run On', 'qqworld_auto_save_images'); ?></th>
+						<th><?php _e('Delete'); ?></th>
+					</thead>
+					<tbody id="cron-list">
+					</tbody>
+					<tfoot>
+						<tr><td colspan="10" align="center"><?php _e('No Cron yet.', 'qqworld_auto_save_images'); ?></td></tr>
+					</tfoot>
+				</table>
+				<p class="submit">
+					<input type="button" class="button button-primary" id="clear-all-crons" value="<?php _e('Clear All Crons', 'qqworld_auto_save_images'); ?>" />
+				</p>
+				<table class="form-table">
+					<tbody>
+						<tr valign="top">
+							<th scope="row"><label><?php _e('Buy', 'qqworld_auto_save_images'); ?></label></th>
+							<td><a href="http://www.qqworld.org/products/qqworld-collector" target="_blank"><?php _e('QQWorld Collector', 'qqworld_auto_save_images'); ?></a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</form>
 <?php
 	}
 

@@ -177,6 +177,42 @@ ul[id^="noty_"] li {
 	margin: 0;
 }
 
+.common-list-table {
+	border-collapse: collapse;
+	width: 100%;
+	border: 1px solid #e4e4e4;
+	border-bottom: 3px solid #e4e4e4;
+	text-align: left;
+	background: #fff;
+}
+.common-list-table tbody tr:nth-child(odd) {
+	background: #fafafa;
+}
+.common-list-table tbody tr:hover {
+	background: #fcfcb7;
+}
+.common-list-table tbody tr a {
+	text-decoration: none;
+}
+.common-list-table thead tr {
+	background: #2ea2cc;
+	border-bottom: 2px solid #0074a2;
+	color: #fff;
+}
+.common-list-table td, .common-list-table th {
+	padding: 5px 20px;
+	border-bottom: 1px solid #e4e4e4;
+}
+.common-list-table td.hr {
+	padding: 1px 0 0 0;
+}
+.common-list-table .green {
+	color: green;
+}
+.common-list-table .red {
+	color: red;
+}
+
 @media screen and ( max-width: 1320px ) {
 	#qqworld-auto-save-images-tabs li {
 		font-size: 24px;
