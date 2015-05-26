@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.2
-Stable tag: 1.7.13.7
+Stable tag: 1.7.13.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,10 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank"
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.13.8 =
+New feature: Automatically add caption shortcode.<br />
+新特性：自动添加图说短代码。
 
 = 1.7.13.7 =
 New Interface: Update user interface of Pro Edition<br />

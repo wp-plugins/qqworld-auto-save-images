@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.13.7
+Version: 1.7.13.8
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -28,6 +28,7 @@ class QQWorld_auto_save_images {
 	var $filename_structure;
 	var $change_title_alt;
 	var $save_outside_links;
+	var $auto_caption;
 	var $additional_content;
 
 	var $optimize;
@@ -86,6 +87,7 @@ class QQWorld_auto_save_images {
 		$this->keep_outside_links = isset($this->format['keep-outside-links']) ? $this->format['keep-outside-links'] : 'no';
 		$this->save_outside_links = isset($this->format['save-outside-links']) ? $this->format['save-outside-links'] : 'no';
 		$this->additional_content = isset($this->format['additional-content']) ? $this->format['additional-content'] : array('before'=>'', 'after'=>'');
+		$this->auto_caption = isset($this->format['auto-caption']) ? $this->format['auto-caption'] : 'no';
 
 		$this->optimize = get_option('qqworld-auto-save-images-optimize', array('mode' => 'local'));
 		$this->optimize_enabled = isset($this->optimize['enabled']) ? $this->optimize['enabled'] : '';
@@ -799,6 +801,15 @@ function save_outside_link($content, $link) {
 									foreach ($linkTo as $value => $title) echo '<option value="'.$value.'"'.selected($value, $this->format['link-to'], false).'>'.$title.'</option>';
 									?>
 									</select>
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="format_caption"><?php _e('Auto Caption', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Automatically add caption shortcode.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Auto Caption', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="format_caption">
+									<input name="qqworld-auto-save-images-format[auto-caption]" type="checkbox" id="format_caption" value="yes" <?php checked('yes', $this->auto_caption); ?> />
 								</label>
 						</fieldset></td>
 					</tr>
@@ -1818,6 +1829,7 @@ function save_outside_link($content, $link) {
 				break;
 		}
 		if ($no_match) $replace = $res['url'];
+		else if ($this->auto_caption == 'yes') $replace = '[caption id="attachment_'.$attachment_id.'" align="alignnone" width="'.$width.'"]' . $replace . ' ' . (isset($args['alt']) ? $args['alt'] : '') . '[/caption]';
 		$replace .= str_replace( '[Attachment ID]', $res['id'], $this->additional_content['after'] );
 
 		if ( $this->keep_outside_links=='yes' ) {
