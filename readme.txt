@@ -44,7 +44,7 @@ Good News: Professional Edition has able to fix this.
 <a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">Grabber for QQWorld Auto Save Images</a>: Grab PDF.
 
 <h4>Professional Edition</h4>
-Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank">QQWorld Collector (USD $7.6)</a>
+Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank">QQWorld Collector (USD $7.7)</a>
 
 ////////////////////////////////////////////////////
 
@@ -80,7 +80,7 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank"
 <a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">QQWorld自动保存图片的捕手</a>：抓取 PDF。
 
 <h4>专业版</h4>
-购买：<a href="http://www.qqworld.org/products/qqworld-collector" target="_blank">QQWorld收藏家 (CNY &yen;40)</a>
+购买：<a href="http://www.qqworld.org/products/qqworld-collector" target="_blank">QQWorld收藏家 (CNY &yen;40.5)</a>
 
 == Installation ==
 
@@ -101,6 +101,10 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank"
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.13.9 =
+New feature: Added new format option Align-To<br />
+新特性：添加对齐方式的格式化选项。
 
 = 1.7.13.8 =
 New feature: Automatically add caption shortcode.<br />

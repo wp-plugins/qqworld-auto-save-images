@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.13.8
+Version: 1.7.13.9
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -29,6 +29,8 @@ class QQWorld_auto_save_images {
 	var $change_title_alt;
 	var $save_outside_links;
 	var $auto_caption;
+	var $format_align_to;
+	var $link_to;
 	var $additional_content;
 
 	var $optimize;
@@ -88,6 +90,8 @@ class QQWorld_auto_save_images {
 		$this->save_outside_links = isset($this->format['save-outside-links']) ? $this->format['save-outside-links'] : 'no';
 		$this->additional_content = isset($this->format['additional-content']) ? $this->format['additional-content'] : array('before'=>'', 'after'=>'');
 		$this->auto_caption = isset($this->format['auto-caption']) ? $this->format['auto-caption'] : 'no';
+		$this->format_link_to = isset($this->format['link-to']) ? $this->format['link-to'] : 'none';
+		$this->format_align_to = isset($this->format['align-to']) ? $this->format['align-to'] : 'none';
 
 		$this->optimize = get_option('qqworld-auto-save-images-optimize', array('mode' => 'local'));
 		$this->optimize_enabled = isset($this->optimize['enabled']) ? $this->optimize['enabled'] : '';
@@ -798,7 +802,26 @@ function save_outside_link($content, $link) {
 										'post' => __('Attachment Page'),
 										'none' => __('None')
 									);
-									foreach ($linkTo as $value => $title) echo '<option value="'.$value.'"'.selected($value, $this->format['link-to'], false).'>'.$title.'</option>';
+									foreach ($linkTo as $value => $title) echo '<option value="'.$value.'"'.selected($value, $this->format_link_to, false).'>'.$title.'</option>';
+									?>
+									</select>
+								</label>
+						</fieldset></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><label for="format-align-to"><?php _e('Align To', 'qqworld_auto_save_images'); ?></label></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Align To', 'qqworld_auto_save_images'); ?></span></legend>
+								<label>
+									<select name="qqworld-auto-save-images-format[align-to]" id="format-align-to">
+									<?php
+									$linkTo = array(
+										'left' => __('Left'),
+										'center' => __('Center'),
+										'right' => __('Right'),
+										'none' => __('None')
+									);
+									foreach ($linkTo as $value => $title) echo '<option value="'.$value.'"'.selected($value, $this->format_align_to, false).'>'.$title.'</option>';
 									?>
 									</select>
 								</label>
@@ -1816,7 +1839,8 @@ function save_outside_link($content, $link) {
 		}
 		$alt = isset($args['alt']) ? ' alt="'.$args['alt'].'"' : '';
 		$title = isset($args['title']) ? ' title="'.$args['title'].'"' : '';
-		$img = '<img class="size-'.$size.' wp-image-'.$attachment_id.'" src="'.$src.'" width="'.$width.'" height="'.$height.'"'.$alt.$title.' />';
+		$align = $this->auto_caption == 'yes' ? '' : 'align'.$this->format_align_to.' ';
+		$img = '<img class="'.$align.'size-'.$size.' wp-image-'.$attachment_id.'" src="'.$src.'" width="'.$width.'" height="'.$height.'"'.$alt.$title.' />';
 		$link_to = $this->keep_outside_links=='no' ? $this->format['link-to'] : 'none';
 		switch ($link_to) {
 			case 'none':
@@ -1829,7 +1853,7 @@ function save_outside_link($content, $link) {
 				break;
 		}
 		if ($no_match) $replace = $res['url'];
-		else if ($this->auto_caption == 'yes') $replace = '[caption id="attachment_'.$attachment_id.'" align="alignnone" width="'.$width.'"]' . $replace . ' ' . (isset($args['alt']) ? $args['alt'] : '') . '[/caption]';
+		else if ($this->auto_caption == 'yes') $replace = '[caption id="attachment_'.$attachment_id.'" align="align'.$this->format_align_to.'" width="'.$width.'"]' . $replace . ' ' . (isset($args['alt']) ? $args['alt'] : '') . '[/caption]';
 		$replace .= str_replace( '[Attachment ID]', $res['id'], $this->additional_content['after'] );
 
 		if ( $this->keep_outside_links=='yes' ) {
