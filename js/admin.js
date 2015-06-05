@@ -69,21 +69,6 @@ QQWorld_auto_save_images.scan_posts = function() {
 
 	this.action = {};
 	
-	this.action.set_watermark_opacity = function() {
-		var opacity = $('#watermark-opacity').val();
-		$('#watermark-test').fadeTo('normal', opacity/100);
-	};
-	this.action.get_watermark_size = function() {
-		_this.watermark.width = $('#watermark-test').width();
-		_this.watermark.height = $('#watermark-test').height();
-		_this.image.width = $('#photo-test').width();
-		_this.image.height = $('#photo-test').height();
-		_this.offset.top.full = parseInt(_this.image.height - _this.watermark.height);
-		_this.offset.left.full = parseInt(_this.image.width - _this.watermark.width);
-		_this.offset.top.half = parseInt(_this.offset.top.full/2);
-		_this.offset.left.half = parseInt(_this.offset.left.full/2);
-	};
-
 	this.action.catch_errors = function(XMLHttpRequest, textStatus, errorThrown) {
 		var error='', args=new Array;
 		error += '<div style="text-align: left;">';
@@ -291,11 +276,9 @@ QQWorld_auto_save_images.scan_posts = function() {
 		});
 		$('#auto').on('click', function() {
 			$('#second_level').fadeIn('fast');
-			$('#manual-demo').fadeOut('fast');
 		});
 		$('#manual').on('click', function() {
 			$('#second_level').fadeOut('fast');
-			$('#manual-demo').fadeIn('fast');
 		});
 		$('#scan_old_posts').on('click', function() {
 			if (jQuery('input[name="qqworld_auto_save_images_post_types[]"]:checked').length) {
@@ -481,140 +464,8 @@ QQWorld_auto_save_images.scan_posts = function() {
 			}
 		});
 
-		$(document).on('change', '#optimize-mode', function() {
-			var index = $(this).get(0).selectedIndex;
-			var optimize_table = $('.optimize-table');
-			optimize_table.not(optimize_table.eq(index)).slideUp('normal');
-			optimize_table.eq(index).slideDown('normal');
-		});
-
-		$(document).on('click', '#test-ftp', function() {
-			var button = $(this);
-			button.attr('disabled', true);
-			$('body').data('noty', noty({
-				text: wait_img,	
-				type: 'notification',
-				layout: 'center',
-				theme: noty_theme
-			}) );
-			$.ajax({
-				type: 'POST',
-				url: ajaxurl,
-				data: {
-					action: 'auto_save_images_test_ftp'
-				},
-				dataType: 'json',
-				success: function(respond) {
-					$('body').data('noty').close();
-					var options = {
-						text: respond.msg,
-						layout: 'center',
-						timeout: 3000,
-						theme: noty_theme
-					};
-					options.type = respond.success ? 'success' : 'error';
-					var n = noty(options);
-					button.removeAttr('disabled');
-				},
-				error: _this.action.catch_errors
-			});
-		});
-
-		$(document).on('change', '#watermark-opacity', _this.action.set_watermark_opacity).on('keyup', '#watermark-opacity', _this.action.set_watermark_opacity);
-
-		$(document).on('click', '#for-watermark-image', function() {
-			$('#upload-watermark-image').click();
-		});
-
-		// watermark postion
-		$(document).on('click', 'input[name="qqworld-auto-save-images-watermark-align-to"]', function() {
-			var id = $(this).attr('id'),
-			top, right, bottom, left,
-			default_offset = 20,
-			offset = {};
-			switch (id) {
-				case 'lt': offset.x = offset.y = default_offset; top = default_offset; left = default_offset; break;
-				case 'ct': offset.x = 0; offset.y = default_offset; top = default_offset; left = _this.offset.left.half; break;
-				case 'rt': offset.x = -default_offset; offset.y = default_offset; top = default_offset; left = _this.offset.left.full-default_offset; break;
-				case 'lc': offset.x = default_offset; offset.y = 0; top = _this.offset.top.half; left = default_offset; break;
-				case 'cc': offset.x = 0; offset.y = 0; top = _this.offset.top.half; left = _this.offset.left.half; break;
-				case 'rc': offset.x = -default_offset; offset.y = 0; top = _this.offset.top.half; left = _this.offset.left.full-default_offset; break;
-				case 'lb': offset.x = default_offset; offset.y = -default_offset; top = _this.offset.top.full-default_offset; left = default_offset; break;
-				case 'cb': offset.x = 0; offset.y = -default_offset; top = _this.offset.top.full-default_offset; left = _this.offset.left.half; break;
-				case 'rb': offset.x = -default_offset; offset.y = -default_offset; top = _this.offset.top.full-default_offset; left = _this.offset.left.full-default_offset; break;
-			};
-			$('#watermark-test').animate({
-				top : top,
-				left: left
-			}, 'fast');
-			$('#offset-x').val(offset.x);
-			$('#offset-y').val(offset.y);
-		});
-
-		$(document).on('click', '#upload-watermark-image', function(event) {
-			event.preventDefault();
-			var title = $(this).attr('title'),
-			id = $(this).attr('id');
-			if ( typeof _this.file_frame == 'object' ) {
-				_this.file_frame.open();
-				return;
-			}
-			_this.file_frame = wp.media.frames.file_frame = wp.media({
-				title: title,
-				button: {
-					text: title,
-				},
-				multiple: false
-			});
-			_this.file_frame.on( 'open', function() {
-				var selection = _this.file_frame.state().get('selection');
-				var attachment_id = $('input[name="qqworld-auto-save-images-watermark-image"]').val();
-				if (attachment_id) {
-					var attachment = wp.media.attachment(attachment_id);
-					attachment.fetch();
-					selection.add( attachment ? [ attachment ] : [] );
-				}
-			});
-			_this.file_frame.on('select', function() {
-				var attachment = _this.file_frame.state().get('selection').first().toJSON();
-				var id = attachment.id;
-				$('input[name="qqworld-auto-save-images-watermark-image"]').val(id);
-				var url = attachment.url;
-				$('#upload-watermark-image img').attr('src', url);
-				$('#watermark-test').attr({
-					src: url,
-					width: attachment.sizes.full.width,
-					height: attachment.sizes.full.height
-				});
-				$('#lt').click();
-				_this.action.get_watermark_size();
-				$('#default-watermark').fadeIn();
-			});
-			_this.file_frame.open();
-		});
-
-		$(document).on('click', '#default-watermark', function() {
-			var src = QASI.default_watermark.src;
-			$('#upload-watermark-image img').attr('src', src);
-			$('#watermark-test').attr({
-				src: src,
-				width: QASI.default_watermark.width,
-				height: QASI.default_watermark.height
-			});
-			$('input[name="qqworld-auto-save-images-watermark-image"]').val('');
-			$('#lt').click();
-			_this.action.get_watermark_size();
-		});
-
-		$(document).on('click', '#Preview Watermark', function() {
-			tb_show($(this).attr('title'), $(this).attr('href'));
-		});
 		$(document).on('change', '#qqworld_auto_save_images_minimum_picture_size_width', function() {
 			$('#qqworld_auto_save_images_minimum_picture_size_height').val($(this).val());
-		});
-
-		$(document).on('click', '#cron_scan_posts', function() {
-			$('#cron-tab').click();
 		});
 	};
 

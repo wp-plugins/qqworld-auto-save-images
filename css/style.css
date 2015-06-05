@@ -107,33 +107,49 @@
 #post_types_list, #exclude_domain_list {
 	margin: 0;
 }
-#scan_old_post_list {
+#scan_old_post_list,
+#comparison-table {
 	border-collapse: collapse;
-	width: 100%;
 	border: 1px solid #e4e4e4;
 	border-bottom: 3px solid #e4e4e4;
 	text-align: left;
 	background: #fff;
+	width: 100%;
 }
-#scan_old_post_list tbody tr:nth-child(odd) {
+#comparison-table thead th {
+	color: #fff;
+}
+#comparison-table .comparison-cell {
+	width: 70px;
+}
+#scan_old_post_list tbody tr:nth-child(odd),
+#comparison-table tbody tr:nth-child(odd) {
 	background: #fafafa;
 }
-#scan_old_post_list tbody tr:hover {
+#scan_old_post_list tbody tr:hover,
+#comparison-table tbody tr:hover {
 	background: #fcfcb7;
 }
-#scan_old_post_list tbody tr a {
+#scan_old_post_list tbody tr a,
+#comparison-table tbody tr a {
 	text-decoration: none;
 }
-#scan_old_post_list thead tr {
+#scan_old_post_list thead tr,
+#comparison-table thead tr {
 	background: #2ea2cc;
 	border-bottom: 2px solid #0074a2;
 	color: #fff;
 }
-#scan_old_post_list td, #scan_old_post_list th {
+#scan_old_post_list td, #scan_old_post_list th,
+#comparison-table td, #comparison-table th {
 	padding: 5px 20px;
 	border-bottom: 1px solid #e4e4e4;
 }
-#scan_old_post_list td.hr {
+#comparison-table td, #comparison-table th {
+	padding: 15px 20px;
+}
+#scan_old_post_list td.hr,
+#comparison-table td.hr {
 	padding: 1px 0 0 0;
 }
 #scan_old_post_list .green {
