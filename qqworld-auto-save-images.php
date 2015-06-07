@@ -849,7 +849,7 @@ function save_outside_link($content, $link) {
 									</thead>
 									<tbody>
 										<tr>
-											<td><?php _e('New manual mode with multi-thread (Faster than automatic mode with more server resource consumption)', 'qqworld_auto_save_images'); ?></td>
+											<td><?php _e('New manual mode with multi-thread (Faster than automatic mode and modify Title & Alt in realtime)', 'qqworld_auto_save_images'); ?></td>
 											<td>&radic;</td>
 											<td>&#9587;</td>
 										</tr>
