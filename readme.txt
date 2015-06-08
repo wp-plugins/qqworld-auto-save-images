@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.2.2
-Stable tag: 1.7.13.9
+Stable tag: 1.7.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,6 +101,10 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank"
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+
+= 1.7.14 =
+Bug fixed: A bug of regular expression ( '{' & '}' ).<br />
+修复Bug：修复正则表达式的bug（ '{' 和 '}' ）。
 
 = 1.7.13.9 =
 New feature: Added new format option Align-To<br />
