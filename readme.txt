@@ -102,6 +102,10 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank"
 
 == Changelog ==
 
+= 1.7.14.2 =
+New feature: Adapting to Custom Upload Dir.<br />
+新特性：和Custom Upload Dir兼容。
+
 = 1.7.14.1 =
 Bug fixed: Couldn't grabbing the image url contain spaces.<br />
 修复Bug：不能抓取包含空格的图像url。

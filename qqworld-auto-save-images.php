@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.14.1
+Version: 1.7.14.2
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -14,6 +14,7 @@ define('QQWORLD_AUTO_SAVE_IMAGES_URL', plugin_dir_url(__FILE__));
 class QQWorld_auto_save_images {
 	var $mode;
 	var $when;
+	var $type;
 	var $remote_publishing;
 	var $current_post_id; // for xmlrpc
 	var $change_image_name;
@@ -1047,7 +1048,7 @@ function save_outside_link($content, $link) {
 		$params = @getimagesize($image_url);
 		$width = $params[0];
 		$height = $params[1];
-		$type = $params['mime'];
+		$this->type = $params['mime'];
 		if ($width==null) {
 			$file = @file_get_contents( $image_url );
 			if ($file) {
@@ -1057,15 +1058,15 @@ function save_outside_link($content, $link) {
 				$params = getimagesizefromstring($file);
 					$width = $params[0];
 					$height = $params[1];
-					$type = $params['mime'];
+					$this->type = $params['mime'];
 				}
 			}
 		} else {
 			$width = $params[0];
 			$height = $params[1];
-			$type = $params['mime'];
+			$this->type = $params['mime'];
 		}
-		return array($width, $height, $type);
+		return array($width, $height, $this->type);
 	}
 
 	public function convert_space_from_content($content) {
@@ -1377,9 +1378,9 @@ function save_outside_link($content, $link) {
 		// GD
 		$img = @imagecreatefromstring($file);
 		if (!$img && function_exists('fsockopen')) {
-			$type = @$this->fsockopen_image_header($image_url);
-			if ($type && in_array($type, array('image/jpeg', 'image/gif', 'image/png'))) {
-				$type = substr($type, 6);
+			$this->type = @$this->fsockopen_image_header($image_url);
+			if ($this->type && in_array($type, array('image/jpeg', 'image/gif', 'image/png'))) {
+				$type = substr($this->type, 6);
 				$img = @call_user_func("imagecreatefrom{$type}", $image_url);
 				if ($img) {
 					ob_start();
@@ -1409,11 +1410,20 @@ function save_outside_link($content, $link) {
 					$img_name = $this->change_images_filename($img_name, '.'.$filetype);
 				} else return false;
 			} else {
+				$img_name = $match[1];
+				$filetype = preg_replace('/^./', '', $match[2]);
 				$img_name = $this->change_images_filename($match[1], $match[2]);
 			}
 			// Automatic reduction pictures size
 			list($file, $width, $height) = $this->automatic_reduction($file, $image_url);
-
+			/* fit to custom-upload-dir - start */
+			if (function_exists('cud_custom_upload_dir')) {
+				global $cud_file_ext, $cud_file_type;
+				$cud_file_type = $this->type;
+				$cud_file_ext = $filetype;
+				add_filter('upload_dir', 'cud_custom_upload_dir', 1);
+			}
+			/* fit to custom-upload-dir - end */
 			$res=wp_upload_bits($img_name,'',$file);
 			if (isset( $res['error'] ) && !empty($res['error'])) return false;
 			$attachment_id = $this->insert_attachment($res['file'], $post_id);
