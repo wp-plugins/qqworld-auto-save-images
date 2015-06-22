@@ -41,7 +41,7 @@ So if you encounter these codes, plaese manually fix the images src to full url.
 Good News: Professional Edition has able to fix this.
 
 <h4>Compatibility with</h4>
-<a href="https://wordpress.org/plugins/custom-upload-dir/>Custom Upload Dir</a>
+<a href="https://wordpress.org/plugins/custom-upload-dir/">Custom Upload Dir</a>
 
 <h4>Plugin's Plugins</h4>
 <a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">Grabber for QQWorld Auto Save Images</a>: Grab PDF.
@@ -80,7 +80,7 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank"
 好消息：专业版可以解决这个问题。
 
 <h4>兼容于其他插件</h4>
-<a href="https://wordpress.org/plugins/custom-upload-dir/>Custom Upload Dir</a>
+<a href="https://wordpress.org/plugins/custom-upload-dir/">Custom Upload Dir</a>
 
 <h4>插件的插件</h4>
 <a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">QQWorld自动保存图片的捕手</a>：抓取 PDF。
