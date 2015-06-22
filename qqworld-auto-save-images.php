@@ -1083,6 +1083,8 @@ function save_outside_link($content, $link) {
 	}
 
 	public function content_save_pre($content, $post_id=null, $action='save') {
+		$post = get_post($post_id);
+		if ($post->post_type == 'revision') return;
 		$this->count = 1;
 		$content = $this->convert_space_from_content($content);
 		$this->change_attachment_url_to_permalink($content);
