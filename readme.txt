@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.2.2
-Stable tag: 1.7.14.1
+Stable tag: 1.7.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -109,10 +109,32 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank"
 == Changelog ==
 
 = 1.7.15 =
-New feature: Compatibility with Custom Upload Dir.<br />
-新特性：和Custom Upload Dir兼容。
-Bug fixed: Save duplicate image<br />
-修复Bug：重复保存图片
+<ul>
+	<li>New feature:
+		<ul>
+			<li>Compatibility with Custom Upload Dir.</li>
+		</ul>
+	</li>
+	<li>新特性：
+		<ul>
+			<li>和Custom Upload Dir兼容。</li>
+		</ul>
+	</li>
+	<li>Bugs Fixed:
+		<ul>
+			<li>Save duplicate image</li>
+			<li>Save duplicate revision post</li>
+			<li>String '%20' in class</li>
+		</ul>
+	</li>
+	<li>修复Bug：
+		<ul>
+			<li>重复保存图片</li>
+			<li>重复保存文章历史版本</li>
+			<li>在class中有“%20”字符串</li>
+		</ul>
+	</li>
+</ul>
 
 = 1.7.14.1 =
 Bug fixed: Couldn't grabbing the image url contain spaces.<br />

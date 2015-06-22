@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.15
+Version: 1.7.14.2
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -1020,10 +1020,13 @@ function save_outside_link($content, $link) {
 		set_time_limit(0);
 		//Check to make sure function is not executed more than once on save
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
-		return;
-
-		if ( !current_user_can('edit_post', $post_id) ) 
-		return;
+			return;
+		// AJAX? Not used here
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) 
+			return;
+		// Check user permissions
+		if ( ! current_user_can( 'edit_post', $post_id ) )
+			return;
 
 		$this->current_post_id = $post_id;
 		
@@ -1038,7 +1041,9 @@ function save_outside_link($content, $link) {
 		$post = get_post($post_id);
 		$content = $this->content_save_pre($post->post_content, $post_id);
 	    //Replace the image in the post
+		remove_action( 'post_updated', 'wp_save_post_revision' );
 	    wp_update_post(array('ID' => $post_id, 'post_content' => $content));
+		add_action( 'post_updated', 'wp_save_post_revision', 10, 1 );
 
 		if ($this->mode=='auto') $this->add_actions();
 		if ($this->remote_publishing) add_action('xmlrpc_publish_post', array($this, 'fetch_images') );
@@ -1070,9 +1075,9 @@ function save_outside_link($content, $link) {
 	}
 
 	public function convert_space_from_content($content) {
-		$preg = preg_match_all('/[src|href]=\"((?!\").*?)\"/i', stripslashes($content), $matches);
+		$preg = preg_match_all('/(src|href)=\"((?!\").*?)\"/i', stripslashes($content), $matches);
 		if ($preg) {
-			foreach ($matches[0] as $match) {
+			foreach ($matches[2] as $match) {
 				if (preg_match("/ /", $match)) {
 					$new_str = str_replace(' ', '%20', $match);
 					$content = str_replace($match, $new_str, $content);
@@ -1085,6 +1090,7 @@ function save_outside_link($content, $link) {
 	public function content_save_pre($content, $post_id=null, $action='save') {
 		$post = get_post($post_id);
 		if ($post->post_type == 'revision') return;
+
 		$this->count = 1;
 		$content = $this->convert_space_from_content($content);
 		$this->change_attachment_url_to_permalink($content);
