@@ -47,7 +47,7 @@ Good News: Professional Edition has able to fix this.
 <a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">Grabber for QQWorld Auto Save Images</a>: Grab PDF.
 
 <h4>Professional Edition</h4>
-Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank">QQWorld Collector (USD $7.7)</a>
+Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank">QQWorld Collector (USD $7.79)</a>
 
 ////////////////////////////////////////////////////
 
@@ -86,7 +86,7 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank"
 <a href="https://wordpress.org/plugins/grabber-for-qqworld-auto-save-images/">QQWorld自动保存图片的捕手</a>：抓取 PDF。
 
 <h4>专业版</h4>
-购买：<a href="http://www.qqworld.org/products/qqworld-collector" target="_blank">QQWorld收藏家 (CNY &yen;40.5)</a>
+购买：<a href="http://www.qqworld.org/products/qqworld-collector" target="_blank">QQWorld收藏家 (CNY &yen;41)</a>
 
 == Installation ==
 
