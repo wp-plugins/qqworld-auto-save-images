@@ -1,0 +1,1343 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: QQworld Auto Save Images\n"
+"Report-Msgid-Bugs-To: http://www.qqworld.org\n"
+"POT-Creation-Date: 2015-06-05 14:06+0800\n"
+"PO-Revision-Date: 2015-06-05 15:57+0800\n"
+"Last-Translator: Michael Wang <admin@qqworld.org>\n"
+"Language-Team: QQWorld <admin@qqworld.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Generator: Poedit 1.7.7\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: qqworld-auto-save-images.php:195
+msgid "Michael Wang"
+msgstr "王曉骞"
+
+#: qqworld-auto-save-images.php:196
+msgid " (In Development)"
+msgstr "（開發中）"
+
+#: qqworld-auto-save-images.php:203
+msgid ""
+"Your server PHP does not support cUrl, please remove ';' from in front of "
+"extension=php_curl.dll in the php.ini."
+msgstr ""
+"你的服務器PHP不支持cUrl，請在php.ini中移除extension=php_curl.dll前面的‘;’。"
+
+#: qqworld-auto-save-images.php:204
+msgid ""
+"Your server PHP does not support GD2, please remove ';' from in front of "
+"extension=php_gd2.dll in the <strong>php.ini</strong>."
+msgstr ""
+"你的服務器PHP不支持GD2，請在php.ini中移除extension=php_gd2.dll前面的‘;’。"
+
+#: qqworld-auto-save-images.php:205
+msgid ""
+"Your server PHP does not support fopen, please set allow_url_fopen=1 in the "
+"php.ini."
+msgstr "你的服務器PHP不支持fopen，請在php.ini中設置allow_url_fopen=1。"
+
+#: qqworld-auto-save-images.php:241
+msgid "No taxonomies found."
+msgstr "沒有相關分類方法。"
+
+#: qqworld-auto-save-images.php:249 qqworld-auto-save-images.php:448
+#: qqworld-auto-save-images.php:1154
+msgid "All remote images have been saved."
+msgstr "已保存所有遠程圖像。"
+
+#: qqworld-auto-save-images.php:249 qqworld-auto-save-images.php:250
+#, php-format
+msgid " <a href=\"%s\">View</a>"
+msgstr " <a href=\"%s\">查看</a>"
+
+#: qqworld-auto-save-images.php:250
+msgid "Has missing images or image which could not download."
+msgstr "內容包含 不存在/無法下載 的圖像。"
+
+#: qqworld-auto-save-images.php:271
+msgid "In Process..."
+msgstr "正在保存……"
+
+#: qqworld-auto-save-images.php:272
+msgid "Something error, please check."
+msgstr "出錯了，請檢查。"
+
+#: qqworld-auto-save-images.php:294
+msgid ""
+"Are you sure?<br />Before you click the yes button, I recommend backup site "
+"database."
+msgstr "你確定嗎？<br />在點擊確定按鈕之前，我建議你備份網站的數據庫。"
+
+#: qqworld-auto-save-images.php:295 qqworld-auto-save-images.php:872
+msgid "Please select post types."
+msgstr "請選擇文章類型。"
+
+#: qqworld-auto-save-images.php:296
+msgid "May be a problem with some posts: "
+msgstr "也許一些文章有問題："
+
+#: qqworld-auto-save-images.php:297
+#, php-format
+msgid "No need enter \"%s\"."
+msgstr "不需要輸入“%s”。"
+
+#: qqworld-auto-save-images.php:298
+#, php-format
+msgid "%d post has been scanned."
+msgstr "已掃描%d篇文章。"
+
+#: qqworld-auto-save-images.php:299
+#, php-format
+msgid "%d posts have been scanned."
+msgstr "已掃描%d篇文章。"
+
+#: qqworld-auto-save-images.php:300
+#, php-format
+msgid "%d post included remote images processed."
+msgstr "已處理%d篇包含遠程圖像的文章。"
+
+#: qqworld-auto-save-images.php:301
+#, php-format
+msgid "%d posts included remote images processed."
+msgstr "已處理%d篇包含遠程圖像的文章。"
+
+#: qqworld-auto-save-images.php:302
+#, php-format
+msgid "%d post has missing images couldn't be processed."
+msgstr "%d篇包含不存在的遠程圖像的文章無法處理。"
+
+#: qqworld-auto-save-images.php:303
+#, php-format
+msgid "%d posts have missing images couldn't be processed."
+msgstr "%d篇包含不存在的遠程圖像的文章無法處理。"
+
+#: qqworld-auto-save-images.php:304
+#, php-format
+msgid "found %d post including remote images."
+msgstr "找到%d篇包含遠程圖像的文章。"
+
+#: qqworld-auto-save-images.php:305
+#, php-format
+msgid "found %d posts including remote images."
+msgstr "找到%d篇包含遠程圖像的文章。"
+
+#: qqworld-auto-save-images.php:306
+#, php-format
+msgid "And with %d post has missing images."
+msgstr "其中有%d篇文章包含不存在的遠程圖像。"
+
+#: qqworld-auto-save-images.php:307
+#, php-format
+msgid "And with %d posts have missing images."
+msgstr "其中有%d篇文章包含不存在的遠程圖像。"
+
+#: qqworld-auto-save-images.php:308
+msgid "No posts processed."
+msgstr "未處理任何文章。"
+
+#: qqworld-auto-save-images.php:309
+msgid "No post has remote images found."
+msgstr "沒有文章包含遠程圖像。"
+
+#: qqworld-auto-save-images.php:310
+msgid "No posts found."
+msgstr "未找到任何文章。"
+
+#: qqworld-auto-save-images.php:311
+msgid "All done."
+msgstr "全部完成。"
+
+#: qqworld-auto-save-images.php:312
+#, fuzzy
+msgid "Yes"
+msgstr "是"
+
+#: qqworld-auto-save-images.php:313 qqworld-auto-save-images.php:712
+msgid "No"
+msgstr ""
+
+#: qqworld-auto-save-images.php:314
+msgid "Scanning..."
+msgstr "掃描中……"
+
+#: qqworld-auto-save-images.php:315
+msgid "Listing..."
+msgstr "顯示列表中……"
+
+#: qqworld-auto-save-images.php:316 qqworld-auto-save-images.php:914
+#, fuzzy
+msgid "ID"
+msgstr "博客ID"
+
+#: qqworld-auto-save-images.php:317
+msgid "Post Type"
+msgstr "文章類型"
+
+#: qqworld-auto-save-images.php:318 qqworld-auto-save-images.php:916
+msgid "Title"
+msgstr "標題"
+
+#: qqworld-auto-save-images.php:319 qqworld-auto-save-images.php:894
+msgid "Status"
+msgstr "狀態"
+
+#: qqworld-auto-save-images.php:320
+msgid "Control"
+msgstr "控制"
+
+#: qqworld-auto-save-images.php:321
+#, fuzzy
+msgid "Done"
+msgstr "全部完成。"
+
+#: qqworld-auto-save-images.php:322 qqworld-auto-save-images.php:692
+#, fuzzy
+msgid "Delete"
+msgstr "刪除"
+
+#: qqworld-auto-save-images.php:345
+msgid "Congratulation! FTP successfully connected."
+msgstr "恭喜！成功連接FTP。"
+
+#: qqworld-auto-save-images.php:347
+msgid "Failed to change ftp directory, Did dirctory not exist?"
+msgstr "切換FTP目錄失敗，目錄不存在？"
+
+#: qqworld-auto-save-images.php:350
+msgid "Whoops, FTP logon has failed!"
+msgstr "哎呀，登錄FTP失敗。"
+
+#: qqworld-auto-save-images.php:353
+msgid "Whoops, FTP connection has failed!"
+msgstr "哎呀，連接FTP失敗。"
+
+#: qqworld-auto-save-images.php:448 qqworld-auto-save-images.php:482
+msgid "Has missing images."
+msgstr "有不存在的遠程圖像。"
+
+#: qqworld-auto-save-images.php:482
+msgid "Normal"
+msgstr "正常"
+
+#: qqworld-auto-save-images.php:483
+msgid "Fetch"
+msgstr "抓取"
+
+#: qqworld-auto-save-images.php:525
+msgid "Save Remote Images"
+msgstr "保存遠程圖片"
+
+#: qqworld-auto-save-images.php:536
+msgid "Settings"
+msgstr "設置"
+
+#: qqworld-auto-save-images.php:544
+msgid "Auto Save Images"
+msgstr "自動保存圖片"
+
+#: qqworld-auto-save-images.php:546 qqworld-auto-save-images.php:573
+msgid "QQWorld Auto Save Images"
+msgstr "QQWorld自動保存圖片"
+
+#: qqworld-auto-save-images.php:555
+msgid "Installation"
+msgstr "安裝說明"
+
+#: qqworld-auto-save-images.php:556
+msgid ""
+"<ol><li>Make sure the server configuration <strong>allow_url_fopen=1</"
+"strong> in php.ini.</li><li>Warning: If your website domain has been "
+"changed, you must modify all image link to new domain from database, or else "
+"all images which not modified in post content will be save again.</li></ol>"
+msgstr ""
+"<ol><li>請確保php.ini的設置中 <strong>allow_url_fopen=1</strong></li><li>警"
+"告：如果你的網站域名更改了，必須在數據庫中將所有的圖片鏈接更新到新域名，否則"
+"插件會把未更改的圖片再保存一次。</li></ol>"
+
+#: qqworld-auto-save-images.php:560
+msgid "Notice"
+msgstr "注意"
+
+#: qqworld-auto-save-images.php:561
+msgid ""
+"<ul><li>This plugin has a little problem that is all the image url must be "
+"full url, it means must included \"http(s)://\", for example:<ul><li>&lt;img "
+"src=&quot;http://img.whitehouse.gov/image/2014/08/09/gogogo.jpg&quot; /&gt;</"
+"li><li>&lt;img src=&quot;http://www.bubugao.me/image/travel/beijing.png?"
+"date=20140218&quot; /&gt;</li>\t\t\t<li>&lt;img src=&quot;http://r4.ykimg."
+"com/05410408543927D66A0B4D03A98AED24&quot; /&gt;</li><li>&lt;img src=&quot;"
+"https://example.com/image?id=127457&quot; /&gt;</li></ul></li><li>The "
+"examples that not works:<ul><li>&lt;img src=&quot;/images/great.png&quot; /"
+"&gt;</li><li>&lt;img src=&quot;./photo-lab/2014-08-09.jpg&quot; /&gt;</"
+"li><li>&lt;img src=&quot;img/background/black.gif&quot; /&gt;</li></ul></"
+"li></ul>I'v tried to figure this out, but i couldn't get the host name to "
+"make image src full.<br />So if you encounter these codes, plaese manually "
+"fix the images src to full url."
+msgstr ""
+"<ul><li>該插件有個小問題，所有的遠程圖像的URL必須是完整的，就是說必須得包含"
+"\"http(s)://\"，比如：<ul><li>&lt;img src=&quot;http://img.whitehouse.gov/"
+"image/2014/08/09/gogogo.jpg&quot; /&gt;</li><li>&lt;img src=&quot;http://www."
+"bubugao.me/image/travel/beijing.png?date=20140218&quot; /&gt;</li><li>&lt;"
+"img src=&quot;http://r4.ykimg.com/05410408543927D66A0B4D03A98AED24&quot; /"
+"&gt;</li><li>&lt;img src=&quot;https://example.com/image?id=127457&quot; /"
+"&gt;</li></ul></li><li>不能保存的例子：<ul><li>&lt;img src=&quot;/images/"
+"great.png&quot; /&gt;</li><li>&lt;img src=&quot;./photo-lab/2014-08-09."
+"jpg&quot; /&gt;</li><li>&lt;img src=&quot;img/background/black.gif&quot; /"
+"&gt;</li></ul></li></ul>我嘗試解決這個問題，但是我無法讓程序獲取到主機名從而"
+"讓圖片的URL完整。<br />所以，如果你碰到這樣的代碼，請手動將圖片地址改成完整"
+"的，或者使用采集工具自動補完圖片的URL然後從外部提交給Wordpress。"
+
+#: qqworld-auto-save-images.php:565
+msgid "About"
+msgstr "關于"
+
+#: qqworld-auto-save-images.php:566
+msgid ""
+"<p>Hi everyone, My name is Michael Wang from china.</p><p>I made this plugin "
+"just for play in the first place, after 1 year, oneday someone sent an email "
+"to me for help , I was surprise and glad to realized my plugin has a fan. "
+"then more and more peoples asked me for helps, and my plugin was getting "
+"more and more powerful. Now this's my plugin. I hope you will like it, "
+"thanks.</p>"
+msgstr ""
+"<p>大家好，我是王曉骞，來自中國。</p><p>我最開始制作本插件只是爲了玩，一年後"
+"的某一天，某人以一封郵件向我求助，我才很高興得意識到居然有人喜歡我的插件，然"
+"後隨著越來越多的人向我尋求幫助，我的插件也變得越來越強大。這就是我的插件，我"
+"希望你們能喜歡它，謝謝。</p>"
+
+#: qqworld-auto-save-images.php:574
+msgid ""
+"Automatically keep the all remote picture to the local, and automatically "
+"set featured image."
+msgstr ""
+"自動保存遠程圖片到本地，自動設置特色圖片，並且支持機器人采集軟件從外部提交。"
+
+#: qqworld-auto-save-images.php:579
+msgid "General"
+msgstr "常規"
+
+#: qqworld-auto-save-images.php:580
+msgid "Filter"
+msgstr "過濾"
+
+#: qqworld-auto-save-images.php:581
+msgid "Format"
+msgstr "格式化"
+
+#: qqworld-auto-save-images.php:582
+msgid "Scan Posts"
+msgstr "掃描文章"
+
+#: qqworld-auto-save-images.php:583 qqworld-auto-save-images.php:978
+msgid "Pro Edition"
+msgstr "專業版"
+
+#: qqworld-auto-save-images.php:589 qqworld-auto-save-images.php:591
+msgid "Mode"
+msgstr "模式"
+
+#: qqworld-auto-save-images.php:594 qqworld-auto-save-images.php:952
+msgid "Automatic"
+msgstr "自動"
+
+#: qqworld-auto-save-images.php:595
+msgid ""
+"Automatically save all remote images to local media libary when you save or "
+"publish post."
+msgstr "在保存或發布文章時，自動將所有遠程圖像保存到本地媒體庫。"
+
+#: qqworld-auto-save-images.php:598 qqworld-auto-save-images.php:953
+msgid "Manual"
+msgstr "手動"
+
+#: qqworld-auto-save-images.php:599
+msgid ""
+"Manually save all remote images to local media libary when you click the "
+"button on the top of editor."
+msgstr "當單擊編輯器頂部的按鈕時，手動將所有遠程圖像保存到本地媒體庫。"
+
+#: qqworld-auto-save-images.php:604 qqworld-auto-save-images.php:606
+msgid "When"
+msgstr "什麽時候"
+
+#: qqworld-auto-save-images.php:609
+msgid "Save post (Publish, save draft or pedding review)."
+msgstr "保存文章時（發布文章，保存草稿或提交審核）。"
+
+#: qqworld-auto-save-images.php:613
+msgid "Publish post only."
+msgstr "僅發布文章時。"
+
+#: qqworld-auto-save-images.php:619 qqworld-auto-save-images.php:621
+msgid "Remote Publishing"
+msgstr "遠程發布"
+
+#: qqworld-auto-save-images.php:619
+msgid ""
+"Save remote images via remote publishing from IFTTT or other way using "
+"XMLRPC. Only supports publish post."
+msgstr "保存通過IFTTT或其他使用XMLRPC方法遠程發布的遠程圖片。僅支持發布文章。"
+
+#: qqworld-auto-save-images.php:629 qqworld-auto-save-images.php:631
+#: qqworld-auto-save-images.php:966
+msgid "Set Featured Image"
+msgstr "設置特色圖片"
+
+#: qqworld-auto-save-images.php:629
+msgid "Set first one of the remote images as featured image."
+msgstr "設置遠程圖片中的第1個爲特色圖片。"
+
+#: qqworld-auto-save-images.php:645 qqworld-auto-save-images.php:647
+msgid "Grabbing from Each Posts"
+msgstr "從每篇文章抓取"
+
+#: qqworld-auto-save-images.php:649
+msgid "All Images"
+msgstr "全部圖片"
+
+#: qqworld-auto-save-images.php:653
+#, php-format
+msgid "First %d image only"
+msgid_plural "First %d images only"
+msgstr[0] "前 %d 幅圖像"
+
+#: qqworld-auto-save-images.php:660 qqworld-auto-save-images.php:662
+msgid "Minimum Picture Size"
+msgstr "最小圖像尺寸"
+
+#: qqworld-auto-save-images.php:660
+msgid "Ignore smaller than this size picture."
+msgstr "忽略比這個尺寸更小的圖像。"
+
+#: qqworld-auto-save-images.php:664 qqworld-auto-save-images.php:676
+msgid "Width:"
+msgstr "寬度："
+
+#: qqworld-auto-save-images.php:664 qqworld-auto-save-images.php:667
+#: qqworld-auto-save-images.php:676 qqworld-auto-save-images.php:679
+msgid "(px)"
+msgstr "（像素）"
+
+#: qqworld-auto-save-images.php:667 qqworld-auto-save-images.php:679
+msgid "Height:"
+msgstr "高度："
+
+#: qqworld-auto-save-images.php:672 qqworld-auto-save-images.php:674
+msgid "Maximum Picture Size"
+msgstr "最大圖像尺寸"
+
+#: qqworld-auto-save-images.php:672
+msgid ""
+"Automatic reduction is greater than the size of the picture. if you want "
+"image width less than 800px with any size height, please set width 800 and "
+"leave height blank."
+msgstr ""
+"自動縮小大于該尺寸的圖像。如果你想要寬度不超過800px和任意高度圖片，請設置寬度"
+"800，並設置高度爲空。"
+
+#: qqworld-auto-save-images.php:684 qqworld-auto-save-images.php:686
+msgid "Exclude Domain/Keyword"
+msgstr "排除域名/關鍵詞"
+
+#: qqworld-auto-save-images.php:684
+msgid "Images will not be saved, if that url contains Exclude-Domain/Keyword."
+msgstr "如果圖片地址包含排除域名/關鍵詞，則不會保存該圖片。"
+
+#: qqworld-auto-save-images.php:696
+msgid "Add a Domain/Keyword"
+msgstr "添加域名/關鍵詞"
+
+#: qqworld-auto-save-images.php:707 qqworld-auto-save-images.php:710
+msgid "Change Image Filename"
+msgstr "更改圖片文件名"
+
+#: qqworld-auto-save-images.php:713
+msgid ""
+"Only change remote images filename that have Non-ASCii characters (for "
+"Windows Server)"
+msgstr "僅修改包含非ASCii字符的遠程圖片文件名（用于Windows服務器）"
+
+#: qqworld-auto-save-images.php:714
+msgid ""
+"Change all remote images Filename and Alt as post name (for Linux Server)"
+msgstr "改變所有遠程圖片文件名爲文章名（Post Name）（用于Linux服務器）"
+
+#: qqworld-auto-save-images.php:719 qqworld-auto-save-images.php:721
+msgid "Custom Filename Structure"
+msgstr "自定文件名結構"
+
+#: qqworld-auto-save-images.php:726
+msgid "Original filename or automatic changed filename."
+msgstr "原文件名或自動更改的文件名。"
+
+#: qqworld-auto-save-images.php:727
+msgid "Full date, e.g. 20150209."
+msgstr "完整的日期，例如：20150209。"
+
+#: qqworld-auto-save-images.php:728
+msgid "YYYY, e.g. 2015."
+msgstr "YYYY，例如：2015。"
+
+#: qqworld-auto-save-images.php:729
+msgid "MM, e.g. 02."
+msgstr "MM，例如：02。"
+
+#: qqworld-auto-save-images.php:730
+msgid "DD, e.g. 15."
+msgstr "DD，例如：15。"
+
+#: qqworld-auto-save-images.php:731
+msgid "HHMMSS, e.g. 182547."
+msgstr "HHMMSS，例如：182547。"
+
+#: qqworld-auto-save-images.php:732
+#, php-format
+msgid "Unix timestamp, e.g. %s."
+msgstr "Unix時間戳，例如：%s。"
+
+#: qqworld-auto-save-images.php:737 qqworld-auto-save-images.php:739
+msgid "Change Title & Alt"
+msgstr "更改標題和替代文本"
+
+#: qqworld-auto-save-images.php:737
+msgid "Automatically add title & alt of image as post title."
+msgstr "自動依照文章標題添加圖片的標題和替代文本。"
+
+#: qqworld-auto-save-images.php:746 qqworld-auto-save-images.php:748
+msgid "Keep Outside Links"
+msgstr "保留外鏈"
+
+#: qqworld-auto-save-images.php:746
+msgid "Keep the outside links of remote images if exist."
+msgstr "保留遠程圖片的鏈接，如果有的話。"
+
+#: qqworld-auto-save-images.php:755 qqworld-auto-save-images.php:757
+msgid "Save Outside Links"
+msgstr "保存外鏈"
+
+#: qqworld-auto-save-images.php:755
+msgid "Save the outside links to description of attachments."
+msgstr "保存外部鏈接到附件的描述。"
+
+#: qqworld-auto-save-images.php:761
+msgid ""
+"To custom the content, add codes into <strong>functions.php</strong> like "
+"this below:"
+msgstr ""
+"如果想自定義該內容，加入類似以下代碼到 <strong>functions.php</strong> 中："
+
+#: qqworld-auto-save-images.php:770 qqworld-auto-save-images.php:772
+msgid "Image Size"
+msgstr "圖像尺寸"
+
+#: qqworld-auto-save-images.php:770
+msgid "Replace images you want size to display."
+msgstr "替換成你想要顯示的尺寸的圖像。"
+
+#: qqworld-auto-save-images.php:777
+#, fuzzy
+msgid "Thumbnail"
+msgstr ""
+"一個數組，可以包含數個函數，每個函數返回可能的縮略圖圖片對象相對于時間對象的"
+"jQuery路徑。"
+
+#: qqworld-auto-save-images.php:778
+msgid "Medium"
+msgstr ""
+
+#: qqworld-auto-save-images.php:779
+msgid "Large"
+msgstr ""
+
+#: qqworld-auto-save-images.php:780
+msgid "Full Size"
+msgstr "完整尺寸"
+
+#: qqworld-auto-save-images.php:789 qqworld-auto-save-images.php:791
+msgid "Link To"
+msgstr "鏈接到"
+
+#: qqworld-auto-save-images.php:789
+msgid "If you checked Keep-Outside-Links, this option will not works."
+msgstr "如果你勾選了保留外鏈，本項將不起作用。"
+
+#: qqworld-auto-save-images.php:796
+#, fuzzy
+msgid "Media File"
+msgstr "添加文件"
+
+#: qqworld-auto-save-images.php:797
+#, fuzzy
+msgid "Attachment Page"
+msgstr "（附件）"
+
+#: qqworld-auto-save-images.php:798 qqworld-auto-save-images.php:817
+msgid "None"
+msgstr ""
+
+#: qqworld-auto-save-images.php:807 qqworld-auto-save-images.php:809
+msgid "Align To"
+msgstr "對齊方式"
+
+#: qqworld-auto-save-images.php:814
+msgid "Left"
+msgstr ""
+
+#: qqworld-auto-save-images.php:815
+msgid "Center"
+msgstr ""
+
+#: qqworld-auto-save-images.php:816
+msgid "Right"
+msgstr ""
+
+#: qqworld-auto-save-images.php:826 qqworld-auto-save-images.php:828
+msgid "Auto Caption"
+msgstr "自動圖說"
+
+#: qqworld-auto-save-images.php:826
+msgid "Automatically add caption shortcode."
+msgstr "自動添加圖說短代碼。"
+
+#: qqworld-auto-save-images.php:835 qqworld-auto-save-images.php:837
+msgid "Additional Content"
+msgstr "額外的內容"
+
+#: qqworld-auto-save-images.php:835
+msgid ""
+"This content will be displayed after the each remote images code. you can "
+"use [Attachment ID] indicate current attachment ID."
+msgstr "此內容將在每個遠程圖像編碼後顯​​示。您可以使用[附件ID]指示當前連接ID。"
+
+#: qqworld-auto-save-images.php:840
+msgid "For example: [Gbuy id='[Attachment ID]']"
+msgstr "例如：[Gbuy id='[Attachment ID]']"
+
+#: qqworld-auto-save-images.php:857
+msgid "Select post types"
+msgstr "選擇文章類型"
+
+#: qqworld-auto-save-images.php:857
+msgid ""
+"If you have too many posts to be scan, sometimes in process looks like "
+"stopping, but it may be fake. please be patient."
+msgstr ""
+"如果有太多文章需要掃描，有時候在掃描過程中看起來像是停止了，但可能是假停止，"
+"請耐心等待。"
+
+#: qqworld-auto-save-images.php:871
+#, fuzzy
+msgid "Categories"
+msgstr "%s分類"
+
+#: qqworld-auto-save-images.php:871
+msgid "Default empty to scan all categories."
+msgstr "默認留空掃描所有分類。"
+
+#: qqworld-auto-save-images.php:876
+msgid "Scope of Post ID"
+msgstr "文章ID範圍"
+
+#: qqworld-auto-save-images.php:876
+msgid ""
+"Default empty for scan all posts ID. If you want to scan posts ID from 50 to "
+"100. please type '50' and '100' or '100' and '50', The order in which two "
+"numbers can be reversed. If you only type one number, system would only scan "
+"that ID."
+msgstr ""
+"默認留空掃描所有文章ID，如果要掃描50-100的文章ID，請輸入'50'和'100'或"
+"者'100'和'50'，兩個數字的順序可以顛倒。如果你只輸入了1個數字，則系統只會掃描"
+"該ID。"
+
+#: qqworld-auto-save-images.php:877
+#, php-format
+msgid "From %1$s to %2$s"
+msgstr "從 %1$s 到 %2$s"
+
+#: qqworld-auto-save-images.php:881
+msgid "Offset"
+msgstr "偏移"
+
+#: qqworld-auto-save-images.php:881
+msgid ""
+"Default scan all posts. If you want to scan 50-150 posts, please type '50' "
+"in the textfield and select '100'."
+msgstr ""
+"默認掃秒全部文章，如果想掃描50-150篇文章，請在文本框中輸入“50”並在下拉菜單中"
+"選擇“100”。"
+
+#: qqworld-auto-save-images.php:883
+#, php-format
+msgid "Start from %s to Scan"
+msgstr "從 %s 開始掃描"
+
+#: qqworld-auto-save-images.php:885
+#, fuzzy
+msgid "All"
+msgstr "所有"
+
+#: qqworld-auto-save-images.php:889
+#, fuzzy
+msgid "Posts"
+msgstr "熱門文章"
+
+#: qqworld-auto-save-images.php:899
+msgid "Any"
+msgstr "任意"
+
+#: qqworld-auto-save-images.php:909
+msgid "Order By"
+msgstr "排序依據"
+
+#: qqworld-auto-save-images.php:915
+msgid "Author"
+msgstr "作者"
+
+#: qqworld-auto-save-images.php:917
+#, fuzzy
+msgid "Date"
+msgstr "日期"
+
+#: qqworld-auto-save-images.php:918
+#, fuzzy
+msgid "Last Modified"
+msgstr "最後回複"
+
+#: qqworld-auto-save-images.php:919
+msgid "Comment Count"
+msgstr "評論"
+
+#: qqworld-auto-save-images.php:929
+#, fuzzy
+msgid "Order"
+msgstr "順序"
+
+#: qqworld-auto-save-images.php:939
+msgid "Speed"
+msgstr "速度"
+
+#: qqworld-auto-save-images.php:939
+msgid "If the server is too much stress may be appropriately reduced speed."
+msgstr "如果服務器壓力過大，可以適當調低速度。"
+
+#: qqworld-auto-save-images.php:952
+msgid ""
+"Scan posts and keep remote images in all posts to local media library. Maybe "
+"take a long time."
+msgstr "掃描所有的文章，將所有遠程圖片保存到本地，可能需要很長時間。"
+
+#: qqworld-auto-save-images.php:953
+msgid ""
+"The list displayed will show you which posts including remote images, then "
+"you can keep them to local manually via click \"Fetch\" button."
+msgstr ""
+"顯示的列表中將告訴你哪些文章包含遠程圖片，然後你可以通過點擊“抓取”按鈕手動保"
+"存。"
+
+#: qqworld-auto-save-images.php:964
+msgid "Demo of Manual Mode"
+msgstr "手動模式的演示"
+
+#: qqworld-auto-save-images.php:967
+msgid ""
+"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/-"
+"KImHNbPA-o\" frameborder=\"0\" allowfullscreen></iframe>"
+msgstr ""
+"<embed src=\"http://player.youku.com/player.php/sid/XOTE3NDk0OTUy/v.swf\" "
+"allowFullScreen=\"true\" quality=\"high\" width=\"480\" height=\"400\" align="
+"\"middle\" allowScriptAccess=\"always\" type=\"application/x-shockwave-flash"
+"\"></embed>"
+
+#: qqworld-auto-save-images.php:971
+msgid "Comparison"
+msgstr "對比"
+
+#: qqworld-auto-save-images.php:977
+msgid "Items"
+msgstr "對比項目"
+
+#: qqworld-auto-save-images.php:979
+msgid "Free Edition"
+msgstr "免費版"
+
+#: qqworld-auto-save-images.php:984
+msgid ""
+"New manual mode with multi-thread (Faster than automatic mode with more "
+"server resource consumption)"
+msgstr "多線程的手動模式（下載速度是自動模式的N倍，但更加耗費服務器資源）"
+
+#: qqworld-auto-save-images.php:991
+msgid "Download Images from WeChat"
+msgstr "下載微信圖片"
+
+#: qqworld-auto-save-images.php:996
+msgid "Cron Scan Posts"
+msgstr "定時掃描文章"
+
+#: qqworld-auto-save-images.php:1001
+msgid "Watermark"
+msgstr "水印"
+
+#: qqworld-auto-save-images.php:1006
+msgid "Images Compression (JPG Only)"
+msgstr "圖片壓縮（僅JPEG）"
+
+#: qqworld-auto-save-images.php:1011
+msgid "Use Proxy"
+msgstr "使用代理服務器（可下載需要翻牆的圖片）"
+
+#: qqworld-auto-save-images.php:1016
+msgid ""
+"Smart Grabbing, Automatically detect 2 images url from href/src of remote "
+"image with outside link, and grab the bigger one."
+msgstr "智能抓取（從圖片src和鏈接href中提取圖片地址，並抓取較大的一個）"
+
+#: qqworld-auto-save-images.php:1021
+msgid "Use Cookie-Free Domain &amp; CDN Servive (AliYun OSS, UpYun, QiNiu)"
+msgstr "使用Cookie-Free域名和CDN服務（阿裏雲OSS、七牛雲存儲、又拍雲存儲等）"
+
+#: qqworld-auto-save-images.php:1026
+msgid ""
+"Collect webpage manually: Easy reprint articles, and get all the images to "
+"choose from web pages."
+msgstr "手動采集功能：輕松轉載文章、從網頁中獲取所有圖片供選擇"
+
+#: qqworld-auto-save-images.php:1036
+msgid "Buy"
+msgstr "購買"
+
+#: qqworld-auto-save-images.php:1037
+msgid "QQWorld Collector"
+msgstr "QQWorld收藏家"
+
+#: qqworld-auto-save-images.php:1151
+msgid "Has Missing/Undownloadable images."
+msgstr "有 不存在/不可下載 的遠程圖像。"
+
+#: qqworld-auto-save-images.php:1158
+msgid "No remote images found."
+msgstr "沒有遠程圖像。"
+
+#: qqworld-auto-save-images.php:1308
+msgid "Original Link"
+msgstr "原始鏈接"
+
+#~ msgid "Images Compression"
+#~ msgstr "圖片壓縮"
+
+#~ msgid "Demo of Pro Edition"
+#~ msgstr "專業版的演示"
+
+#~ msgid "Cron"
+#~ msgstr "計劃任務"
+
+#~ msgid ""
+#~ "Set cron for automatically scan posts.<br />I recommend set the option "
+#~ "Offset from 0 to scan 100 posts."
+#~ msgstr ""
+#~ "設置計劃任務自動掃描文章。<br />我建議設置偏移從0開始掃描100篇文章。"
+
+#~ msgid "Optimization"
+#~ msgstr "優化"
+
+#~ msgid "Preview"
+#~ msgstr "預覽"
+
+#~ msgid "Database"
+#~ msgstr "數據庫"
+
+#~ msgid "General Options"
+#~ msgstr "常規設置"
+
+#~ msgid "Filter Options"
+#~ msgstr "過濾選項"
+
+#~ msgid "Format Options"
+#~ msgstr "格式化選項"
+
+#~ msgid "Just for preview, The complete feature will on the Pro version."
+#~ msgstr "僅僅用于預覽，專業版將提供完整的功能。"
+
+#~ msgid "Optimization Options"
+#~ msgstr "優化選項"
+
+#~ msgid "Enabled"
+#~ msgstr "啓用"
+
+#~ msgid "Use Cookie-Free Domains to display images."
+#~ msgstr "使用免Cookie域名(Cookie-Free Domains)來顯示圖片。"
+
+#~ msgid ""
+#~ "If you don't want using local media library, please select Use-FTP-Remote-"
+#~ "Server."
+#~ msgstr "如果你不想使用本地媒體庫，請選擇使用FTP遠程服務器。"
+
+#~ msgid "Use local server"
+#~ msgstr "使用本地服務器"
+
+#~ msgid "Use QiNiu Cloud Storage"
+#~ msgstr "使用七牛雲存儲"
+
+#~ msgid "Use FTP remote server"
+#~ msgstr "使用FTP遠程服務器"
+
+#~ msgid "Use AliYun Open Storage Service (OSS)"
+#~ msgstr "使用阿裏雲開放存儲服務OSS"
+
+#~ msgid "Use UpYun Storage Service"
+#~ msgstr "使用又拍雲存儲"
+
+#~ msgid "Domain & Folder"
+#~ msgstr "域名 & 目錄"
+
+#~ msgid ""
+#~ "Set new url structure, Do not end with '/'. The folder string must front "
+#~ "with '/'."
+#~ msgstr "設置新的URL結構，不要以 '/' 結尾，目錄字符串必須以 '/' 開頭。"
+
+#~ msgid "Host"
+#~ msgstr "主機"
+
+#~ msgid "You need add this code below into wp-config.php:"
+#~ msgstr "妳需要在 wp-config.php 中加入以下代碼："
+
+#~ msgid ""
+#~ "Needs <a href=\"%s\" target=\"_blank\">plugin of QiNiu Cloud Storage</a>."
+#~ msgstr "需要 <a href=\"%s\" target=\"_blank\">七牛雲存儲插件</a>。"
+
+#~ msgid "Folder (Can be empty)"
+#~ msgstr "目錄（可以爲空）"
+
+#~ msgid "FTP Settings"
+#~ msgstr "FTP設置"
+
+#~ msgid "IP Address"
+#~ msgstr "IP地址"
+
+#~ msgid "Port"
+#~ msgstr "端口"
+
+#~ msgid "Username"
+#~ msgstr "用戶名"
+
+#~ msgid "Password"
+#~ msgstr "密碼"
+
+#~ msgid "Directory"
+#~ msgstr "目錄"
+
+#~ msgid "Test FTP"
+#~ msgstr "測試FTP"
+
+#~ msgid "Test Access OSS"
+#~ msgstr "測試連接OSS"
+
+#~ msgid "Only the authority Public-Read can be used."
+#~ msgstr "只有公共讀權限可用。"
+
+#~ msgid "Bucket Naming conventions:"
+#~ msgstr "Bucket命名規範："
+
+#~ msgid "Can only contain lowercase letters, numbers, and dashes"
+#~ msgstr "只能包含小寫字母，數字和短橫線"
+
+#~ msgid "You must start and end with lowercase letters and numbers"
+#~ msgstr "必須以小寫字母和數字開頭和結尾"
+
+#~ msgid "BucketName length limits between 3-63"
+#~ msgstr "bucketName的長度限制在3-63之間"
+
+#~ msgid "Delete Bucket"
+#~ msgstr "刪除Bucket"
+
+#~ msgid "New Bucket Name"
+#~ msgstr "新Bucket名"
+
+#~ msgid "Create a New Bucket"
+#~ msgstr "新建Bucket"
+
+#~ msgid "Scan & Sync"
+#~ msgstr "掃描 & 同步"
+
+#~ msgid "Automatically scan media library and sync to AliYun OSS."
+#~ msgstr "自動掃描媒體庫並同步到阿裡雲OSS。"
+
+#~ msgid "Fast Scan"
+#~ msgstr "快速掃描"
+
+#~ msgid "Smart Scan"
+#~ msgstr "智能掃描"
+
+#~ msgid "Sync Delete"
+#~ msgstr "同步刪除"
+
+#~ msgid ""
+#~ "When you delete a local attachment file, delete the OSS file "
+#~ "synchronization."
+#~ msgstr "當你刪除本地附件文件時，同時刪除OSS上的文件。"
+
+#~ msgid "Auto Replace"
+#~ msgstr "自動替換"
+
+#~ msgid ""
+#~ "Automatically replaces post content's local url as OSS's url when syncing."
+#~ msgstr "當同步時自動將文章內容中的本地URL替換爲OSS上的URL。"
+
+#~ msgctxt "upyun"
+#~ msgid "Bucket"
+#~ msgstr "空間名"
+
+#~ msgctxt "upyun"
+#~ msgid "Test Access UpYun"
+#~ msgstr "測試連接又拍雲"
+
+#~ msgid ""
+#~ "Automatically scan media library and sync to UpYun.<br /><strong>Fast "
+#~ "Scan</strong>: Determines whether the synchronization with local marks."
+#~ "<br /><strong>Smart Scan</strong>: Determines whether the synchronization "
+#~ "with UpYun file exists."
+#~ msgstr ""
+#~ "自動掃描媒體庫並同步到又拍雲。<br /><strong>快速掃描</strong>：通過本地記"
+#~ "號來判斷是否已同步。<br /><strong>智能掃描</strong>：通過又拍雲上的文件是"
+#~ "否存在判斷是否已同步。"
+
+#~ msgid ""
+#~ "When you delete a local attachment file, delete the UpYun file "
+#~ "synchronization."
+#~ msgstr "當你刪除本地附件文件時，同時刪除又拍雲上的文件。"
+
+#~ msgid ""
+#~ "Automatically replaces post content's local url as UpYun's url when "
+#~ "syncing."
+#~ msgstr "當同步時自動將文章內容中的本地URL替換爲又拍雲上的URL。"
+
+#~ msgid "Proxy Settings"
+#~ msgstr "代理設置"
+
+#~ msgid "Use proxy server to download images."
+#~ msgstr "使用代理服務器下載圖片。"
+
+#~ msgid "Timeout"
+#~ msgstr "超時"
+
+#~ msgid "Set timeout period on proxy."
+#~ msgstr "設置代理超時時間。"
+
+#~ msgid "Second(s)"
+#~ msgstr "秒"
+
+#~ msgid "Proxy Address"
+#~ msgstr "代理地址"
+
+#~ msgid "For example: 127.0.0.1:8087"
+#~ msgstr "示例：127.0.0.1:8087"
+
+#~ msgid "Images Compression Options"
+#~ msgstr "圖片壓縮選項"
+
+#~ msgid "Enable compress images when uploading."
+#~ msgstr "啓用上傳時壓縮圖像。"
+
+#~ msgid "Quality"
+#~ msgstr "品質"
+
+#~ msgid ""
+#~ "Compression level, ranges from 0 (worst quality, smaller file) to 100 "
+#~ "(best quality, biggest file)."
+#~ msgstr ""
+#~ "壓縮級別，範圍從0（最低品質，文件較小）到100（最高品質，文件較大）。"
+
+#~ msgid " (Recommend)"
+#~ msgstr "（推薦）"
+
+#~ msgid "Smart Options"
+#~ msgstr "智能選項"
+
+#~ msgid "Smart Grabbing"
+#~ msgstr "智能抓取"
+
+#~ msgid ""
+#~ "Automatically detect 2 images url from href/src of remote image with "
+#~ "outside link, and grab the bigger one."
+#~ msgstr ""
+#~ "自動從帶外部鏈接的遠程圖片的href和src中檢測2幅圖片並抓取其中較大的一個。"
+
+#~ msgid "Enabled Watermark"
+#~ msgstr "啓用水印"
+
+#~ msgid "Use for both of remote images and the local upload."
+#~ msgstr "同時用于遠程圖片和本地上傳。"
+
+#~ msgid "Ignore animated GIF"
+#~ msgstr "忽略GIF動畫"
+
+#~ msgid "Skip images that smaller than this size."
+#~ msgstr "跳過比這個尺寸更小的圖像。"
+
+#~ msgid "Position"
+#~ msgstr "位置"
+
+#~ msgid "You can try to drag the watermark image."
+#~ msgstr "你可以試著拖動水印圖片。"
+
+#~ msgid "Opacity"
+#~ msgstr "不透明度"
+
+#~ msgid "Upload Watermark Image"
+#~ msgstr "上傳水印圖片"
+
+#~ msgid "Insert a Watermark Image"
+#~ msgstr "插入水印圖片"
+
+#~ msgid "Default Watermark"
+#~ msgstr "默認水印"
+
+#~ msgid "Content Replacement"
+#~ msgstr "內容替換"
+
+#~ msgctxt "database"
+#~ msgid "Table"
+#~ msgstr "表"
+
+#~ msgid "Comments"
+#~ msgstr "評論"
+
+#~ msgctxt "database"
+#~ msgid "Field"
+#~ msgstr "字段"
+
+#~ msgctxt "database"
+#~ msgid "Post Content"
+#~ msgstr "文章內容"
+
+#~ msgctxt "database"
+#~ msgid "Post Title"
+#~ msgstr "文章標題"
+
+#~ msgctxt "database"
+#~ msgid "Post Excerpt"
+#~ msgstr "文章摘要"
+
+#~ msgctxt "database"
+#~ msgid "Source Text"
+#~ msgstr "來源文本"
+
+#~ msgid "For example: "
+#~ msgstr "範例："
+
+#~ msgctxt "database"
+#~ msgid "Replacement Text"
+#~ msgstr "替換文本"
+
+#~ msgid "Replace Now"
+#~ msgstr "立即替換"
+
+#~ msgid ""
+#~ "Be careful, before you click the Replace-Now button, i recommend backup "
+#~ "the website database."
+#~ msgstr "小心，在你點立即替換之前，我建議先備份網站數據庫。"
+
+#~ msgid "Cron of Scan Posts"
+#~ msgstr "掃描文章計劃任務"
+
+#~ msgid "Post Types"
+#~ msgstr "文章類型"
+
+#~ msgid "Recurrence"
+#~ msgstr "循環運行間隔"
+
+#~ msgid "Will Run On"
+#~ msgstr "將運行于"
+
+#~ msgid "No Cron yet."
+#~ msgstr "還沒有計劃任務。"
+
+#~ msgid "Clear All Crons"
+#~ msgstr "清除所有計劃任務"
+
+#~ msgid "Demo"
+#~ msgstr "演示"
+
+#~ msgid "Scan"
+#~ msgstr "掃描"
+
+#~ msgid "QQWorld Auto Save Images Pro"
+#~ msgstr "QQWorld自動保存圖片專業版"
+
+#~ msgid "Use local server | QiNiu Cloud Storage"
+#~ msgstr "使用 本地服務器 | 七牛雲存儲"
+
+#~ msgid ""
+#~ "Just for preview, The complete feature will on the Pro version. Don't "
+#~ "worry, other features will be free forever."
+#~ msgstr "僅僅用于預覽，專業版將提供完整的功能。別擔心，其他功能將永久免費。"
+
+#~ msgid "Use remote server"
+#~ msgstr "使用遠程服務器"
+
+#~ msgid ""
+#~ "If you wanna use local media library, please choose the Use-local-server."
+#~ msgstr "如果你想使用本地媒體庫，請選擇使用本地服務器。"
+
+#~ msgid "Do not end with '/'."
+#~ msgstr "結尾不要有 '/'。"
+
+#~ msgid "Your server PHP version lower than 5.4, so this feature not works."
+#~ msgstr "服務器PHP的版本低于5.4，所以此功能無法使用。"
+
+#~ msgid "Trial"
+#~ msgstr "試用"
+
+#~ msgid "Coming.. I don't know when, Who cares.."
+#~ msgstr "即將…我不知道什麽時候，管它呢……"
+
+#~ msgid ""
+#~ "Recommeded choose option 2, if you choose option 3, make sure post name | "
+#~ "slug exclude Chinese or other East Asian characters. Notices: If your "
+#~ "host OS is linux, you can choose option 1 and would not cause coding mess "
+#~ "up, because of linux is using UTF8 encoding, as same as Wordpress."
+#~ msgstr ""
+#~ "推薦選擇第2項，如果選擇第3項，請確保文章名（Post Name | Slug）不包含中文和"
+#~ "其他東亞字符。提示：如果您的主機操作系統是Linux，可以選擇第1項而不會導致亂"
+#~ "碼，因爲Linux的編碼是UTF8，和Wordpress一樣。"
+
+#~ msgid "Grabbing from Each Post"
+#~ msgstr "從每篇文章抓取"
+
+#~ msgid "Save"
+#~ msgstr "保存"
+
+#~ msgid "image"
+#~ msgid_plural "images"
+#~ msgstr[0] "圖片"
+
+#~ msgid "Only Save First"
+#~ msgstr "僅保存前..."
+
+#~ msgid ""
+#~ "Only change remote images filename that has Chinese or other East Asian "
+#~ "characters (for Windows Server)"
+#~ msgstr "僅改變包含中文或其他東亞字符的遠程圖片文件名（用于Windows服務器）"
+
+#~ msgid "Filename Structure"
+#~ msgstr "文件名結構"
+
+#~ msgid "Default: %filename%-%date%"
+#~ msgstr "默認：%filename%-%date%"
+
+#~ msgid ""
+#~ "Only change remote images filename that has Chinese or other East Asian "
+#~ "characters"
+#~ msgstr "僅改變包含中文或其他東亞字符的遠程圖片文件名"
+
+#~ msgid "Change all remote images Filename and Alt as post name"
+#~ msgstr "改變所有遠程圖片文件名爲文章名（Post Name）"
+
+#~ msgid "Save Outside Link"
+#~ msgstr "保存外鏈"
+
+#~ msgid "Automatically add title & alt of image as post name."
+#~ msgstr "自動依照文章標題添加圖片的標題和替代文本。"
+
+#~ msgid ""
+#~ "Recommeded choose option 2, if you choose option 3, make sure post name | "
+#~ "slug exclude Chinese or other East Asian characters."
+#~ msgstr ""
+#~ "推薦選擇第2項，如果選擇第3項，請確保文章名（Post Name | Slug）不包含中文和"
+#~ "其他東亞字符。"
+
+#~ msgid ""
+#~ "Recommeded enable option 2, if you choose option 3, make sure post name | "
+#~ "slug exclude Chinese or other East Asian characters."
+#~ msgstr ""
+#~ "推薦啓用第2項，如果選擇第3項，請確保文章名（Post Name | Slug）不包含中文和"
+#~ "其他東亞字符。"
+
+#~ msgid ""
+#~ "If you checked this, when the remote image filename have Chinese or other "
+#~ "East Asian characters. system will automatically change image filename. I "
+#~ "suggest enable it."
+#~ msgstr ""
+#~ "如果勾選了此項，當遠程圖片名包含中文或其他東亞字符的時候，將自動更改圖片文"
+#~ "件名。建議開啓。"
+
+#~ msgid ""
+#~ "Automatic reduction is greater than the size of the picture. if you want "
+#~ "image width less than 800px with any size height, please set width 800 "
+#~ "and left height blank."
+#~ msgstr ""
+#~ "自動縮小大于該尺寸的圖像。如果你想要寬度不超過800px和任意高度圖片，請設置"
+#~ "寬度800，並設置高度爲空。"
+
+#~ msgid "Automatic reduction is greater than the size of the picture."
+#~ msgstr "自動縮小大于改尺寸的圖像。"
+
+#~ msgid ""
+#~ "This content will be displayed after the each remote images code. you can "
+#~ "use [Attachment ID] indicate current attachment ID. For example: [Gbuy "
+#~ "id='[Attachment ID]']."
+#~ msgstr ""
+#~ "該內容將顯示在每一個遠程圖片的後面。你可以使用 [Attachment ID] 來表示當前"
+#~ "的附件ID，舉例：[Gbuy id=‘[Attachment ID]’]。"
+
+#~ msgid ""
+#~ "This content will be displayed after the each remote images code. you can "
+#~ "use [Attachment ID] indicate current attachment ID. For example: [Gbuy id="
+#~ "\"[Attachment ID]\"]."
+#~ msgstr ""
+#~ "該內容將顯示在每一個遠程圖片的後面。你可以使用 [Attachment ID] 來表示當前"
+#~ "的附件ID，舉例：[Gbuy id=\"[Attachment ID]\"]。"
+
+#~ msgid ""
+#~ "This content will be displayed after the each remote images code. you can "
+#~ "use [Attachment ID] indicate current attachment ID. For example: [Gbuy id="
+#~ "\"[Attachment ID]\"]"
+#~ msgstr ""
+#~ "該內容將顯示在每一個遠程圖片代碼後，你可以使用 [Attachment ID] 來表示附件"
+#~ "ID，例如：[Gbuy id=\"[Attachment ID]\"]。"
+
+#, fuzzy
+#~ msgid "Notice:"
+#~ msgstr "提示："
+
+#~ msgid ""
+#~ "Ever since the QQWorld-Auto-Save-Image v1.7.7 released, the plugin core "
+#~ "had a big modification, please reset the <a href=\"%s\">settings</a>."
+#~ msgstr ""
+#~ "自動 QQWorld自動保存圖片 v1.7.7發布，插件核心有較大更新，請重新<a href="
+#~ "\"%s\">設置</a>。"
+
+#~ msgid ""
+#~ "<p>Hi everyone, My name is Michael Wang, I hope you will like my plugin. "
+#~ "thanks.</p>"
+#~ msgstr "<p>大家好，我是王曉骞，希望你們能喜歡我的插件，謝謝。</p>"
+
+#~ msgid "Upload a Watermark Image"
+#~ msgstr "上傳水印圖片"
+
+#~ msgid "Upload"
+#~ msgstr "上傳"
+
+#~ msgid "Type"
+#~ msgstr "類型"
+
+#~ msgid "Text"
+#~ msgstr "文本"
+
+#, fuzzy
+#~ msgid "Change Image File Name"
+#~ msgstr "更改圖片文件名"
+
+#~ msgid "Successed save remote images"
+#~ msgstr "成功保存遠程圖片"
