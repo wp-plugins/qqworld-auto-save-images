@@ -4,7 +4,7 @@ Donate link:
 Tags: auto, save, local, fetch, images
 Requires at least: 3.5
 Tested up to: 4.2.2
-Stable tag: 1.7.15
+Stable tag: 1.7.15.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,6 +107,9 @@ Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank"
 6. 用户界面 - 扫描文章
 
 == Changelog ==
+= 1.7.15.1 =
+New feature: Supported save remote images via Schedule Publish.<br />
+新特性：支持定时发布时保存远程图像。
 
 = 1.7.15 =
 <ul>

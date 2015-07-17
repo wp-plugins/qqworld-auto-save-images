@@ -3,7 +3,7 @@
 Plugin Name: QQWorld Auto Save Images
 Plugin URI: https://wordpress.org/plugins/qqworld-auto-save-images/
 Description: Automatically keep the all remote picture to the local, and automatically set featured image.
-Version: 1.7.15
+Version: 1.7.15.1
 Author: Michael Wang
 Author URI: http://www.qqworld.org
 Text Domain: qqworld_auto_save_images
@@ -38,6 +38,7 @@ class QQWorld_auto_save_images {
 		$this->mode = get_option('qqworld_auto_save_images_mode', 'auto');
 		$this->when = get_option('qqworld_auto_save_images_when', 'publish');
 		$this->remote_publishing = get_option('qqworld_auto_save_images_remote_publishing', 'yes');
+		$this->schedule_publish = get_option('qqworld_auto_save_images_schedule_publish', 'yes');
 		$this->featured_image = get_option('qqworld_auto_save_images_set_featured_image', 'yes');
 		$this->only_save_first = get_option('qqworld_auto_save_images_only_save_first', 'all');
 		$this->change_image_name = get_option('qqworld_auto_save_images_auto_change_name', 'none');
@@ -67,6 +68,7 @@ class QQWorld_auto_save_images {
 				add_action( 'wp_ajax_nopriv_save_remote_images', array($this, 'save_remote_images') );	
 				break;
 		}
+		if ($this->schedule_publish == 'yes') add_action( 'publish_future_post', array($this, 'fetch_images') );
 		if ($this->remote_publishing) add_action('xmlrpc_publish_post', array($this, 'fetch_images') );
 
 		add_action( 'wp_ajax_get_scan_list', array($this, 'get_scan_list') );
@@ -480,6 +482,16 @@ class QQWorld_auto_save_images {
 								<label for="publish">
 									<input name="qqworld_auto_save_images_when" type="radio" id="publish" value="publish" <?php checked('publish', $this->when); ?> />
 									<?php _e('Publish post only.', 'qqworld_auto_save_images'); ?>
+								</label>
+						</fieldset></td>
+					</tr>
+
+					<tr valign="top">
+						<th scope="row"><label><?php _e('Schedule Publish', 'qqworld_auto_save_images'); ?></label> <span class="icon help" title="<?php _e("Save remote images via Schedule Publish.", 'qqworld_auto_save_images'); ?>"></span></th>
+						<td><fieldset>
+							<legend class="screen-reader-text"><span><?php _e('Schedule Publish', 'qqworld_auto_save_images'); ?></span></legend>
+								<label for="qqworld_auto_save_images_schedule_publish">
+									<input name="qqworld_auto_save_images_schedule_publish" type="checkbox" id="qqworld_auto_save_images_schedule_publish" value="yes" <?php checked('yes', $this->schedule_publish); ?> />
 								</label>
 						</fieldset></td>
 					</tr>
@@ -919,6 +931,7 @@ function save_outside_link($content, $link) {
 				'qqworld_auto_save_images_mode',
 				'qqworld_auto_save_images_when',
 				'qqworld_auto_save_images_remote_publishing',
+				'qqworld_auto_save_images_schedule_publish',
 				'qqworld_auto_save_images_set_featured_image',
 				'qqworld_auto_save_images_auto_change_name',
 				'qqworld_auto_save_images_only_save_first',
@@ -1018,14 +1031,13 @@ function save_outside_link($content, $link) {
 
 	function fetch_images($post_id) { // for automatic mode
 		set_time_limit(0);
+
 		//Check to make sure function is not executed more than once on save
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
 			return;
+
 		// AJAX? Not used here
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) 
-			return;
-		// Check user permissions
-		if ( ! current_user_can( 'edit_post', $post_id ) )
 			return;
 
 		$this->current_post_id = $post_id;
@@ -1037,16 +1049,19 @@ function save_outside_link($content, $link) {
 
 		if ($this->mode=='auto') $this->remove_actions();
 		if ($this->remote_publishing) remove_action('xmlrpc_publish_post', array($this, 'fetch_images') );
+		if ($this->schedule_publish == 'yes') remove_action('publish_future_post', array($this, 'fetch_images') );
 
 		$post = get_post($post_id);
 		$content = $this->content_save_pre($post->post_content, $post_id);
 	    //Replace the image in the post
 		remove_action( 'post_updated', 'wp_save_post_revision' );
 	    wp_update_post(array('ID' => $post_id, 'post_content' => $content));
+
 		add_action( 'post_updated', 'wp_save_post_revision', 10, 1 );
 
 		if ($this->mode=='auto') $this->add_actions();
 		if ($this->remote_publishing) add_action('xmlrpc_publish_post', array($this, 'fetch_images') );
+		if ($this->schedule_publish == 'yes') add_action('publish_future_post', array($this, 'fetch_images') );
 	}
 
 	public function getimagesize($image_url) {
@@ -1136,7 +1151,7 @@ function save_outside_link($content, $link) {
 			foreach ($matches[1] as $attachment_id) {
 				$attachment = get_post($attachment_id);
 				$post = get_post($attachment->post_parent);
-				if ($post->post_status != 'draft' && $post->post_status != 'pending') {
+				if ($post->post_status != 'draft' && $post->post_status != 'pending' && $post->post_status != 'future') {
 					$url = get_permalink($attachment_id);
 					$content = preg_replace('/'.$this->encode_pattern(home_url('?attachment_id='.$attachment_id)).'/i', $url, $content);
 				}
@@ -1463,7 +1478,7 @@ function save_outside_link($content, $link) {
 	}
 	
 	//insert attachment
-	function insert_attachment($file,$id){
+	function insert_attachment($file, $id){
 		$dirs = wp_upload_dir();
 		$filetype = wp_check_filetype($file);
 		$attachment=array(
@@ -1474,6 +1489,7 @@ function save_outside_link($content, $link) {
 			'post_status' => 'inherit'
 		);
 		$attach_id = wp_insert_attachment($attachment, $file, $id);
+		if (!function_exists('wp_generate_attachment_metadata')) include_once (ABSPATH . DIRECTORY_SEPARATOR . 'wp-admin' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'image.php');
 		$attach_data = wp_generate_attachment_metadata($attach_id, $file);
 		wp_update_attachment_metadata($attach_id, $attach_data);
 		return $attach_id;
