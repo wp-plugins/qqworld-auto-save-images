@@ -48,6 +48,7 @@ Good News: Professional Edition has able to fix this.
 
 <h4>Professional Edition</h4>
 Buy: <a href="http://www.qqworld.org/products/qqworld-collector" target="_blank">QQWorld Collector (USD $7.98)</a>
+(No need understand chinese, there is a language switcher on left sidebar.)
 
 ////////////////////////////////////////////////////
 
