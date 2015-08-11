@@ -915,7 +915,8 @@ function save_outside_link($content, $link) {
 						</tr>
 						<tr valign="top">
 							<th scope="row"><label><?php _e('Buy', 'qqworld_auto_save_images'); ?></label></th>
-							<td><a href="http://www.qqworld.org/products/qqworld-collector" target="_blank" class="button button-primary"><?php _e('QQWorld Collector', 'qqworld_auto_save_images'); ?></a></td>
+							<td><a href="http://www.qqworld.org/products/qqworld-collector" target="_blank" class="button button-primary"><?php _e('QQWorld Collector', 'qqworld_auto_save_images'); ?></a>
+							<p class="description"><?php _e('(No need understand chinese, there is a language switcher on left sidebar.)', 'qqworld_auto_save_images')?></td></p>
 						</tr>
 					</tbody>
 				</table>
